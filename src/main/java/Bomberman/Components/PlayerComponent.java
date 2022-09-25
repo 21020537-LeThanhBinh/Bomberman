@@ -142,17 +142,21 @@ public class PlayerComponent extends Component {
         state = STOP;
     }
 
+    public void die() {
+        state = DIE;
+    }
+
     public void placeBomb(int flames) {
         if (bombCounter == geti("bomb")) {
             return;
         }
         bombCounter++;
         int bombLocationX = (int) (entity.getX() % TILED_SIZE > TILED_SIZE / 2
-            ? entity.getX() + TILED_SIZE - entity.getX() % TILED_SIZE + 1
-            : entity.getX() - entity.getX() % TILED_SIZE) + 1;
+            ? entity.getX() + TILED_SIZE - entity.getX() % TILED_SIZE
+            : entity.getX() - entity.getX() % TILED_SIZE);
         int bombLocationY = (int) (entity.getY() % TILED_SIZE > TILED_SIZE / 2
-            ? entity.getY() + TILED_SIZE - entity.getY() % TILED_SIZE + 1
-            : entity.getY() - entity.getY() % TILED_SIZE) + 1;
+            ? entity.getY() + TILED_SIZE - entity.getY() % TILED_SIZE
+            : entity.getY() - entity.getY() % TILED_SIZE);
 
         Entity bomb = spawn("bomb", new SpawnData(bombLocationX, bombLocationY));
         play("place_bomb.wav");

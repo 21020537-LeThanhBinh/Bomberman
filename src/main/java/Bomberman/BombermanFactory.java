@@ -1,16 +1,11 @@
 package Bomberman;
 
-import static Bomberman.Constants.Constant.GAME_WORLD_HEIGHT;
-import static Bomberman.Constants.Constant.GAME_WORLD_WIDTH;
-import static Bomberman.Constants.Constant.SCENE_WIDTH;
-import static Bomberman.Constants.Constant.TILED_SIZE;
+import static Bomberman.BombermanType.*;
+import static Bomberman.Constants.Constant.*;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-import Bomberman.Components.BombComponent;
-import Bomberman.Components.FlameComponent;
-import Bomberman.Components.PlayerComponent;
+import Bomberman.Components.*;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
@@ -18,6 +13,7 @@ import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
+import com.almasb.fxgl.physics.PhysicsComponent;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -29,6 +25,45 @@ public class BombermanFactory implements EntityFactory {
     public Entity newBackground(SpawnData data) {
         return entityBuilder(data)
             .view(new Rectangle(GAME_WORLD_WIDTH, GAME_WORLD_HEIGHT, Color.rgb(0, 125, 0)))
+            .zIndex(-1)
+            .build();
+    }
+
+    @Spawns("wall")
+    public Entity newWall(SpawnData data) {
+        return entityBuilder(data)
+            .type(WALL)
+            .viewWithBBox("wall.png")
+            .with(new PhysicsComponent())
+            .collidable()
+            .build();
+    }
+
+    @Spawns("brick")
+    public Entity newBrick(SpawnData data) {
+        return entityBuilder(data)
+            .type(BRICK)
+            .viewWithBBox("brick.png")
+            .with(new PhysicsComponent())
+            .collidable()
+            .build();
+    }
+
+    @Spawns("brick_break")
+    public Entity newBrickBreak(SpawnData data) {
+        return FXGL.entityBuilder(data)
+            .type(BRICK_BREAK)
+            .with(new BrickBreakComponent())
+            .build();
+    }
+
+    @Spawns("portal")
+    public Entity newPortal(SpawnData data) {
+        return entityBuilder(data)
+            .type(PORTAL)
+            .viewWithBBox("portal.png")
+            .collidable()
+            .zIndex(-1)
             .build();
     }
 
@@ -44,12 +79,9 @@ public class BombermanFactory implements EntityFactory {
 
     @Spawns("enemy")
     public Entity newEnemy(SpawnData data) {
-        Point2D randomPos = new Point2D(random(0, SCENE_WIDTH - TILED_SIZE), random(0, SCENE_WIDTH - TILED_SIZE));
-
         return entityBuilder(data)
             .type(BombermanType.ENEMY1)
-            .at(randomPos)
-            .viewWithBBox(new Circle(15, 15, 15, Color.RED))
+            .viewWithBBox(new Circle(24, 24, 24, Color.RED))
             .collidable()
             .build();
     }
@@ -57,8 +89,7 @@ public class BombermanFactory implements EntityFactory {
     @Spawns("bomb")
     public Entity newBomb(SpawnData data) {
         return entityBuilder(data)
-            .type(BombermanType.BOMB)
-            .at(data.getX(), data.getY())
+            .type(BOMB)
             .with(new BombComponent())
             .bbox(new HitBox(new Point2D(2, 2), BoundingShape.circle(22)))
             .collidable()
@@ -69,9 +100,8 @@ public class BombermanFactory implements EntityFactory {
     public Entity newCentralFlame(SpawnData data) {
         return entityBuilder(data)
             .type(BombermanType.FLAME)
-            .at(data.getX(), data.getY())
             .with(new FlameComponent("central_flame.png"))
-            .bbox(new HitBox(BoundingShape.box(TILED_SIZE, TILED_SIZE)))
+            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
             .collidable()
             .build();
     }
@@ -81,8 +111,7 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.FLAME)
             .with(new FlameComponent("top_down_flame.png"))
-            .at(data.getX(), data.getY())
-            .bbox(new HitBox(BoundingShape.box(TILED_SIZE, TILED_SIZE)))
+            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
             .collidable()
             .build();
     }
@@ -92,8 +121,7 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.FLAME)
             .with(new FlameComponent("top_up_flame.png"))
-            .at(data.getX(), data.getY())
-            .bbox(new HitBox(BoundingShape.box(TILED_SIZE, TILED_SIZE)))
+            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
             .collidable()
             .build();
     }
@@ -103,8 +131,7 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.FLAME)
             .with(new FlameComponent("top_right_flame.png"))
-            .at(data.getX(), data.getY())
-            .bbox(new HitBox(BoundingShape.box(TILED_SIZE, TILED_SIZE)))
+            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
             .collidable()
             .build();
     }
@@ -114,8 +141,7 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.FLAME)
             .with(new FlameComponent("top_left_flame.png"))
-            .at(data.getX(), data.getY())
-            .bbox(new HitBox(BoundingShape.box(TILED_SIZE, TILED_SIZE)))
+            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
             .collidable()
             .build();
     }
@@ -125,8 +151,7 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.FLAME)
             .with(new FlameComponent("up_flame.png"))
-            .at(data.getX(), data.getY())
-            .bbox(new HitBox(BoundingShape.box(TILED_SIZE, TILED_SIZE)))
+            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
             .collidable()
             .build();
     }
@@ -136,8 +161,7 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.FLAME)
             .with(new FlameComponent("down_flame.png"))
-            .at(data.getX(), data.getY())
-            .bbox(new HitBox(BoundingShape.box(TILED_SIZE, TILED_SIZE)))
+            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
             .collidable()
             .build();
     }
@@ -147,8 +171,7 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.FLAME)
             .with(new FlameComponent("left_flame.png"))
-            .at(data.getX(), data.getY())
-            .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(TILED_SIZE, TILED_SIZE)))
+            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
             .collidable()
             .build();
     }
@@ -158,9 +181,41 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.FLAME)
             .with(new FlameComponent("right_flame.png"))
-            .at(data.getX(), data.getY())
-            .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(TILED_SIZE, TILED_SIZE)))
+            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
             .collidable()
+            .build();
+    }
+
+    @Spawns("powerup_flames")
+    public Entity newItem(SpawnData data) {
+        return entityBuilder(data)
+            .type(POWERUP_FLAMES)
+            .viewWithBBox("powerup_flames.png")
+            .at(data.getX()+4,data.getY()+4)
+            .collidable()
+            .zIndex(-1)
+            .build();
+    }
+
+    @Spawns("powerup_bombs")
+    public Entity newItem2(SpawnData data) {
+        return entityBuilder(data)
+            .type(POWERUP_BOMBS)
+            .viewWithBBox("powerup_bombs.png")
+            .at(data.getX()+4,data.getY()+4)
+            .collidable()
+            .zIndex(-1)
+            .build();
+    }
+
+    @Spawns("powerup_speed")
+    public Entity newItem3(SpawnData data) {
+        return entityBuilder(data)
+            .type(POWERUP_SPEED)
+            .viewWithBBox("powerup_speed.png")
+            .at(data.getX()+4,data.getY()+4)
+            .collidable()
+            .zIndex(-1)
             .build();
     }
 }
