@@ -18,6 +18,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 public class BombermanFactory implements EntityFactory {
 
@@ -26,6 +27,14 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .view(new Rectangle(GAME_WORLD_WIDTH, GAME_WORLD_HEIGHT, Color.rgb(0, 125, 0)))
             .zIndex(-1)
+            .build();
+    }
+
+    @Spawns("block")
+    public Entity newBlock(SpawnData data) {
+        return entityBuilder(data)
+            .bbox(new HitBox(BoundingShape.box(TILED_SIZE, TILED_SIZE)))
+            .with(new PhysicsComponent())
             .build();
     }
 
@@ -61,7 +70,8 @@ public class BombermanFactory implements EntityFactory {
     public Entity newPortal(SpawnData data) {
         return entityBuilder(data)
             .type(PORTAL)
-            .viewWithBBox("portal.png")
+            .view("portal.png")
+            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
             .collidable()
             .zIndex(-1)
             .build();

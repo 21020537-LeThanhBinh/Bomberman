@@ -27,6 +27,7 @@ public class PlayerComponent extends Component {
     // Player's frame size
     private final int FRAME_SIZE = 45;
     private int bombCounter;
+    private boolean bombValid;
     private State state;
     private PhysicsComponent physics;
     private AnimatedTexture texture;
@@ -37,11 +38,10 @@ public class PlayerComponent extends Component {
     public PlayerComponent() {
         state = STOP;
         bombCounter = 0;
+        bombValid = true;
 
         physics = new PhysicsComponent();
-        BodyDef bd = new BodyDef();
-        bd.setType(BodyType.DYNAMIC);
-        physics.setBodyDef(bd);
+        physics.setBodyType(BodyType.DYNAMIC);
 
         setSkin();
 
@@ -147,9 +147,14 @@ public class PlayerComponent extends Component {
     }
 
     public void placeBomb(int flames) {
-        if (bombCounter == geti("bomb")) {
+        if (bombCounter == geti("bomb") || !bombValid) {
             return;
         }
+        bombValid = false;
+        getGameTimer().runOnceAfter(() -> {
+            bombValid = true;
+        }, Duration.seconds(0.1));
+
         bombCounter++;
         int bombLocationX = (int) (entity.getX() % TILED_SIZE > TILED_SIZE / 2
             ? entity.getX() + TILED_SIZE - entity.getX() % TILED_SIZE
