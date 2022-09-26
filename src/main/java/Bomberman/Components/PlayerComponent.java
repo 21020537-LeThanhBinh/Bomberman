@@ -151,10 +151,6 @@ public class PlayerComponent extends Component {
             return;
         }
         bombValid = false;
-        getGameTimer().runOnceAfter(() -> {
-            bombValid = true;
-        }, Duration.seconds(0.1));
-
         bombCounter++;
         int bombLocationX = (int) (entity.getX() % TILED_SIZE > TILED_SIZE / 2
             ? entity.getX() + TILED_SIZE - entity.getX() % TILED_SIZE
@@ -170,5 +166,9 @@ public class PlayerComponent extends Component {
             play("explosion.wav");
             bombCounter--;
         }, Duration.seconds(2.1));
+    }
+
+    public void setBombValid(boolean bombValid) {
+        this.bombValid = bombValid;
     }
 }

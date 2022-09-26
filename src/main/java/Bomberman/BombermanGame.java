@@ -122,18 +122,21 @@ public class BombermanGame extends GameApplication {
         physics.setGravity(0,0);
 
         onCollision(PLAYER, PORTAL, (player, portal) -> {
-            if (getGameWorld().getGroup(ENEMY1, POWERUP_BOMBS, POWERUP_FLAMES, POWERUP_SPEED).getSize() == 0) {
+            if (getGameWorld().getGroup(ENEMY1, POWERUP_BOMBS, POWERUP_FLAMES).getSize() == 0) {
                 player.removeFromWorld();
-                nextLevel();
+                // Next level music . . .
+
+                getGameTimer().runOnceAfter(this::nextLevel, Duration.seconds(1));
             }
         });
 
+        // Stop player from moving in bomb's pos
         onCollisionEnd(PLAYER, BOMB, (player, bomb) -> {
-            Entity block = spawn("block", bomb.getX(), bomb.getY());
-            getGameTimer().runOnceAfter(() -> {
-                block.removeFromWorld();
-            },Duration.seconds(2.1));
+            Entity physic_block = spawn("physic_block", bomb.getX(), bomb.getY());
+            getGameTimer().runOnceAfter(physic_block::removeFromWorld, Duration.seconds(2.1));
+            playerComponent.setBombValid(true);
         });
+
         onCollision(BRICK, FLAME, (brick, flame) -> {
             brick.removeFromWorld();
             spawn("brick_break", brick.getX(), brick.getY());
@@ -231,12 +234,15 @@ public class BombermanGame extends GameApplication {
 
     protected void nextLevel() {
         inc("level", 1);
+        // Remove old level . . .
+
         if (geti("level") <= MAX_LEVEL) {
             loadFile("Level" + geti("level") + "_sample.txt");
             loadLevel();
         }
         else {
-            System.out.println("You win! " + geti("level"));
+            System.out.println("You win!");
+            // Load win screen . . .
         }
     }
 }

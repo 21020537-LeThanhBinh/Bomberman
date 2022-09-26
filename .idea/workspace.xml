@@ -5,37 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7c503e0f-386a-4cce-aced-9eeea4ddb675" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/levels/Level2_sample.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/levels/Level_sample.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/levels/Level2_sample.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/levels/Level_sample.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-25-Sep-2022-11.38.14.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-25-Sep-2022-11.39.38.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-25-Sep-2022-11.40.07.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-25-Sep-2022-11.47.14.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-25-Sep-2022-11.51.35.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-25-Sep-2022-11.51.56.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-25-Sep-2022-11.52.57.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-25-Sep-2022-11.53.30.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-25-Sep-2022-11.54.49.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-25-Sep-2022-12.21.35.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-26-Sep-2022-12.24.56.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-26-Sep-2022-12.25.27.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-26-Sep-2022-12.27.29.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-26-Sep-2022-12.28.42.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-26-Sep-2022-12.29.09.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-26-Sep-2022-12.29.59.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-26-Sep-2022-12.33.32.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-26-Sep-2022-12.35.33.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-26-Sep-2022-12.37.37.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-26-Sep-2022-12.39.12.log" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/BombComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/BombComponent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/PlayerComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/PlayerComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Constants/Constant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Constants/Constant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/levels/Level1_sample.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/levels/Level1_sample.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/levels/Level2_sample.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/levels/Level2_sample.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/Components/BombComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/Components/BombComponent.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/Components/PlayerComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/Components/PlayerComponent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/Constants/Constant.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/Constants/Constant.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/assets/levels/Level1_sample.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/assets/levels/Level1_sample.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/assets/levels/Level2_sample.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/assets/levels/Level2_sample.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -184,6 +171,7 @@
       <workItem from="1664151276455" duration="4813000" />
       <workItem from="1664163352759" duration="2138000" />
       <workItem from="1664167334933" duration="3410000" />
+      <workItem from="1664171821540" duration="2722000" />
     </task>
     <servers />
   </component>

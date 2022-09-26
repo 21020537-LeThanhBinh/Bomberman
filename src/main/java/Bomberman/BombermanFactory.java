@@ -30,8 +30,8 @@ public class BombermanFactory implements EntityFactory {
             .build();
     }
 
-    @Spawns("block")
-    public Entity newBlock(SpawnData data) {
+    @Spawns("physic_block")
+    public Entity newPhysicsBlock(SpawnData data) {
         return entityBuilder(data)
             .bbox(new HitBox(BoundingShape.box(TILED_SIZE, TILED_SIZE)))
             .with(new PhysicsComponent())
