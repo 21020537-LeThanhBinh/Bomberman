@@ -150,7 +150,6 @@ public class PlayerComponent extends Component {
         if (bombCounter == geti("bomb") || !bombValid) {
             return;
         }
-        bombValid = false;
         bombCounter++;
         int bombLocationX = (int) (entity.getX() % TILED_SIZE > TILED_SIZE / 2
             ? entity.getX() + TILED_SIZE - entity.getX() % TILED_SIZE

@@ -4,20 +4,21 @@ import static Bomberman.BombermanType.*;
 import static Bomberman.Constants.Constant.*;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
+import Bomberman.Components.BrickComponent;
 import Bomberman.Components.PlayerComponent;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsWorld;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import javafx.scene.input.KeyCode;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class BombermanGame extends GameApplication {
@@ -26,6 +27,8 @@ public class BombermanGame extends GameApplication {
     private int HEIGHT;
     private int WIDTH;
     private Entity player;
+
+    private List<Entity> stillObject = new ArrayList<>();
     private PlayerComponent playerComponent;
 
     public static void main(String[] args) {
@@ -110,7 +113,7 @@ public class BombermanGame extends GameApplication {
 
         getInput().addAction(new UserAction("Place Bomb") {
             @Override
-            protected void onAction() {
+            protected void onActionBegin() {
                 playerComponent.placeBomb(geti("flame"));
             }
         }, KeyCode.SPACE);
@@ -123,9 +126,9 @@ public class BombermanGame extends GameApplication {
 
         onCollision(PLAYER, PORTAL, (player, portal) -> {
             if (getGameWorld().getGroup(ENEMY1, POWERUP_BOMBS, POWERUP_FLAMES).getSize() == 0) {
-                player.removeFromWorld();
                 // Next level music . . .
 
+                player.removeFromWorld();
                 getGameTimer().runOnceAfter(this::nextLevel, Duration.seconds(1));
             }
         });
@@ -134,12 +137,11 @@ public class BombermanGame extends GameApplication {
         onCollisionEnd(PLAYER, BOMB, (player, bomb) -> {
             Entity physic_block = spawn("physic_block", bomb.getX(), bomb.getY());
             getGameTimer().runOnceAfter(physic_block::removeFromWorld, Duration.seconds(2.1));
-            playerComponent.setBombValid(true);
         });
 
         onCollision(BRICK, FLAME, (brick, flame) -> {
-            brick.removeFromWorld();
-            spawn("brick_break", brick.getX(), brick.getY());
+            brick.getComponent(BrickComponent.class).brickBreak();
+            getGameTimer().runOnceAfter(brick::removeFromWorld, Duration.seconds(0.4));
         });
 
         onCollision(PLAYER, FLAME, (player, flame) -> {
@@ -202,7 +204,7 @@ public class BombermanGame extends GameApplication {
                 Character ch = line.charAt(j);
                 switch (ch) {
                     case '#':
-                        spawn("wall", j * TILED_SIZE, i * TILED_SIZE);
+                        stillObject.add(spawn("wall", j * TILED_SIZE, i * TILED_SIZE));
                         break;
                     case 'p':
                         player = spawn("player", j * TILED_SIZE, i * TILED_SIZE);
@@ -213,20 +215,20 @@ public class BombermanGame extends GameApplication {
                         spawn("enemy", j * TILED_SIZE, i * TILED_SIZE);
                         break;
                     case 'x':
-                        spawn("portal", j * TILED_SIZE, i * TILED_SIZE);
+                        stillObject.add(spawn("portal", j * TILED_SIZE, i * TILED_SIZE));
                         break;
                     case 'b':
-                        spawn("powerup_bombs", j * TILED_SIZE, i * TILED_SIZE);
+                        stillObject.add(spawn("powerup_bombs", j * TILED_SIZE, i * TILED_SIZE));
                         break;
                     case 'f':
-                        spawn("powerup_flames", j * TILED_SIZE, i * TILED_SIZE);
+                        stillObject.add(spawn("powerup_flames", j * TILED_SIZE, i * TILED_SIZE));
                         break;
                     case 's':
-                        spawn("powerup_speed", j * TILED_SIZE, i * TILED_SIZE);
+                        stillObject.add(spawn("powerup_speed", j * TILED_SIZE, i * TILED_SIZE));
                         break;
                 }
                 if (Arrays.asList('*', 'x', 'b', 'f', 's').contains(ch)) {
-                    spawn("brick", j * TILED_SIZE, i * TILED_SIZE);
+                    stillObject.add(spawn("brick", j * TILED_SIZE, i * TILED_SIZE));
                 }
             }
         }
@@ -234,7 +236,9 @@ public class BombermanGame extends GameApplication {
 
     protected void nextLevel() {
         inc("level", 1);
+
         // Remove old level . . .
+        stillObject.forEach(Entity::removeFromWorld);
 
         if (geti("level") <= MAX_LEVEL) {
             loadFile("Level" + geti("level") + "_sample.txt");

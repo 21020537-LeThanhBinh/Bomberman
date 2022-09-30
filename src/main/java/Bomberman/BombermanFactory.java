@@ -5,12 +5,10 @@ import static Bomberman.Constants.Constant.*;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 import Bomberman.Components.*;
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
-import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
@@ -18,7 +16,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
 public class BombermanFactory implements EntityFactory {
 
@@ -52,17 +49,10 @@ public class BombermanFactory implements EntityFactory {
     public Entity newBrick(SpawnData data) {
         return entityBuilder(data)
             .type(BRICK)
-            .viewWithBBox("brick.png")
+            .bbox(new HitBox(BoundingShape.box(TILED_SIZE, TILED_SIZE)))
+            .with(new BrickComponent())
             .with(new PhysicsComponent())
             .collidable()
-            .build();
-    }
-
-    @Spawns("brick_break")
-    public Entity newBrickBreak(SpawnData data) {
-        return FXGL.entityBuilder(data)
-            .type(BRICK_BREAK)
-            .with(new BrickBreakComponent())
             .build();
     }
 
