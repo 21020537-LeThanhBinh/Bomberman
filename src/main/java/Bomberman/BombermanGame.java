@@ -23,13 +23,11 @@ import javafx.util.Duration;
 
 public class BombermanGame extends GameApplication {
     private Scanner sc;
-    private int level;
     private int HEIGHT;
     private int WIDTH;
     private Entity player;
-
-    private List<Entity> stillObject = new ArrayList<>();
     private PlayerComponent playerComponent;
+    private List<Entity> stillObject = new ArrayList<>();
 
     public static void main(String[] args) {
         launch(args);
@@ -39,7 +37,6 @@ public class BombermanGame extends GameApplication {
     protected void initSettings(GameSettings settings) {
         loadFile("Level1_sample.txt");
 
-        level = sc.nextInt();
         HEIGHT = sc.nextInt();
         WIDTH = sc.nextInt();
 
@@ -129,6 +126,7 @@ public class BombermanGame extends GameApplication {
                 // Next level music . . .
 
                 player.removeFromWorld();
+                playerComponent.setBombValid(false);
                 getGameTimer().runOnceAfter(this::nextLevel, Duration.seconds(1));
             }
         });
@@ -139,7 +137,11 @@ public class BombermanGame extends GameApplication {
             getGameTimer().runOnceAfter(physic_block::removeFromWorld, Duration.seconds(2.1));
         });
 
+        onCollisionBegin(FLAME, WALL, (flame, wall) -> {
+            flame.removeFromWorld();
+        });
         onCollision(BRICK, FLAME, (brick, flame) -> {
+            flame.removeFromWorld();
             brick.getComponent(BrickComponent.class).brickBreak();
             getGameTimer().runOnceAfter(brick::removeFromWorld, Duration.seconds(0.4));
         });
@@ -176,8 +178,7 @@ public class BombermanGame extends GameApplication {
 
     @Override
     protected void initGameVars(Map<String, Object> vars) {
-        vars.put("level", level);
-
+        vars.put("level", STARTING_LEVEL);
         vars.put("speed", PLAYER_SPEED);
         vars.put("bomb", 1);
         vars.put("flame", 1);

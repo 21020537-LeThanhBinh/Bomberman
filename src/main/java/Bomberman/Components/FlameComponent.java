@@ -1,7 +1,10 @@
 package Bomberman.Components;
 
+import static Bomberman.BombermanType.FLAME;
+import static Bomberman.BombermanType.WALL;
 import static Bomberman.Constants.Constant.TILED_SIZE;
 import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
+import static com.almasb.fxgl.dsl.FXGL.onCollisionBegin;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.image;
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -15,10 +18,6 @@ public class FlameComponent extends Component {
     private AnimationChannel animation;
 
     public FlameComponent(String assetName) {
-        getGameTimer().runOnceAfter(() -> {
-            entity.removeFromWorld();
-        }, Duration.seconds(0.4));
-
         animation = new AnimationChannel(FXGL.image(assetName), 3, TILED_SIZE, TILED_SIZE, Duration.seconds(0.4), 0, 2);
         texture = new AnimatedTexture(animation);
         texture.loop();
