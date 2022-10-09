@@ -101,7 +101,7 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.FLAME)
             .with(new FlameComponent("central_flame.png"))
-            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
+            .bbox(new HitBox(new Point2D(2,2), BoundingShape.box(TILED_SIZE-4, TILED_SIZE-4)))
             .collidable()
             .build();
     }
@@ -111,7 +111,7 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.FLAME)
             .with(new FlameComponent("top_down_flame.png"))
-            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
+            .bbox(new HitBox(new Point2D(2,TILED_SIZE-2-data.getZ()), BoundingShape.box(TILED_SIZE-4, data.getZ())))
             .collidable()
             .build();
     }
@@ -121,7 +121,7 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.FLAME)
             .with(new FlameComponent("top_up_flame.png"))
-            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
+            .bbox(new HitBox(new Point2D(2,2), BoundingShape.box(TILED_SIZE-4, data.getZ())))
             .collidable()
             .build();
     }
@@ -131,7 +131,7 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.FLAME)
             .with(new FlameComponent("top_right_flame.png"))
-            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
+            .bbox(new HitBox(new Point2D(TILED_SIZE-2-data.getZ(),2), BoundingShape.box(data.getZ(), TILED_SIZE-4)))
             .collidable()
             .build();
     }
@@ -141,7 +141,7 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.FLAME)
             .with(new FlameComponent("top_left_flame.png"))
-            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
+            .bbox(new HitBox(new Point2D(2,2), BoundingShape.box(data.getZ(), TILED_SIZE-4)))
             .collidable()
             .build();
     }
@@ -151,7 +151,7 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.FLAME)
             .with(new FlameComponent("up_flame.png"))
-            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
+            .bbox(new HitBox(new Point2D(2,2), BoundingShape.box(TILED_SIZE-4, data.getZ())))
             .collidable()
             .build();
     }
@@ -161,7 +161,7 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.FLAME)
             .with(new FlameComponent("down_flame.png"))
-            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
+            .bbox(new HitBox(new Point2D(2,TILED_SIZE-2-data.getZ()), BoundingShape.box(TILED_SIZE-4, data.getZ())))
             .collidable()
             .build();
     }
@@ -171,7 +171,7 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.FLAME)
             .with(new FlameComponent("left_flame.png"))
-            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
+            .bbox(new HitBox(new Point2D(2,2), BoundingShape.box(data.getZ(), TILED_SIZE-4)))
             .collidable()
             .build();
     }
@@ -181,7 +181,7 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.FLAME)
             .with(new FlameComponent("right_flame.png"))
-            .bbox(new HitBox(new Point2D(1,1), BoundingShape.box(TILED_SIZE-2, TILED_SIZE-2)))
+            .bbox(new HitBox(new Point2D(TILED_SIZE-2-data.getZ(),2), BoundingShape.box(data.getZ(), TILED_SIZE-4)))
             .collidable()
             .build();
     }
