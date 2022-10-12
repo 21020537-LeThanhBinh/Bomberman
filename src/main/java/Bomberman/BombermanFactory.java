@@ -5,6 +5,7 @@ import static Bomberman.Constants.Constant.*;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 import Bomberman.Components.*;
+import Bomberman.Components.Enemy.Enemy1;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
@@ -30,6 +31,7 @@ public class BombermanFactory implements EntityFactory {
     @Spawns("physic_block")
     public Entity newPhysicsBlock(SpawnData data) {
         return entityBuilder(data)
+            .type(BOMB)
             .bbox(new HitBox(BoundingShape.box(TILED_SIZE, TILED_SIZE)))
             .with(new PhysicsComponent())
             .build();
@@ -77,11 +79,12 @@ public class BombermanFactory implements EntityFactory {
             .build();
     }
 
-    @Spawns("enemy")
-    public Entity newEnemy(SpawnData data) {
+    @Spawns("enemy1")
+    public Entity newEnemy1(SpawnData data) {
         return entityBuilder(data)
-            .type(BombermanType.ENEMY1)
-            .viewWithBBox(new Circle(24, 24, 24, Color.RED))
+            .type(ENEMY1)
+            .bbox(new HitBox(new Point2D(5, 5), BoundingShape.box(38, 38)))
+            .with(new Enemy1())
             .collidable()
             .build();
     }

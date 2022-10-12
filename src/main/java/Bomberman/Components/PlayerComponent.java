@@ -1,9 +1,16 @@
 package Bomberman.Components;
 
+import static Bomberman.BombermanType.PLAYER;
+import static Bomberman.BombermanType.POWERUP_BOMBS;
+import static Bomberman.BombermanType.POWERUP_FLAMES;
+import static Bomberman.BombermanType.POWERUP_SPEED;
+import static Bomberman.Constants.Constant.BONUS_SPEED;
 import static Bomberman.Constants.Constant.TILED_SIZE;
 import static Bomberman.DynamicEntityState.State.*;
 import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGL.image;
+import static com.almasb.fxgl.dsl.FXGL.inc;
+import static com.almasb.fxgl.dsl.FXGL.onCollisionBegin;
 import static com.almasb.fxgl.dsl.FXGL.play;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.geti;
@@ -46,6 +53,25 @@ public class PlayerComponent extends Component {
         setSkin();
 
         texture = new AnimatedTexture(animIdleDown);
+
+        onCollisionBegin(PLAYER, POWERUP_FLAMES, (player, powerup) -> {
+            powerup.removeFromWorld();
+            play("powerup.wav");
+            inc("flame", 1);
+        });
+        onCollisionBegin(PLAYER, POWERUP_BOMBS, (player, powerup) -> {
+            powerup.removeFromWorld();
+            play("powerup.wav");
+            inc("bomb", 1);
+        });
+        onCollisionBegin(PLAYER, POWERUP_SPEED, (player, powerup) -> {
+            powerup.removeFromWorld();
+            play("powerup.wav");
+            inc("speed", BONUS_SPEED);
+            getGameTimer().runOnceAfter(() -> {
+                inc("speed", -BONUS_SPEED);
+            }, Duration.seconds(6));
+        });
     }
 
     @Override
@@ -169,5 +195,9 @@ public class PlayerComponent extends Component {
 
     public void setBombValid(boolean bombValid) {
         this.bombValid = bombValid;
+    }
+
+    public State getState() {
+        return state;
     }
 }
