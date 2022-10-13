@@ -6,25 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="7c503e0f-386a-4cce-aced-9eeea4ddb675" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-27-Sep-2022-08.48.32.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-27-Sep-2022-08.56.45.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-27-Sep-2022-08.58.30.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-28-Sep-2022-10.52.07.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-28-Sep-2022-10.53.15.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-30-Sep-2022-07.54.16.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-30-Sep-2022-07.55.53.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-30-Sep-2022-08.28.54.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-30-Sep-2022-08.38.01.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-30-Sep-2022-08.38.47.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/BombComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/BombComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/FlameComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/FlameComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Constants/Constant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Constants/Constant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/levels/Level1_sample.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/levels/Level1_sample.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/levels/Level2_sample.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/levels/Level2_sample.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/levels/Level_sample.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/levels/Level_sample.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/assets/levels/Level2_sample.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/assets/levels/Level2_sample.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-12-Oct-2022-20.31.25.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-12-Oct-2022-20.33.04.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-12-Oct-2022-20.41.53.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Enemy/Enemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Enemy/Enemy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Enemy/Enemy1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Enemy/Enemy1.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +43,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Admin/Desktop/Bomberman/src/main/resources/assets/levels&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Admin/Desktop/Bomberman/src/main/java/Bomberman/Components&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -70,6 +56,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Admin\Desktop\Bomberman\src\main\java\Bomberman\Components" />
       <recent name="C:\Users\Admin\Desktop\Bomberman\src\main\resources\assets\levels" />
       <recent name="C:\Users\Admin\Desktop\Bomberman\src\main\resources\assets\textures" />
     </key>
@@ -78,8 +65,9 @@
     </key>
   </component>
   <component name="RunManager" selected="Application.BombermanGame">
-    <configuration name="BombermanGame (2)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="BombermanGame (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Bomberman.BombermanGame" />
+      <module name="Bomberman" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="Bomberman.*" />
@@ -90,7 +78,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="BombermanGame (3)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="BombermanGame (2)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Bomberman.BombermanGame" />
       <module name="Bomberman" />
       <extension name="coverage">
@@ -156,10 +144,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.BombermanGame" />
+        <item itemvalue="Application.BombermanGame (2)" />
+        <item itemvalue="Application.BombermanGame (1)" />
         <item itemvalue="Application.BombermanGame (5)" />
         <item itemvalue="Application.BombermanGame (4)" />
-        <item itemvalue="Application.BombermanGame (3)" />
-        <item itemvalue="Application.BombermanGame (2)" />
       </list>
     </recent_temporary>
   </component>
@@ -203,7 +191,14 @@
       <workItem from="1664955311462" duration="346000" />
       <workItem from="1664957475438" duration="95000" />
       <workItem from="1665101848861" duration="153000" />
-      <workItem from="1665272839359" duration="5551000" />
+      <workItem from="1665272839359" duration="16545000" />
+      <workItem from="1665362154627" duration="680000" />
+      <workItem from="1665366134407" duration="7000" />
+      <workItem from="1665387511387" duration="636000" />
+      <workItem from="1665471576194" duration="53000" />
+      <workItem from="1665579499789" duration="4248000" />
+      <workItem from="1665621499151" duration="1236000" />
+      <workItem from="1665630811428" duration="767000" />
     </task>
     <servers />
   </component>

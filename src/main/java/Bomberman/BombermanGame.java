@@ -149,30 +149,8 @@ public class BombermanGame extends GameApplication {
         onCollision(PLAYER, FLAME, (player, flame) -> {
             playerComponent.die();
         });
-        onCollision(ENEMY1, FLAME, (enemy1, flame) -> {
-            enemy1.removeFromWorld();
-        });
         onCollision(ENEMY1, PLAYER, (enemy1, player) -> {
             playerComponent.die();
-        });
-
-        onCollisionBegin(PLAYER, POWERUP_FLAMES, (player, powerup) -> {
-            powerup.removeFromWorld();
-            play("powerup.wav");
-            inc("flame", 1);
-        });
-        onCollisionBegin(PLAYER, POWERUP_BOMBS, (player, powerup) -> {
-            powerup.removeFromWorld();
-            play("powerup.wav");
-            inc("bomb", 1);
-        });
-        onCollisionBegin(PLAYER, POWERUP_SPEED, (player, powerup) -> {
-            powerup.removeFromWorld();
-            play("powerup.wav");
-            inc("speed", BONUS_SPEED);
-            getGameTimer().runOnceAfter(() -> {
-                inc("speed", -BONUS_SPEED);
-            }, Duration.seconds(6));
         });
     }
 
@@ -212,8 +190,7 @@ public class BombermanGame extends GameApplication {
                         playerComponent = player.getComponent(PlayerComponent.class);
                         break;
                     case '1':
-                    case '2':
-                        spawn("enemy", j * TILED_SIZE, i * TILED_SIZE);
+                        spawn("enemy1", j * TILED_SIZE, i * TILED_SIZE);
                         break;
                     case 'x':
                         stillObject.add(spawn("portal", j * TILED_SIZE, i * TILED_SIZE));
