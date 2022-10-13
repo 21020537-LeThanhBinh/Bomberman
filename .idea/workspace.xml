@@ -6,23 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="7c503e0f-386a-4cce-aced-9eeea4ddb675" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-09-Oct-2022-07.41.02.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-09-Oct-2022-07.42.13.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-09-Oct-2022-07.48.35.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-09-Oct-2022-07.50.57.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-09-Oct-2022-07.52.55.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-09-Oct-2022-07.55.19.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-09-Oct-2022-07.57.30.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-09-Oct-2022-07.59.37.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-09-Oct-2022-08.52.39.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-09-Oct-2022-08.55.24.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/PlayerComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/PlayerComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/levels/Level1_sample.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/levels/Level1_sample.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/assets/levels/Level1_sample.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/assets/levels/Level1_sample.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-12-Oct-2022-20.31.25.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-12-Oct-2022-20.33.04.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-12-Oct-2022-20.41.53.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Enemy/Enemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Enemy/Enemy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Enemy/Enemy1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Enemy/Enemy1.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -209,6 +197,8 @@
       <workItem from="1665387511387" duration="636000" />
       <workItem from="1665471576194" duration="53000" />
       <workItem from="1665579499789" duration="4248000" />
+      <workItem from="1665621499151" duration="1236000" />
+      <workItem from="1665630811428" duration="767000" />
     </task>
     <servers />
   </component>

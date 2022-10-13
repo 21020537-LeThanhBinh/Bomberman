@@ -70,6 +70,7 @@ public abstract class Enemy extends Component {
     }
 
     public void turn() {
+        if (state == DIE) return;
         double randomDirection = Math.random();
         if (dx < 0) {
             entity.translateX(reactionForce);
