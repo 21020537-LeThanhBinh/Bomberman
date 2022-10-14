@@ -32,26 +32,17 @@ public class BombComponent extends Component {
     }
 
     public void explode(int flames) {
-        for (int i = 1; i <= flames; i++) {
-            if (i != flames) {
-                listFlame.add(spawn("right_flame", new SpawnData(entity.getX() + TILED_SIZE * i, entity.getY(), TILED_SIZE * i)));
-                listFlame.add(spawn("left_flame", new SpawnData(entity.getX() - TILED_SIZE * i, entity.getY(), TILED_SIZE * i)));
-                listFlame.add(spawn("down_flame", new SpawnData(entity.getX(), entity.getY() + TILED_SIZE * i, TILED_SIZE * i)));
-                listFlame.add(spawn("up_flame", new SpawnData(entity.getX(), entity.getY() - TILED_SIZE * i, TILED_SIZE * i)));
-            } else {
-                listFlame.add(spawn("top_right_flame", new SpawnData(entity.getX() + TILED_SIZE * i, entity.getY(), TILED_SIZE * i)));
-                listFlame.add(spawn("top_left_flame", new SpawnData(entity.getX() - TILED_SIZE * i, entity.getY(), TILED_SIZE * i)));
-                listFlame.add(spawn("top_down_flame", new SpawnData(entity.getX(), entity.getY() + TILED_SIZE * i, TILED_SIZE * i)));
-                listFlame.add(spawn("top_up_flame", new SpawnData(entity.getX(), entity.getY() - TILED_SIZE * i, TILED_SIZE * i)));
-            }
-        }
         listFlame.add(spawn("central_flame", new SpawnData(entity.getX(), entity.getY())));
-
-        getGameTimer().runOnceAfter(() -> {
-            for (Entity value : listFlame) {
-                value.removeFromWorld();
-            }
-        }, Duration.seconds(0.4));
+        listFlame.add(spawn("top_down_flame", new SpawnData(entity.getX(), entity.getY() + TILED_SIZE, 0)));
+        listFlame.add(spawn("top_right_flame", new SpawnData(entity.getX() + TILED_SIZE, entity.getY(), 0)));
+        listFlame.add(spawn("top_left_flame", new SpawnData(entity.getX() - TILED_SIZE, entity.getY(), 0)));
+        for (int i = 1; i < flames; i++) {
+            listFlame.add(spawn("right_flame", new SpawnData(entity.getX() + TILED_SIZE, entity.getY(), 0)));
+            listFlame.add(spawn("left_flame", new SpawnData(entity.getX() - TILED_SIZE, entity.getY(), 0)));
+            listFlame.add(spawn("down_flame", new SpawnData(entity.getX(), entity.getY() + TILED_SIZE, 0)));
+            listFlame.add(spawn("up_flame", new SpawnData(entity.getX(), entity.getY() - TILED_SIZE, 0)));
+        }
+        listFlame.add(spawn("top_up_flame", new SpawnData(entity.getX(), entity.getY() - TILED_SIZE, 0)));
 
         entity.removeFromWorld();
     }

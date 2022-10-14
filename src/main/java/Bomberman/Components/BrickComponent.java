@@ -1,6 +1,7 @@
 package Bomberman.Components;
 
 import static Bomberman.Constants.Constant.TILED_SIZE;
+import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.image;
 
 import com.almasb.fxgl.entity.component.Component;
@@ -24,6 +25,9 @@ public class BrickComponent extends Component {
 
     public void brickBreak() {
         texture.loopNoOverride(animBrickBreak);
+        getGameTimer().runOnceAfter(() -> {
+            entity.removeFromWorld();
+        }, Duration.seconds(0.4));
     }
 
     @Override

@@ -137,15 +137,6 @@ public class BombermanGame extends GameApplication {
             getGameTimer().runOnceAfter(physic_block::removeFromWorld, Duration.seconds(2.1));
         });
 
-        onCollisionBegin(FLAME, WALL, (flame, wall) -> {
-            flame.removeFromWorld();
-        });
-        onCollision(BRICK, FLAME, (brick, flame) -> {
-            flame.removeFromWorld();
-            brick.getComponent(BrickComponent.class).brickBreak();
-            getGameTimer().runOnceAfter(brick::removeFromWorld, Duration.seconds(0.4));
-        });
-
         onCollision(PLAYER, FLAME, (player, flame) -> {
             playerComponent.die();
         });

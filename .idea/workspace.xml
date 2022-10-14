@@ -6,11 +6,21 @@
   <component name="ChangeListManager">
     <list default="true" id="7c503e0f-386a-4cce-aced-9eeea4ddb675" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-12-Oct-2022-20.31.25.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-12-Oct-2022-20.33.04.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-12-Oct-2022-20.41.53.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Enemy/Enemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Enemy/Enemy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Enemy/Enemy1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Enemy/Enemy1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-12-Oct-2022-20.43.04.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-12-Oct-2022-20.44.57.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-12-Oct-2022-20.46.21.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-12-Oct-2022-20.48.53.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-12-Oct-2022-20.50.31.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-12-Oct-2022-20.57.05.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-12-Oct-2022-23.05.42.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-13-Oct-2022-10.15.40.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-13-Oct-2022-10.24.29.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-13-Oct-2022-10.25.45.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/BombComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/BombComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/BrickComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/BrickComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/FlameComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/FlameComponent.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
