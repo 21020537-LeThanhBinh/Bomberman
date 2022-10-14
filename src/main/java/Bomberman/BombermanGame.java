@@ -4,7 +4,6 @@ import static Bomberman.BombermanType.*;
 import static Bomberman.Constants.Constant.*;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-import Bomberman.Components.BrickComponent;
 import Bomberman.Components.PlayerComponent;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
@@ -114,6 +113,24 @@ public class BombermanGame extends GameApplication {
                 playerComponent.placeBomb(geti("flame"));
             }
         }, KeyCode.SPACE);
+
+        getInput().addAction(new UserAction("Switch to classic bomb") {
+            @Override
+            protected void onActionBegin() {
+                playerComponent.setBombType(CLASSICBOMB);
+                System.out.println("Switched to classic bomb");
+                // Music ...
+            }
+        }, KeyCode.DIGIT1);
+
+        getInput().addAction(new UserAction("Switch to lazer bomb") {
+            @Override
+            protected void onActionBegin() {
+                playerComponent.setBombType(LAZERBOMB);
+                System.out.println("Switched to lazer bomb");
+                // Music ...
+            }
+        }, KeyCode.DIGIT2);
     }
 
     @Override
@@ -149,8 +166,8 @@ public class BombermanGame extends GameApplication {
     protected void initGameVars(Map<String, Object> vars) {
         vars.put("level", STARTING_LEVEL);
         vars.put("speed", PLAYER_SPEED);
-        vars.put("bomb", 1);
-        vars.put("flame", 1);
+        vars.put("bomb", 2);
+        vars.put("flame", 2);
     }
 
     @Override

@@ -5,6 +5,8 @@ import static Bomberman.Constants.Constant.*;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 import Bomberman.Components.*;
+import Bomberman.Components.Bomb.ClassicBomb;
+import Bomberman.Components.Bomb.LazerBomb;
 import Bomberman.Components.Enemy.Enemy1;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
@@ -15,7 +17,6 @@ import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 public class BombermanFactory implements EntityFactory {
@@ -89,11 +90,31 @@ public class BombermanFactory implements EntityFactory {
             .build();
     }
 
-    @Spawns("bomb")
-    public Entity newBomb(SpawnData data) {
+//    @Spawns("bomb")
+//    public Entity newBomb(SpawnData data) {
+//        return entityBuilder(data)
+//            .type(BOMB)
+//            .with(new BombComponent())
+//            .bbox(new HitBox(new Point2D(2, 2), BoundingShape.circle(22)))
+//            .collidable()
+//            .build();
+//    }
+
+    @Spawns("classic_bomb")
+    public Entity newClassicBomb(SpawnData data) {
         return entityBuilder(data)
             .type(BOMB)
-            .with(new BombComponent())
+            .with(new ClassicBomb())
+            .bbox(new HitBox(new Point2D(2, 2), BoundingShape.circle(22)))
+            .collidable()
+            .build();
+    }
+
+    @Spawns("lazer_bomb")
+    public Entity newLazerBomb(SpawnData data) {
+        return entityBuilder(data)
+            .type(BOMB)
+            .with(new LazerBomb())
             .bbox(new HitBox(new Point2D(2, 2), BoundingShape.circle(22)))
             .collidable()
             .build();
@@ -101,9 +122,10 @@ public class BombermanFactory implements EntityFactory {
 
     @Spawns("central_flame")
     public Entity newCentralFlame(SpawnData data) {
+        boolean isLazer = data.getZ() > 0;
         return entityBuilder(data)
             .type(BombermanType.FLAME)
-            .with(new FlameComponent("central_flame.png", data))
+            .with(new FlameComponent("central_flame.png", isLazer))
             .bbox(new HitBox(new Point2D(2,2), BoundingShape.box(TILED_SIZE-4, TILED_SIZE-4)))
             .collidable()
             .build();
@@ -111,9 +133,10 @@ public class BombermanFactory implements EntityFactory {
 
     @Spawns("top_down_flame")
     public Entity newTDFlame(SpawnData data) {
+        boolean isLazer = data.getZ() > 0;
         return entityBuilder(data)
             .type(BombermanType.FLAME)
-            .with(new FlameComponent("top_down_flame.png", data))
+            .with(new FlameComponent("top_down_flame.png", isLazer))
             .bbox(new HitBox(new Point2D(2,2), BoundingShape.box(TILED_SIZE-4, TILED_SIZE-4)))
             .collidable()
             .build();
@@ -121,9 +144,10 @@ public class BombermanFactory implements EntityFactory {
 
     @Spawns("top_up_flame")
     public Entity newTUFlame(SpawnData data) {
+        boolean isLazer = data.getZ() > 0;
         return entityBuilder(data)
             .type(BombermanType.FLAME)
-            .with(new FlameComponent("top_up_flame.png", data))
+            .with(new FlameComponent("top_up_flame.png", isLazer))
             .bbox(new HitBox(new Point2D(2,2), BoundingShape.box(TILED_SIZE-4, TILED_SIZE-4)))
             .collidable()
             .build();
@@ -131,9 +155,10 @@ public class BombermanFactory implements EntityFactory {
 
     @Spawns("top_right_flame")
     public Entity newTRFlame(SpawnData data) {
+        boolean isLazer = data.getZ() > 0;
         return entityBuilder(data)
             .type(BombermanType.FLAME)
-            .with(new FlameComponent("top_right_flame.png", data))
+            .with(new FlameComponent("top_right_flame.png", isLazer))
             .bbox(new HitBox(new Point2D(2,2), BoundingShape.box(TILED_SIZE-4, TILED_SIZE-4)))
             .collidable()
             .build();
@@ -141,9 +166,10 @@ public class BombermanFactory implements EntityFactory {
 
     @Spawns("top_left_flame")
     public Entity newTLFlame(SpawnData data) {
+        boolean isLazer = data.getZ() > 0;
         return entityBuilder(data)
             .type(BombermanType.FLAME)
-            .with(new FlameComponent("top_left_flame.png", data))
+            .with(new FlameComponent("top_left_flame.png", isLazer))
             .bbox(new HitBox(new Point2D(2,2), BoundingShape.box(TILED_SIZE-4, TILED_SIZE-4)))
             .collidable()
             .build();
@@ -151,9 +177,10 @@ public class BombermanFactory implements EntityFactory {
 
     @Spawns("up_flame")
     public Entity newUFlame(SpawnData data) {
+        boolean isLazer = data.getZ() > 0;
         return entityBuilder(data)
             .type(BombermanType.FLAME)
-            .with(new FlameComponent("up_flame.png", data))
+            .with(new FlameComponent("up_flame.png", isLazer))
             .bbox(new HitBox(new Point2D(2,2), BoundingShape.box(TILED_SIZE-4, TILED_SIZE-4)))
             .collidable()
             .build();
@@ -161,9 +188,10 @@ public class BombermanFactory implements EntityFactory {
 
     @Spawns("down_flame")
     public Entity newDFlame(SpawnData data) {
+        boolean isLazer = data.getZ() > 0;
         return entityBuilder(data)
             .type(BombermanType.FLAME)
-            .with(new FlameComponent("down_flame.png", data))
+            .with(new FlameComponent("down_flame.png", isLazer))
             .bbox(new HitBox(new Point2D(2,2), BoundingShape.box(TILED_SIZE-4, TILED_SIZE-4)))
             .collidable()
             .build();
@@ -171,9 +199,10 @@ public class BombermanFactory implements EntityFactory {
 
     @Spawns("left_flame")
     public Entity newLFlame(SpawnData data) {
+        boolean isLazer = data.getZ() > 0;
         return entityBuilder(data)
             .type(BombermanType.FLAME)
-            .with(new FlameComponent("left_flame.png", data))
+            .with(new FlameComponent("left_flame.png", isLazer))
             .bbox(new HitBox(new Point2D(2,2), BoundingShape.box(TILED_SIZE-4, TILED_SIZE-4)))
             .collidable()
             .build();
@@ -181,9 +210,10 @@ public class BombermanFactory implements EntityFactory {
 
     @Spawns("right_flame")
     public Entity newRFlame(SpawnData data) {
+        boolean isLazer = data.getZ() > 0;
         return entityBuilder(data)
             .type(BombermanType.FLAME)
-            .with(new FlameComponent("right_flame.png", data))
+            .with(new FlameComponent("right_flame.png", isLazer))
             .bbox(new HitBox(new Point2D(2,2), BoundingShape.box(TILED_SIZE-4, TILED_SIZE-4)))
             .collidable()
             .build();

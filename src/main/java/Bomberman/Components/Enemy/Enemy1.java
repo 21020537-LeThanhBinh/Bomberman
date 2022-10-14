@@ -1,17 +1,12 @@
 package Bomberman.Components.Enemy;
 
-import Bomberman.Components.FlameComponent;
-import Bomberman.Components.PlayerComponent;
-import com.almasb.fxgl.entity.Entity;
 import javafx.util.Duration;
 
 import static Bomberman.Constants.Constant.ENEMY_SPEED;
 import static Bomberman.BombermanType.*;
-import static Bomberman.Constants.Constant.TILED_SIZE;
-import static Bomberman.DynamicEntityState.State.DIE;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-public class Enemy1 extends Enemy {
+public class Enemy1 extends EnemyComponent {
     public Enemy1() {
         super(-ENEMY_SPEED, 0, 1, 3, "enemy1.png");
         onCollisionBegin(ENEMY1, BRICK, (enemy1, brick) -> {
