@@ -10,7 +10,7 @@ import static Bomberman.Constants.Constant.ENEMY_SPEED;
 import static Bomberman.DynamicEntityState.State.*;
 import static com.almasb.fxgl.dsl.FXGL.image;
 
-public abstract class Enemy extends Component {
+public abstract class EnemyComponent extends Component {
     private final int FRAME_SIZE = 48;
     protected double dx;
     protected double dy;
@@ -22,7 +22,7 @@ public abstract class Enemy extends Component {
     protected AnimationChannel animDie;
     protected AnimationChannel animWalkDown, animWalkRight, animWalkUp, animWalkLeft;
 
-    public Enemy(double dx, double dy, double speedFactor, double reactionForce, String assetName) {
+    public EnemyComponent(double dx, double dy, double speedFactor, double reactionForce, String assetName) {
         this.dx = dx;
         this.dy = dy;
         this.speedFactor = speedFactor;

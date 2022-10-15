@@ -26,7 +26,7 @@ public class BrickComponent extends Component {
     public void brickBreak() {
         texture.loopNoOverride(animBrickBreak);
         getGameTimer().runOnceAfter(() -> {
-            entity.removeFromWorld();
+            if (entity != null) entity.removeFromWorld();
         }, Duration.seconds(0.4));
     }
 

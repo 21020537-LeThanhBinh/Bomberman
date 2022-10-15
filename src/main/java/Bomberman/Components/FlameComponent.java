@@ -5,14 +5,9 @@ import static Bomberman.BombermanType.FLAME;
 import static Bomberman.BombermanType.WALL;
 import static Bomberman.Constants.Constant.TILED_SIZE;
 import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
-import static com.almasb.fxgl.dsl.FXGL.onCollision;
 import static com.almasb.fxgl.dsl.FXGL.onCollisionBegin;
-import static com.almasb.fxgl.dsl.FXGL.onCollisionOneTimeOnly;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.image;
-
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.AnimatedTexture;
@@ -20,12 +15,14 @@ import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.util.Duration;
 
 public class FlameComponent extends Component {
-    public String name;
+    private String name;
+    private boolean isLazer;
     private AnimatedTexture texture;
     private AnimationChannel animation;
 
-    public FlameComponent(String assetName, SpawnData data) {
+    public FlameComponent(String assetName, boolean isLazer) {
         this.name = assetName.split("\\.")[0];
+        this.isLazer = isLazer;
 
         getGameTimer().runOnceAfter(() -> {
             if (entity != null) entity.removeFromWorld();
@@ -35,28 +32,33 @@ public class FlameComponent extends Component {
             flame.removeFromWorld();
         });
         onCollisionBegin(FLAME, BRICK, (flame, brick) -> {
-            flame.removeFromWorld();
+            if (!flame.getComponent(FlameComponent.class).isLazer) flame.removeFromWorld();
             brick.getComponent(BrickComponent.class).brickBreak();
         });
         onCollisionBegin(FLAME, FLAME, (flame, flame1) -> {
             String thisName = flame.getComponent(FlameComponent.class).name;
-            switch (thisName) {
-                case "up_flame":
-                case "top_up_flame":
-                    spawn(thisName, new SpawnData(flame.getX(), flame.getY()-TILED_SIZE, 0));
-                    break;
-                case "down_flame":
-                case "top_down_flame":
-                    spawn(thisName, new SpawnData(flame.getX(), flame.getY()+TILED_SIZE, 0));
-                    break;
-                case "left_flame":
-                case "top_left_flame":
-                    spawn(thisName, new SpawnData(flame.getX()-TILED_SIZE, flame.getY(), 0));
-                    break;
-                default:
-                    spawn(thisName, new SpawnData(flame.getX()+TILED_SIZE, flame.getY(), 0));
-                    break;
-            }
+            int thisZ = flame.getComponent(FlameComponent.class).isLazer ? 1 : 0;
+
+            getGameTimer().runOnceAfter(() -> {
+                switch (thisName) {
+                    case "up_flame":
+                    case "top_up_flame":
+                        spawn(thisName, new SpawnData(flame.getX(), flame.getY()-TILED_SIZE, thisZ));
+                        break;
+                    case "down_flame":
+                    case "top_down_flame":
+                        spawn(thisName, new SpawnData(flame.getX(), flame.getY()+TILED_SIZE, thisZ));
+                        break;
+                    case "left_flame":
+                    case "top_left_flame":
+                        spawn(thisName, new SpawnData(flame.getX()-TILED_SIZE, flame.getY(), thisZ));
+                        break;
+                    case "right_flame":
+                    case "top_right_flame":
+                        spawn(thisName, new SpawnData(flame.getX()+TILED_SIZE, flame.getY(), thisZ));
+                        break;
+                }
+            }, Duration.seconds(0.05));
             flame.removeFromWorld();
         });
 
