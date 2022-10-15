@@ -1,22 +1,40 @@
 package Bomberman.Components.Bomb;
 
+import static Bomberman.BombermanType.BOMB;
+import static Bomberman.BombermanType.FLAME;
+import static Bomberman.BombermanType.PLAYER;
 import static Bomberman.Constants.Constant.TILED_SIZE;
+import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
+import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGL.inc;
+import static com.almasb.fxgl.dsl.FXGL.onCollision;
+import static com.almasb.fxgl.dsl.FXGL.onCollisionBegin;
+import static com.almasb.fxgl.dsl.FXGL.onCollisionEnd;
+import static com.almasb.fxgl.dsl.FXGL.play;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 
+import Bomberman.Components.PlayerComponent;
 import Bomberman.DynamicEntityState.State;
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
+import javafx.util.Duration;
 
 public class LazerBomb extends BombComponent{
-  @Override
-  public void explode(int flames) {
-    spawn("central_flame", new SpawnData(entity.getX(), entity.getY(), 1));
-    entity.removeFromWorld();
+  private State direction;
+  public LazerBomb() {
+    onCollision(BOMB, FLAME, (bomb, flame) -> {
+      if (bomb != null) bomb.getComponent(LazerBomb.class).explode();
+    });
+
+    direction = getGameWorld().getSingleton(PLAYER).getComponent(PlayerComponent.class).getState();
   }
 
-  public void explode(int flames, State state) {
-    spawn("central_flame", new SpawnData(entity.getX(), entity.getY(), 1));
+  @Override
+  public void explode() {
+    super.explode();
 
-    switch (state) {
+    spawn("central_flame", new SpawnData(entity.getX(), entity.getY(), 1));
+    switch (direction) {
       case UP:
         for (int i = 1; i < flames; i++) {
           spawn("up_flame", new SpawnData(entity.getX(), entity.getY() - TILED_SIZE, 1));
@@ -45,6 +63,5 @@ public class LazerBomb extends BombComponent{
       case DIE:
         break;
     }
-    entity.removeFromWorld();
   }
 }

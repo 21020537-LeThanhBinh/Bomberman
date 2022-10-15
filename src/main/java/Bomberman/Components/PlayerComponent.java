@@ -5,7 +5,6 @@ import static Bomberman.BombermanType.POWERUP_BOMBS;
 import static Bomberman.BombermanType.POWERUP_FLAMES;
 import static Bomberman.BombermanType.POWERUP_SPEED;
 import static Bomberman.Constants.Constant.BONUS_SPEED;
-import static Bomberman.Constants.Constant.LAZER_FLAME;
 import static Bomberman.Constants.Constant.TILED_SIZE;
 import static Bomberman.DynamicEntityState.State.*;
 import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
@@ -17,11 +16,8 @@ import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.geti;
 
 import Bomberman.BombermanType;
-import Bomberman.Components.Bomb.ClassicBomb;
-import Bomberman.Components.Bomb.LazerBomb;
 import Bomberman.DynamicEntityState.State;
 import com.almasb.fxgl.core.math.FXGLMath;
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.physics.PhysicsComponent;
@@ -32,7 +28,6 @@ import javafx.util.Duration;
 
 public class PlayerComponent extends Component {
     private final int FRAME_SIZE = 45;
-    private int bombCounter;
     private boolean bombValid;
     private State state;
     private BombermanType bombType;
@@ -45,7 +40,6 @@ public class PlayerComponent extends Component {
     public PlayerComponent() {
         state = STOP;
         bombType = BombermanType.CLASSICBOMB;
-        bombCounter = 0;
         bombValid = true;
 
         physics = new PhysicsComponent();
@@ -171,11 +165,10 @@ public class PlayerComponent extends Component {
         state = DIE;
     }
 
-    public void placeBomb(int flames) {
-        if (bombCounter == geti("bomb") || !bombValid) {
+    public void placeBomb() {
+        if (geti("bomb") == 0 || !bombValid) {
             return;
         }
-        bombCounter++;
         int bombLocationX = (int) (entity.getX() % TILED_SIZE > TILED_SIZE / 2
             ? entity.getX() + TILED_SIZE - entity.getX() % TILED_SIZE
             : entity.getX() - entity.getX() % TILED_SIZE);
@@ -186,23 +179,10 @@ public class PlayerComponent extends Component {
         play("place_bomb.wav");
         switch (bombType) {
             case CLASSICBOMB:
-                Entity classicBomb = spawn("classic_bomb", new SpawnData(bombLocationX, bombLocationY));
-
-                getGameTimer().runOnceAfter(() -> {
-                    classicBomb.getComponent(ClassicBomb.class).explode(flames);
-                    play("explosion.wav");
-                    bombCounter--;
-                }, Duration.seconds(2));
+                spawn("classic_bomb", new SpawnData(bombLocationX, bombLocationY));
                 break;
             case LAZERBOMB:
-                Entity lazerBomb = spawn("lazer_bomb", new SpawnData(bombLocationX, bombLocationY));
-
-                State temporaryState = state;
-                getGameTimer().runOnceAfter(() -> {
-                    lazerBomb.getComponent(LazerBomb.class).explode(LAZER_FLAME, temporaryState);
-                    play("explosion.wav");
-                    bombCounter--;
-                }, Duration.seconds(2));
+                spawn("lazer_bomb", new SpawnData(bombLocationX, bombLocationY));
                 break;
         }
     }
@@ -217,5 +197,13 @@ public class PlayerComponent extends Component {
 
     public void setBombType(BombermanType bombType) {
         this.bombType = bombType;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 }

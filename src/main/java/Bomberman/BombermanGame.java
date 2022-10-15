@@ -110,7 +110,7 @@ public class BombermanGame extends GameApplication {
         getInput().addAction(new UserAction("Place Bomb") {
             @Override
             protected void onActionBegin() {
-                playerComponent.placeBomb(geti("flame"));
+                playerComponent.placeBomb();
             }
         }, KeyCode.SPACE);
 
@@ -148,12 +148,6 @@ public class BombermanGame extends GameApplication {
             }
         });
 
-        // Stop player from moving in bomb's pos
-        onCollisionEnd(PLAYER, BOMB, (player, bomb) -> {
-            Entity physic_block = spawn("physic_block", bomb.getX(), bomb.getY());
-            getGameTimer().runOnceAfter(physic_block::removeFromWorld, Duration.seconds(2.1));
-        });
-
         onCollision(PLAYER, FLAME, (player, flame) -> {
             playerComponent.die();
         });
@@ -167,7 +161,7 @@ public class BombermanGame extends GameApplication {
         vars.put("level", STARTING_LEVEL);
         vars.put("speed", PLAYER_SPEED);
         vars.put("bomb", 2);
-        vars.put("flame", 2);
+        vars.put("flame", 1);
     }
 
     @Override
