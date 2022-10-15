@@ -7,6 +7,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 import Bomberman.Components.*;
 import Bomberman.Components.Bomb.ClassicBomb;
 import Bomberman.Components.Bomb.LazerBomb;
+import Bomberman.Components.Bomb.LightBomb;
 import Bomberman.Components.Enemy.Enemy1;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
@@ -15,6 +16,8 @@ import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
+import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -31,10 +34,13 @@ public class BombermanFactory implements EntityFactory {
 
     @Spawns("physic_block")
     public Entity newPhysicsBlock(SpawnData data) {
+        PhysicsComponent physics = new PhysicsComponent();
+        if (data.getZ() > 0) physics.setBodyType(BodyType.DYNAMIC);
+
         return entityBuilder(data)
             .type(PHYSIC_BLOCK)
-            .bbox(new HitBox(BoundingShape.box(TILED_SIZE, TILED_SIZE)))
-            .with(new PhysicsComponent())
+            .bbox(new HitBox(new Point2D(2, 2), BoundingShape.circle(22)))
+            .with(physics)
             .collidable()
             .build();
     }
@@ -75,7 +81,7 @@ public class BombermanFactory implements EntityFactory {
     public Entity newPlayer(SpawnData data) {
         return entityBuilder(data)
             .type(BombermanType.PLAYER)
-            .bbox(new HitBox(new Point2D(2, 2), BoundingShape.circle(20)))
+            .bbox(new HitBox(new Point2D(2, 2), BoundingShape.circle(22)))
             .with(new PlayerComponent())
             .collidable()
             .build();
@@ -116,6 +122,16 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BOMB)
             .with(new LazerBomb())
+            .bbox(new HitBox(new Point2D(2, 2), BoundingShape.circle(22)))
+            .collidable()
+            .build();
+    }
+
+    @Spawns("light_bomb")
+    public Entity newLightBomb(SpawnData data) {
+        return entityBuilder(data)
+            .type(BOMB)
+            .with(new LightBomb())
             .bbox(new HitBox(new Point2D(2, 2), BoundingShape.circle(22)))
             .collidable()
             .build();

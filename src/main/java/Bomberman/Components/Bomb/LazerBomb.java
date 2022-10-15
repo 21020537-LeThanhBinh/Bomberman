@@ -26,6 +26,11 @@ public class LazerBomb extends BombComponent{
       if (bomb != null) bomb.getComponent(LazerBomb.class).explode();
     });
 
+    // Stop player from moving in bomb's pos
+    onCollisionEnd(PLAYER, BOMB, (player, bomb) -> {
+      if (physic_block == null) physic_block = spawn("physic_block", bomb.getX(), bomb.getY());
+    });
+
     direction = getGameWorld().getSingleton(PLAYER).getComponent(PlayerComponent.class).getState();
   }
 

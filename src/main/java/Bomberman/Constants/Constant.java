@@ -19,6 +19,4 @@ public class Constant {
     public static final int ENEMY_SPEED = 80;
 
     public static final int BONUS_SPEED = 100;
-
-    public static final int LAZER_FLAME = 3;
 }

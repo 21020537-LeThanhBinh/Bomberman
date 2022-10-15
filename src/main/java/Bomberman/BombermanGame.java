@@ -131,6 +131,15 @@ public class BombermanGame extends GameApplication {
                 // Music ...
             }
         }, KeyCode.DIGIT2);
+
+        getInput().addAction(new UserAction("Switch to light bomb") {
+            @Override
+            protected void onActionBegin() {
+                playerComponent.setBombType(LIGHTBOMB);
+                System.out.println("Switched to light bomb");
+                // Music ...
+            }
+        }, KeyCode.DIGIT3);
     }
 
     @Override

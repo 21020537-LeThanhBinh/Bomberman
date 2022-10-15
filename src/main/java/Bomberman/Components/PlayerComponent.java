@@ -1,9 +1,6 @@
 package Bomberman.Components;
 
-import static Bomberman.BombermanType.PLAYER;
-import static Bomberman.BombermanType.POWERUP_BOMBS;
-import static Bomberman.BombermanType.POWERUP_FLAMES;
-import static Bomberman.BombermanType.POWERUP_SPEED;
+import static Bomberman.BombermanType.*;
 import static Bomberman.Constants.Constant.BONUS_SPEED;
 import static Bomberman.Constants.Constant.TILED_SIZE;
 import static Bomberman.DynamicEntityState.State.*;
@@ -17,6 +14,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.geti;
 
 import Bomberman.BombermanType;
 import Bomberman.DynamicEntityState.State;
+import Bomberman.Utils.Utils;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
@@ -24,6 +22,7 @@ import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
+import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
 public class PlayerComponent extends Component {
@@ -169,20 +168,18 @@ public class PlayerComponent extends Component {
         if (geti("bomb") == 0 || !bombValid) {
             return;
         }
-        int bombLocationX = (int) (entity.getX() % TILED_SIZE > TILED_SIZE / 2
-            ? entity.getX() + TILED_SIZE - entity.getX() % TILED_SIZE
-            : entity.getX() - entity.getX() % TILED_SIZE);
-        int bombLocationY = (int) (entity.getY() % TILED_SIZE > TILED_SIZE / 2
-            ? entity.getY() + TILED_SIZE - entity.getY() % TILED_SIZE
-            : entity.getY() - entity.getY() % TILED_SIZE);
 
+        Point2D bombLocation = Utils.rearrange(entity.getPosition());
         play("place_bomb.wav");
         switch (bombType) {
             case CLASSICBOMB:
-                spawn("classic_bomb", new SpawnData(bombLocationX, bombLocationY));
+                spawn("classic_bomb", new SpawnData(bombLocation));
                 break;
             case LAZERBOMB:
-                spawn("lazer_bomb", new SpawnData(bombLocationX, bombLocationY));
+                spawn("lazer_bomb", new SpawnData(bombLocation));
+                break;
+            case LIGHTBOMB:
+                spawn("light_bomb", new SpawnData(bombLocation));
                 break;
         }
     }
