@@ -6,25 +6,26 @@
   <component name="ChangeListManager">
     <list default="true" id="7c503e0f-386a-4cce-aced-9eeea4ddb675" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-14-Oct-2022-19.19.04.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-14-Oct-2022-19.20.40.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-14-Oct-2022-19.22.06.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-14-Oct-2022-19.50.07.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-14-Oct-2022-19.51.55.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-14-Oct-2022-20.03.36.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-14-Oct-2022-20.04.54.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-14-Oct-2022-20.07.53.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-14-Oct-2022-20.14.36.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-14-Oct-2022-20.16.59.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-15-Oct-2022-10.50.09.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-15-Oct-2022-10.52.05.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-15-Oct-2022-10.52.26.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-15-Oct-2022-10.52.51.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-15-Oct-2022-10.54.17.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-15-Oct-2022-10.54.53.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-15-Oct-2022-10.56.27.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-15-Oct-2022-10.56.40.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-15-Oct-2022-11.06.33.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-15-Oct-2022-11.07.21.log" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanGame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Bomb/BombComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Bomb/BombComponent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Bomb/ClassicBomb.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Bomb/ClassicBomb.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Bomb/LazerBomb.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Bomb/LazerBomb.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/FlameComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/FlameComponent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/PlayerComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/PlayerComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Constants/Constant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Constants/Constant.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$5.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanType.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanType.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/Components/Bomb/BombComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/Components/Bomb/BombComponent.class" afterDir="false" />
@@ -83,6 +84,7 @@
       <recent name="C:\Users\Admin\Desktop\Bomberman\src\main\resources\assets\textures" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="Bomberman.Components.Bomb" />
       <recent name="Bomberman.DynamicEntityState" />
       <recent name="Bomberman.Components" />
     </key>
@@ -225,7 +227,7 @@
       <workItem from="1665749211596" duration="3949000" />
       <workItem from="1665755231201" duration="11181000" />
       <workItem from="1665795077389" duration="3389000" />
-      <workItem from="1665805419735" duration="1289000" />
+      <workItem from="1665805419735" duration="11136000" />
     </task>
     <servers />
   </component>

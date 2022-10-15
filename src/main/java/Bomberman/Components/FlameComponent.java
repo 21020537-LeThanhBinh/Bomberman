@@ -59,7 +59,10 @@ public class FlameComponent extends Component {
                         break;
                 }
             }, Duration.seconds(0.05));
-            flame.removeFromWorld();
+
+            if (!thisName.equals("central_flame")) {
+                flame.removeFromWorld();
+            }
         });
 
         animation = new AnimationChannel(FXGL.image(assetName), 3, TILED_SIZE, TILED_SIZE, Duration.seconds(0.4), 0, 2);

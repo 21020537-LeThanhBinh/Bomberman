@@ -39,11 +39,6 @@ public abstract class BombComponent extends Component {
             if (entity != null) explode();
         }, Duration.seconds(2));
 
-        // Stop player from moving in bomb's pos
-        onCollisionEnd(PLAYER, BOMB, (player, bomb) -> {
-            physic_block = spawn("physic_block", bomb.getX(), bomb.getY());
-        });
-
         onCollisionBegin(PHYSIC_BLOCK, FLAME, (physicBlock, flame) -> {
             if (physicBlock != null) physicBlock.removeFromWorld();
         });
@@ -62,8 +57,6 @@ public abstract class BombComponent extends Component {
 
     public void explode() {
         entity.removeFromWorld();
-        if (physic_block != null) physic_block.removeFromWorld();
-
         play("explosion.wav");
         inc("bomb", 1);
     }
