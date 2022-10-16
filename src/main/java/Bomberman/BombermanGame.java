@@ -163,6 +163,9 @@ public class BombermanGame extends GameApplication {
         onCollision(ENEMY1, PLAYER, (enemy1, player) -> {
             playerComponent.die();
         });
+        onCollision(ENEMY2, PLAYER, (enemy2, player) -> {
+            playerComponent.die();
+        });
     }
 
     @Override
@@ -202,6 +205,9 @@ public class BombermanGame extends GameApplication {
                         break;
                     case '1':
                         spawn("enemy1", j * TILED_SIZE, i * TILED_SIZE);
+                        break;
+                    case '2':
+                        spawn("enemy2", j * TILED_SIZE, i * TILED_SIZE);
                         break;
                     case 'x':
                         stillObject.add(spawn("portal", j * TILED_SIZE, i * TILED_SIZE));

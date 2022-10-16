@@ -60,7 +60,10 @@ public class FlameComponent extends Component {
                 }
             }, Duration.seconds(0.05));
 
-            if (!thisName.equals("central_flame")) {
+            if (thisName.equals("central_flame")) {
+                flame1.removeFromWorld();
+            }
+            else {
                 flame.removeFromWorld();
             }
         });

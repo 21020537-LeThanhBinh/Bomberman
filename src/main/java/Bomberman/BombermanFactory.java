@@ -9,6 +9,7 @@ import Bomberman.Components.Bomb.ClassicBomb;
 import Bomberman.Components.Bomb.LazerBomb;
 import Bomberman.Components.Bomb.LightBomb;
 import Bomberman.Components.Enemy.Enemy1;
+import Bomberman.Components.Enemy.Enemy2;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
@@ -17,7 +18,6 @@ import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
-import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -93,6 +93,16 @@ public class BombermanFactory implements EntityFactory {
             .type(ENEMY1)
             .bbox(new HitBox(new Point2D(5, 5), BoundingShape.box(38, 38)))
             .with(new Enemy1())
+            .collidable()
+            .build();
+    }
+
+    @Spawns("enemy2")
+    public Entity newEnemy2(SpawnData data) {
+        return entityBuilder(data)
+            .type(ENEMY2)
+            .bbox(new HitBox(new Point2D(5, 5), BoundingShape.box(38, 38)))
+            .with(new Enemy2())
             .collidable()
             .build();
     }

@@ -41,28 +41,28 @@ public class LazerBomb extends BombComponent{
     spawn("central_flame", new SpawnData(entity.getX(), entity.getY(), 1));
     switch (direction) {
       case UP:
+        spawn("top_up_flame", new SpawnData(entity.getX(), entity.getY() - TILED_SIZE, 1));
         for (int i = 1; i < flames; i++) {
           spawn("up_flame", new SpawnData(entity.getX(), entity.getY() - TILED_SIZE, 1));
         }
-        spawn("top_up_flame", new SpawnData(entity.getX(), entity.getY() - TILED_SIZE, 1));
         break;
       case RIGHT:
+        spawn("top_right_flame", new SpawnData(entity.getX() + TILED_SIZE, entity.getY(), 1));
         for (int i = 1; i < flames; i++) {
           spawn("right_flame", new SpawnData(entity.getX() + TILED_SIZE, entity.getY(), 1));
         }
-        spawn("top_right_flame", new SpawnData(entity.getX() + TILED_SIZE, entity.getY(), 1));
         break;
       case DOWN:
+        spawn("top_down_flame", new SpawnData(entity.getX(), entity.getY() + TILED_SIZE, 1));
         for (int i = 1; i < flames; i++) {
           spawn("down_flame", new SpawnData(entity.getX(), entity.getY() + TILED_SIZE, 1));
         }
-        spawn("top_down_flame", new SpawnData(entity.getX(), entity.getY() + TILED_SIZE, 1));
         break;
       case LEFT:
+        spawn("top_left_flame", new SpawnData(entity.getX() - TILED_SIZE, entity.getY(), 1));
         for (int i = 1; i < flames; i++) {
           spawn("left_flame", new SpawnData(entity.getX() - TILED_SIZE, entity.getY(), 1));
         }
-        spawn("top_left_flame", new SpawnData(entity.getX() - TILED_SIZE, entity.getY(), 1));
         break;
       case STOP:
       case DIE:
