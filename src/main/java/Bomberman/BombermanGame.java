@@ -39,6 +39,8 @@ public class BombermanGame extends GameApplication {
         HEIGHT = sc.nextInt();
         WIDTH = sc.nextInt();
 
+
+
         settings.setWidth(WIDTH * TILED_SIZE);
         settings.setHeight(HEIGHT * TILED_SIZE);
 
@@ -54,6 +56,9 @@ public class BombermanGame extends GameApplication {
         getGameWorld().addEntityFactory(new BombermanFactory());
 
         spawn("background");
+
+        set("map_width", WIDTH);
+        set("map_height", HEIGHT);
         loadLevel();
     }
 
@@ -148,7 +153,7 @@ public class BombermanGame extends GameApplication {
         physics.setGravity(0,0);
 
         onCollision(PLAYER, PORTAL, (player, portal) -> {
-            if (getGameWorld().getGroup(ENEMY1, POWERUP_BOMBS, POWERUP_FLAMES).getSize() == 0) {
+            if (getGameWorld().getGroup(ENEMY1, ENEMY2, ENEMY3, POWERUP_BOMBS, POWERUP_FLAMES).getSize() == 0) {
                 // Next level music . . .
 
                 player.removeFromWorld();
@@ -166,10 +171,15 @@ public class BombermanGame extends GameApplication {
         onCollision(ENEMY2, PLAYER, (enemy2, player) -> {
             playerComponent.die();
         });
+        onCollision(ENEMY3, PLAYER, (enemy3, player) -> {
+            playerComponent.die();
+        });
     }
 
     @Override
     protected void initGameVars(Map<String, Object> vars) {
+        vars.put("map_width", 0);
+        vars.put("map_height", 0);
         vars.put("level", STARTING_LEVEL);
         vars.put("speed", PLAYER_SPEED);
         vars.put("bomb", 2);
@@ -208,6 +218,9 @@ public class BombermanGame extends GameApplication {
                         break;
                     case '2':
                         spawn("enemy2", j * TILED_SIZE, i * TILED_SIZE);
+                        break;
+                    case '3':
+                        spawn("enemy3", j * TILED_SIZE, i * TILED_SIZE);
                         break;
                     case 'x':
                         stillObject.add(spawn("portal", j * TILED_SIZE, i * TILED_SIZE));

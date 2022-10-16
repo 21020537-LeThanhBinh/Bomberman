@@ -6,12 +6,21 @@
   <component name="ChangeListManager">
     <list default="true" id="7c503e0f-386a-4cce-aced-9eeea4ddb675" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-16-Oct-2022-08.48.43.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-16-Oct-2022-08.49.57.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-16-Oct-2022-08.51.23.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-16-Oct-2022-08.52.34.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Bomb/LazerBomb.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Bomb/LazerBomb.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/PlayerComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/PlayerComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-16-Oct-2022-09.02.49.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-16-Oct-2022-09.13.40.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-16-Oct-2022-09.16.04.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-16-Oct-2022-09.17.53.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-16-Oct-2022-09.20.21.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-16-Oct-2022-09.29.46.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-16-Oct-2022-09.30.59.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-16-Oct-2022-09.31.52.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-16-Oct-2022-09.32.21.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-16-Oct-2022-09.35.46.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/levels/Level1_sample.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/levels/Level1_sample.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/Components/Bomb/LazerBomb$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/Components/Bomb/LazerBomb$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/Components/Bomb/LazerBomb.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/Components/Bomb/LazerBomb.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -210,7 +219,7 @@
       <workItem from="1665818390987" duration="521000" />
       <workItem from="1665818939690" duration="3064000" />
       <workItem from="1665828109493" duration="9000" />
-      <workItem from="1665878683734" duration="7617000" />
+      <workItem from="1665878683734" duration="38455000" />
     </task>
     <servers />
   </component>

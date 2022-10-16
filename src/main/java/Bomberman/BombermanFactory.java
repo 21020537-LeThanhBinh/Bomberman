@@ -10,6 +10,7 @@ import Bomberman.Components.Bomb.LazerBomb;
 import Bomberman.Components.Bomb.LightBomb;
 import Bomberman.Components.Enemy.Enemy1;
 import Bomberman.Components.Enemy.Enemy2;
+import Bomberman.Components.Enemy.Enemy3;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
@@ -107,15 +108,15 @@ public class BombermanFactory implements EntityFactory {
             .build();
     }
 
-//    @Spawns("bomb")
-//    public Entity newBomb(SpawnData data) {
-//        return entityBuilder(data)
-//            .type(BOMB)
-//            .with(new BombComponent())
-//            .bbox(new HitBox(new Point2D(2, 2), BoundingShape.circle(22)))
-//            .collidable()
-//            .build();
-//    }
+    @Spawns("enemy3")
+    public Entity newEnemy3(SpawnData data) {
+        return entityBuilder(data)
+            .type(ENEMY3)
+            .bbox(new HitBox(new Point2D(5, 5), BoundingShape.box(38, 38)))
+            .with(new Enemy3())
+            .collidable()
+            .build();
+    }
 
     @Spawns("classic_bomb")
     public Entity newClassicBomb(SpawnData data) {
