@@ -51,7 +51,7 @@ public class AStarPathFinder {
 	 */
 	public Path findPath(int sx, int sy, int tx, int ty) {
 		// The target is blocked (== 0)
-		if (map.getVal(tx, ty) != 1) {
+		if (!isValidLocation(sx, sy, tx, ty) || map.getVal(tx, ty) != 1) {
 			return null;
 		}
 		

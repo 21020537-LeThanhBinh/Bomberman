@@ -11,6 +11,7 @@ import static Bomberman.Constants.Constant.TILED_SIZE;
 import static Bomberman.DynamicEntityState.State.DIE;
 import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGL.random;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.geti;
 
 import Bomberman.Components.Bomb.LightBomb;
@@ -33,8 +34,10 @@ public class Enemy3 extends EnemyComponent {
     private int myY;
     private int playerX;
     private int playerY;
+    // Random movement
+    private boolean movingRandom;
     public Enemy3() {
-        super(-ENEMY_SPEED, 0, 3, 3, "enemy3.png");
+        super(-ENEMY_SPEED, 0, 2, 3, "enemy3.png");
 
         FXGL.onCollisionBegin(ENEMY3, BRICK, (enemy3, brick) -> {
             enemy3.getComponent(Enemy3.class).turn();
@@ -53,6 +56,8 @@ public class Enemy3 extends EnemyComponent {
 
         map = new Map(geti("map_width"), geti("map_height"));
         aStar = new AStarPathFinder(map);
+
+        movingRandom = false;
     }
 
     @Override
@@ -69,11 +74,22 @@ public class Enemy3 extends EnemyComponent {
             return;
         }
 
+        if (myX == playerX && myY == playerY) {
+            movingRandom = false;
+        }
+
+        if (!movingRandom) {
+            loadPlayer();
+        }
         loadMap();
         path = aStar.findPath(myX,myY,playerX,playerY);
 
         // No path to player
         if (path == null) {
+            playerX = random(myX-2,myX+2);
+            playerY = random(myY-2,myY+2);
+
+            movingRandom = true;
             return;
         }
 
@@ -111,7 +127,7 @@ public class Enemy3 extends EnemyComponent {
         super.onUpdate(tpf);
     }
 
-    private void loadMap() {
+    public void loadMap() {
         for (int x = 0; x < geti("map_width"); x++) {
             for (int y = 0; y < geti("map_height"); y++) {
                 map.setVal(x,y,1);
@@ -131,22 +147,11 @@ public class Enemy3 extends EnemyComponent {
                 map.setVal(thisX,thisY,0);
             }
         });
+    }
 
+    public void loadPlayer() {
         Point2D playerPos = getGameWorld().getSingleton(PLAYER).getPosition();
         playerX = (int)Math.round(playerPos.getX() / TILED_SIZE);
         playerY = (int)Math.round(playerPos.getY() / TILED_SIZE);
-    }
-
-    @Override
-    public void turn() {
-//        if (dx < 0) {
-//            turnRight();
-//        } else if (dx > 0) {
-//            turnLeft();
-//        } else if (dy < 0) {
-//            turnDown();
-//        } else {
-//            turnUp();
-//        }
     }
 }
