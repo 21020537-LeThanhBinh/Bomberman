@@ -1,5 +1,6 @@
 package Bomberman.Components.Enemy;
 
+import Bomberman.Components.Bomb.LightBomb;
 import javafx.util.Duration;
 
 import static Bomberman.Constants.Constant.ENEMY_SPEED;
@@ -16,7 +17,8 @@ public class Enemy1 extends EnemyComponent {
             enemy1.getComponent(Enemy1.class).turn();
         });
         onCollisionBegin(ENEMY1, BOMB, (enemy1, bomb) -> {
-            enemy1.getComponent(Enemy1.class).turn();
+            if (!bomb.hasComponent(LightBomb.class))
+                enemy1.getComponent(Enemy1.class).turn();
         });
         onCollision(ENEMY1, FLAME, (enemy1, flame) -> {
             enemy1.getComponent(Enemy1.class).setStateDie();

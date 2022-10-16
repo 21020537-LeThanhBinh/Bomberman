@@ -25,10 +25,6 @@ public class LightBomb extends BombComponent {
     onCollisionEnd(PLAYER, BOMB, (player, bomb) -> {
       if (physic_block == null) physic_block = spawn("physic_block", bomb.getX(), bomb.getY(), 1);
     });
-
-  //    onCollisionBegin(PHYSIC_BLOCK, ENEMY1, (physicBlock, enemy) -> {
-  //      if (physicBlock != null) physicBlock.removeFromWorld();
-  //    });
   }
 
   @Override
