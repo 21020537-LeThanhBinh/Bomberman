@@ -29,6 +29,7 @@ public class PlayerComponent extends Component {
     private final int FRAME_SIZE = 45;
     private boolean bombValid;
     private State state;
+    private State prevState;
     private BombermanType bombType;
     private PhysicsComponent physics;
     private AnimatedTexture texture;
@@ -38,6 +39,7 @@ public class PlayerComponent extends Component {
 
     public PlayerComponent() {
         state = STOP;
+        prevState = DOWN;
         bombType = BombermanType.CLASSICBOMB;
         bombValid = true;
 
@@ -120,13 +122,13 @@ public class PlayerComponent extends Component {
                 texture.loopNoOverride(animWalkLeft);
                 break;
             case STOP:
-                if (texture.getAnimationChannel() == animWalkDown) {
+                if (prevState == DOWN) {
                     texture.loopNoOverride(animIdleDown);
-                } else if (texture.getAnimationChannel() == animWalkUp) {
+                } else if (prevState == UP) {
                     texture.loopNoOverride(animIdleUp);
-                } else if (texture.getAnimationChannel() == animWalkLeft) {
+                } else if (prevState == LEFT) {
                     texture.loopNoOverride(animIdleLeft);
-                } else if (texture.getAnimationChannel() == animWalkRight) {
+                } else if (prevState == RIGHT) {
                     texture.loopNoOverride(animIdleRight);
                 }
                 break;
@@ -157,6 +159,7 @@ public class PlayerComponent extends Component {
     }
 
     public void stop() {
+        prevState = state;
         state = STOP;
     }
 
@@ -200,7 +203,7 @@ public class PlayerComponent extends Component {
         return state;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public State getPrevState() {
+        return prevState;
     }
 }
