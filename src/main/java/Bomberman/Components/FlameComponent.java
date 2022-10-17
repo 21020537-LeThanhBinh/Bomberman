@@ -26,7 +26,7 @@ public class FlameComponent extends Component {
 
         getGameTimer().runOnceAfter(() -> {
             if (entity != null) entity.removeFromWorld();
-        }, Duration.seconds(0.4));
+        }, Duration.seconds(0.3));
 
         onCollisionBegin(FLAME, WALL, (flame, wall) -> {
             flame.removeFromWorld();
@@ -68,7 +68,7 @@ public class FlameComponent extends Component {
             }
         });
 
-        animation = new AnimationChannel(FXGL.image(assetName), 3, TILED_SIZE, TILED_SIZE, Duration.seconds(0.4), 0, 2);
+        animation = new AnimationChannel(FXGL.image(assetName), 3, TILED_SIZE, TILED_SIZE, Duration.seconds(0.3), 0, 2);
         texture = new AnimatedTexture(animation);
         texture.loop();
     }

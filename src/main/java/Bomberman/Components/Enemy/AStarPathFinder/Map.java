@@ -18,11 +18,18 @@ public class Map {
   public int getHeight() {
     return height;
   }
+
   public int getVal(int x, int y) {
+    if (!isValidLocation(x, y)) return 0;
     return binaryMap[y][x];
   }
 
   public void setVal(int x, int y, int val) {
+    if (!isValidLocation(x, y)) return;
     binaryMap[y][x] = val;
+  }
+
+  protected boolean isValidLocation(int x, int y) {
+    return !((x < 0) || (y < 0) || (x >= width) || (y >= height));
   }
 }

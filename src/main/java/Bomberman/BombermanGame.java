@@ -39,8 +39,6 @@ public class BombermanGame extends GameApplication {
         HEIGHT = sc.nextInt();
         WIDTH = sc.nextInt();
 
-
-
         settings.setWidth(WIDTH * TILED_SIZE);
         settings.setHeight(HEIGHT * TILED_SIZE);
 
@@ -153,7 +151,7 @@ public class BombermanGame extends GameApplication {
         physics.setGravity(0,0);
 
         onCollision(PLAYER, PORTAL, (player, portal) -> {
-            if (getGameWorld().getGroup(ENEMY1, ENEMY2, ENEMY3, POWERUP_BOMBS, POWERUP_FLAMES).getSize() == 0) {
+            if (getGameWorld().getGroup(ENEMY1, ENEMY2, ENEMY3, ENEMY4, ENEMY5, POWERUP_BOMBS, POWERUP_FLAMES).getSize() == 0) {
                 // Next level music . . .
 
                 player.removeFromWorld();
@@ -172,6 +170,12 @@ public class BombermanGame extends GameApplication {
             playerComponent.die();
         });
         onCollision(ENEMY3, PLAYER, (enemy3, player) -> {
+            playerComponent.die();
+        });
+        onCollision(ENEMY4, PLAYER, (enemy4, player) -> {
+            playerComponent.die();
+        });
+        onCollision(ENEMY5, PLAYER, (enemy5, player) -> {
             playerComponent.die();
         });
     }
@@ -221,6 +225,9 @@ public class BombermanGame extends GameApplication {
                         break;
                     case '3':
                         spawn("enemy3", j * TILED_SIZE, i * TILED_SIZE);
+                        break;
+                    case '4':
+                        spawn("enemy4", j * TILED_SIZE, i * TILED_SIZE);
                         break;
                     case 'x':
                         stillObject.add(spawn("portal", j * TILED_SIZE, i * TILED_SIZE));
