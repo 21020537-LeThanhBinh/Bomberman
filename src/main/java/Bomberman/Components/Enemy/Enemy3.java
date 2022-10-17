@@ -24,31 +24,35 @@ import javafx.util.Duration;
 
 public class Enemy3 extends EnemyComponent {
     // PathFinder stuff
-    private AStarPathFinder aStar;
-    private Map map;
-    private Path path;
+    protected AStarPathFinder aStar;
+    protected Map map;
+    protected Path path;
     // real locaiton
-    private Point2D nextStep;
+    protected Point2D nextStep;
     // location on the map
-    private int myX;
-    private int myY;
-    private int playerX;
-    private int playerY;
+    protected int myX;
+    protected int myY;
+    protected int playerX;
+    protected int playerY;
     // Random movement
-    private boolean movingRandom;
+    protected boolean movingRandom;
     public Enemy3() {
         super(-ENEMY_SPEED, 0, 2, 3, "enemy3.png");
 
-        FXGL.onCollisionBegin(ENEMY3, BRICK, (enemy3, brick) -> {
-            enemy3.getComponent(Enemy3.class).turn();
+        FXGL.onCollision(ENEMY3, FLAME, (enemy3, flame) -> {
+            enemy3.getComponent(Enemy3.class).setStateDie();
+            getGameTimer().runOnceAfter(enemy3::removeFromWorld, Duration.seconds(2.4));
         });
-        FXGL.onCollisionBegin(ENEMY3, WALL, (enemy3, wall) -> {
-            enemy3.getComponent(Enemy3.class).turn();
-        });
-        FXGL.onCollisionBegin(ENEMY3, BOMB, (enemy3, bomb) -> {
-            if (!bomb.hasComponent(LightBomb.class))
-                enemy3.getComponent(Enemy3.class).turn();
-        });
+
+        map = new Map(geti("map_width"), geti("map_height"));
+        aStar = new AStarPathFinder(map);
+
+        movingRandom = false;
+    }
+
+    public Enemy3(double dx, double dy, double speedFactor, double reactionForce, String assetName) {
+        super(dx, dy, speedFactor, reactionForce, assetName);
+
         FXGL.onCollision(ENEMY3, FLAME, (enemy3, flame) -> {
             enemy3.getComponent(Enemy3.class).setStateDie();
             getGameTimer().runOnceAfter(enemy3::removeFromWorld, Duration.seconds(2.4));

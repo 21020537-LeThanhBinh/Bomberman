@@ -16,7 +16,6 @@ public abstract class EnemyComponent extends Component {
     protected double dy;
     protected double speedFactor;
     private double reactionForce;
-
     protected State state;
     protected AnimatedTexture texture;
     protected AnimationChannel animDie;

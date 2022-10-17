@@ -7,6 +7,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 import Bomberman.Components.PlayerComponent;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsWorld;
@@ -22,8 +23,8 @@ import javafx.util.Duration;
 
 public class BombermanGame extends GameApplication {
     private Scanner sc;
-    private int HEIGHT;
-    private int WIDTH;
+    private int MAP_HEIGHT;
+    private int MAP_WIDTH;
     private Entity player;
     private PlayerComponent playerComponent;
     private List<Entity> stillObject = new ArrayList<>();
@@ -36,19 +37,17 @@ public class BombermanGame extends GameApplication {
     protected void initSettings(GameSettings settings) {
         loadFile("Level1_sample.txt");
 
-        HEIGHT = sc.nextInt();
-        WIDTH = sc.nextInt();
+        MAP_HEIGHT = sc.nextInt();
+        MAP_WIDTH = sc.nextInt();
 
-
-
-        settings.setWidth(WIDTH * TILED_SIZE);
-        settings.setHeight(HEIGHT * TILED_SIZE);
+        settings.setWidth(Math.min(MAX_SCENE_WIDTH, MAP_WIDTH * TILED_SIZE));
+        settings.setHeight(Math.min(MAX_SCENE_HEIGHT, MAP_HEIGHT * TILED_SIZE));
 
         settings.setTitle(GAME_TITLE);
         settings.setVersion(GAME_VERSION);
 
         settings.setFullScreenAllowed(true);
-        settings.setFullScreenFromStart(false);
+        settings.setFullScreenFromStart(true);
     }
 
     @Override
@@ -57,8 +56,8 @@ public class BombermanGame extends GameApplication {
 
         spawn("background");
 
-        set("map_width", WIDTH);
-        set("map_height", HEIGHT);
+        set("map_width", MAP_WIDTH);
+        set("map_height", MAP_HEIGHT);
         loadLevel();
     }
 
@@ -153,7 +152,7 @@ public class BombermanGame extends GameApplication {
         physics.setGravity(0,0);
 
         onCollision(PLAYER, PORTAL, (player, portal) -> {
-            if (getGameWorld().getGroup(ENEMY1, ENEMY2, ENEMY3, POWERUP_BOMBS, POWERUP_FLAMES).getSize() == 0) {
+            if (getGameWorld().getGroup(ENEMY1, ENEMY2, ENEMY3, ENEMY4, ENEMY5, POWERUP_BOMBS, POWERUP_FLAMES).getSize() == 0) {
                 // Next level music . . .
 
                 player.removeFromWorld();
@@ -172,6 +171,12 @@ public class BombermanGame extends GameApplication {
             playerComponent.die();
         });
         onCollision(ENEMY3, PLAYER, (enemy3, player) -> {
+            playerComponent.die();
+        });
+        onCollision(ENEMY4, PLAYER, (enemy4, player) -> {
+            playerComponent.die();
+        });
+        onCollision(ENEMY5, PLAYER, (enemy5, player) -> {
             playerComponent.die();
         });
     }
@@ -200,10 +205,12 @@ public class BombermanGame extends GameApplication {
     }
 
     protected void loadLevel() {
+
+
         sc.nextLine();
-        for (int i = 0; i < HEIGHT; i++) {
+        for (int i = 0; i < MAP_HEIGHT; i++) {
             String line = sc.nextLine();
-            for (int j = 0; j < WIDTH; j++) {
+            for (int j = 0; j < MAP_WIDTH; j++) {
                 Character ch = line.charAt(j);
                 switch (ch) {
                     case '#':
@@ -221,6 +228,9 @@ public class BombermanGame extends GameApplication {
                         break;
                     case '3':
                         spawn("enemy3", j * TILED_SIZE, i * TILED_SIZE);
+                        break;
+                    case '4':
+                        spawn("enemy4", j * TILED_SIZE, i * TILED_SIZE);
                         break;
                     case 'x':
                         stillObject.add(spawn("portal", j * TILED_SIZE, i * TILED_SIZE));
@@ -240,6 +250,10 @@ public class BombermanGame extends GameApplication {
                 }
             }
         }
+
+        Viewport viewport = getGameScene().getViewport();
+        viewport.setBounds(0, 0, MAP_WIDTH * TILED_SIZE, MAP_HEIGHT * TILED_SIZE);
+        viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
     }
 
     protected void nextLevel() {
