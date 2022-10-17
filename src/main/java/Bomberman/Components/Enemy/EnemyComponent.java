@@ -132,4 +132,8 @@ public abstract class EnemyComponent extends Component {
         dy = 0;
         state = DIE;
     }
+
+    public State getState() {
+        return state;
+    }
 }

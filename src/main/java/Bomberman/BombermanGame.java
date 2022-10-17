@@ -2,8 +2,14 @@ package Bomberman;
 
 import static Bomberman.BombermanType.*;
 import static Bomberman.Constants.Constant.*;
+import static Bomberman.DynamicEntityState.State.DIE;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
+import Bomberman.Components.Enemy.Enemy1;
+import Bomberman.Components.Enemy.Enemy2;
+import Bomberman.Components.Enemy.Enemy3;
+import Bomberman.Components.Enemy.Enemy4;
+import Bomberman.Components.FlameComponent;
 import Bomberman.Components.PlayerComponent;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
@@ -28,6 +34,7 @@ public class BombermanGame extends GameApplication {
     private Entity player;
     private PlayerComponent playerComponent;
     private List<Entity> stillObject = new ArrayList<>();
+    private List<Entity> enemies = new ArrayList<>();
 
     public static void main(String[] args) {
         launch(args);
@@ -47,7 +54,7 @@ public class BombermanGame extends GameApplication {
         settings.setVersion(GAME_VERSION);
 
         settings.setFullScreenAllowed(true);
-        settings.setFullScreenFromStart(true);
+        settings.setFullScreenFromStart(false);
     }
 
     @Override
@@ -161,23 +168,34 @@ public class BombermanGame extends GameApplication {
             }
         });
 
-        onCollision(PLAYER, FLAME, (player, flame) -> {
-            playerComponent.die();
+        onCollisionBegin(PLAYER, ENEMY1, (player, enemy) -> {
+            if (enemy.getComponent(Enemy1.class).getState() != DIE
+                && playerComponent.getState() != DIE) {
+                onPlayerDied();
+            }
         });
-        onCollision(ENEMY1, PLAYER, (enemy1, player) -> {
-            playerComponent.die();
+        onCollisionBegin(PLAYER, ENEMY2, (player, enemy) -> {
+            if (enemy.getComponent(Enemy2.class).getState() != DIE
+                && playerComponent.getState() != DIE) {
+                onPlayerDied();
+            }
         });
-        onCollision(ENEMY2, PLAYER, (enemy2, player) -> {
-            playerComponent.die();
+        onCollisionBegin(PLAYER, ENEMY3, (player, enemy) -> {
+            if (enemy.getComponent(Enemy3.class).getState() != DIE
+                && playerComponent.getState() != DIE) {
+                onPlayerDied();
+            }
         });
-        onCollision(ENEMY3, PLAYER, (enemy3, player) -> {
-            playerComponent.die();
+        onCollisionBegin(PLAYER, ENEMY4, (player, enemy) -> {
+            if (enemy.getComponent(Enemy4.class).getState() != DIE
+                && playerComponent.getState() != DIE) {
+                onPlayerDied();
+            }
         });
-        onCollision(ENEMY4, PLAYER, (enemy4, player) -> {
-            playerComponent.die();
-        });
-        onCollision(ENEMY5, PLAYER, (enemy5, player) -> {
-            playerComponent.die();
+        onCollisionBegin(PLAYER, FLAME, (player, flame) -> {
+            if (playerComponent.getState() != DIE) {
+                onPlayerDied();
+            }
         });
     }
 
@@ -187,7 +205,7 @@ public class BombermanGame extends GameApplication {
         vars.put("map_height", 0);
         vars.put("level", STARTING_LEVEL);
         vars.put("speed", PLAYER_SPEED);
-        vars.put("bomb", 2);
+        vars.put("bomb", 1);
         vars.put("flame", 1);
     }
 
@@ -205,8 +223,6 @@ public class BombermanGame extends GameApplication {
     }
 
     protected void loadLevel() {
-
-
         sc.nextLine();
         for (int i = 0; i < MAP_HEIGHT; i++) {
             String line = sc.nextLine();
@@ -221,16 +237,16 @@ public class BombermanGame extends GameApplication {
                         playerComponent = player.getComponent(PlayerComponent.class);
                         break;
                     case '1':
-                        spawn("enemy1", j * TILED_SIZE, i * TILED_SIZE);
+                        enemies.add(spawn("enemy1", j * TILED_SIZE, i * TILED_SIZE));
                         break;
                     case '2':
-                        spawn("enemy2", j * TILED_SIZE, i * TILED_SIZE);
+                        enemies.add(spawn("enemy2", j * TILED_SIZE, i * TILED_SIZE));
                         break;
                     case '3':
-                        spawn("enemy3", j * TILED_SIZE, i * TILED_SIZE);
+                        enemies.add(spawn("enemy3", j * TILED_SIZE, i * TILED_SIZE));
                         break;
                     case '4':
-                        spawn("enemy4", j * TILED_SIZE, i * TILED_SIZE);
+                        enemies.add(spawn("enemy4", j * TILED_SIZE, i * TILED_SIZE));
                         break;
                     case 'x':
                         stillObject.add(spawn("portal", j * TILED_SIZE, i * TILED_SIZE));
@@ -270,5 +286,21 @@ public class BombermanGame extends GameApplication {
             System.out.println("You win!");
             // Load win screen . . .
         }
+    }
+
+    protected void resetLevel() {
+        player.removeFromWorld();
+        stillObject.forEach(Entity::removeFromWorld);
+        enemies.forEach(Entity::removeFromWorld);
+
+        loadFile("Level" + geti("level") + "_sample.txt");
+        loadLevel();
+
+        set("flame", 1);
+    }
+
+    public void onPlayerDied() {
+        playerComponent.die();
+        resetLevel();
     }
 }

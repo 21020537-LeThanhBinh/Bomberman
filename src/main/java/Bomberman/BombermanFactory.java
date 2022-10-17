@@ -34,6 +34,14 @@ public class BombermanFactory implements EntityFactory {
             .build();
     }
 
+    @Spawns("yellow_mark")
+    public Entity newYellowMark(SpawnData data) {
+        return entityBuilder(data)
+            .view(new Rectangle(48, 48, Color.rgb(125, 255, 0)))
+            .zIndex(-1)
+            .build();
+    }
+
     @Spawns("physic_block")
     public Entity newPhysicsBlock(SpawnData data) {
         PhysicsComponent physics = new PhysicsComponent();

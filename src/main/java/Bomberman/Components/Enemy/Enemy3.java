@@ -12,6 +12,7 @@ import static Bomberman.DynamicEntityState.State.DIE;
 import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.random;
+import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.geti;
 
 import Bomberman.Components.Bomb.LightBomb;
@@ -19,6 +20,9 @@ import Bomberman.Components.Enemy.AStarPathFinder.AStarPathFinder;
 import Bomberman.Components.Enemy.AStarPathFinder.Map;
 import Bomberman.Components.Enemy.AStarPathFinder.Path;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
@@ -36,6 +40,9 @@ public class Enemy3 extends EnemyComponent {
     protected int playerY;
     // Random movement
     protected boolean movingRandom;
+    // Marker
+    protected List<Entity> nextStepList = new ArrayList<com.almasb.fxgl.entity.Entity>();
+
     public Enemy3() {
         super(-ENEMY_SPEED, 0, 2, 3, "enemy3.png");
 
@@ -100,6 +107,10 @@ public class Enemy3 extends EnemyComponent {
         // Ideal nextStep
         nextStep = new Point2D(path.getX(0) * TILED_SIZE, path.getY(0) * TILED_SIZE);
 
+        // Marking (for testing)
+        removeMarker();
+        markPath();
+
         // When at nextStep (accuracy < 3)
         if (entity.getPosition().distance(nextStep) < 3) {
             myX = path.getX(0);
@@ -157,5 +168,22 @@ public class Enemy3 extends EnemyComponent {
         Point2D playerPos = getGameWorld().getSingleton(PLAYER).getPosition();
         playerX = (int)Math.round(playerPos.getX() / TILED_SIZE);
         playerY = (int)Math.round(playerPos.getY() / TILED_SIZE);
+    }
+
+    public void markPath() {
+        for (int i = 0; i < path.getLength(); i++) {
+            nextStepList.add(spawn("yellow_mark", path.getX(i) * TILED_SIZE, path.getY(i) * TILED_SIZE));
+        }
+    }
+
+    public void removeMarker() {
+        nextStepList.forEach(Entity::removeFromWorld);
+        nextStepList.clear();
+    }
+
+    @Override
+    public void onRemoved() {
+        removeMarker();
+        super.onRemoved();
     }
 }
