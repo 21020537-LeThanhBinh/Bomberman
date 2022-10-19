@@ -5,12 +5,15 @@ import static Bomberman.Constants.Constant.*;
 import static Bomberman.DynamicEntityState.State.DIE;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-import Bomberman.Components.Enemy.Enemy1;
-import Bomberman.Components.Enemy.Enemy2;
-import Bomberman.Components.Enemy.Enemy3;
-import Bomberman.Components.Enemy.Enemy4;
-import Bomberman.Components.FlameComponent;
+import Bomberman.Components.Enemy.*;
 import Bomberman.Components.PlayerComponent;
+import Bomberman.Components.PlayerMP;
+import Bomberman.DynamicEntityState.State;
+import Bomberman.net.GameClient;
+import Bomberman.net.GameServer;
+import Bomberman.net.packets.Packet00Login;
+import Bomberman.net.packets.Packet01Disconnect;
+import Bomberman.net.packets.Packet02Move;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
@@ -24,13 +27,26 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
+import javax.swing.JOptionPane;
 
-public class BombermanGame extends GameApplication {
+public class BombermanGame extends GameApplication  {
+    public Viewport viewport;
+
+    public static BombermanGame game;
+    // Multiplayer
+    private GameServer socketServer;
+    private GameClient socketClient;
+    private PlayerMP playerMP;
+
+    // File and map
     private Scanner sc;
     private int MAP_HEIGHT;
     private int MAP_WIDTH;
+
+    // Entities related
     private Entity player;
     private PlayerComponent playerComponent;
     private List<Entity> stillObject = new ArrayList<>();
@@ -42,12 +58,14 @@ public class BombermanGame extends GameApplication {
 
     @Override
     protected void initSettings(GameSettings settings) {
+        game = this;
+
         loadFile("Level1_sample.txt");
 
         MAP_HEIGHT = sc.nextInt();
         MAP_WIDTH = sc.nextInt();
 
-        settings.setWidth(Math.min(MAX_SCENE_WIDTH, MAP_WIDTH * TILED_SIZE));
+        settings.setWidth(Math.min(MAX_SCENE_WIDTH, MAP_WIDTH * TILED_SIZE)/2);
         settings.setHeight(Math.min(MAX_SCENE_HEIGHT, MAP_HEIGHT * TILED_SIZE));
 
         settings.setTitle(GAME_TITLE);
@@ -60,12 +78,38 @@ public class BombermanGame extends GameApplication {
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new BombermanFactory());
+        set("map_width", MAP_WIDTH);
+        set("map_height", MAP_HEIGHT);
 
         spawn("background");
 
-        set("map_width", MAP_WIDTH);
-        set("map_height", MAP_HEIGHT);
+        viewport = getGameScene().getViewport();
+        viewport.setBounds(0, 0, MAP_WIDTH * TILED_SIZE, MAP_HEIGHT * TILED_SIZE);
+//        viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
+
         loadLevel();
+
+        if (JOptionPane.showConfirmDialog(null, "Do you want to run the server") == 0) {
+            socketServer = new GameServer(this);
+            socketServer.start();
+        }
+
+        socketClient = new GameClient(this, "localhost");
+        socketClient.start();
+
+        playerMP = new PlayerMP(48, 48, JOptionPane.showInputDialog(this, "Please enter a username"),
+            null,-1);
+        player = playerMP.getEntity();
+        playerComponent = player.getComponent(PlayerComponent.class);
+        addPlayer(playerMP.getEntity());
+
+        viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
+
+        Packet00Login loginPacket = new Packet00Login(playerMP.getUsername(), player.getX(), player.getY());
+        if (socketServer != null) {
+            socketServer.addConnection(playerMP, loginPacket);
+        }
+        loginPacket.writeData(socketClient);
     }
 
     @Override
@@ -151,6 +195,16 @@ public class BombermanGame extends GameApplication {
                 // Music ...
             }
         }, KeyCode.DIGIT3);
+
+        getInput().addAction(new UserAction("Exit game") {
+            @Override
+            protected void onActionBegin() {
+                Packet01Disconnect packet = new Packet01Disconnect(playerComponent.getUsername());
+                packet.writeData(socketClient);
+                Platform.exit();
+                System.out.println("Exit game");
+            }
+        }, KeyCode.ESCAPE);
     }
 
     @Override
@@ -232,16 +286,16 @@ public class BombermanGame extends GameApplication {
                     case '#':
                         stillObject.add(spawn("wall", j * TILED_SIZE, i * TILED_SIZE));
                         break;
-                    case 'p':
-                        player = spawn("player", j * TILED_SIZE, i * TILED_SIZE);
-                        playerComponent = player.getComponent(PlayerComponent.class);
-                        break;
-                    case '1':
-                        enemies.add(spawn("enemy1", j * TILED_SIZE, i * TILED_SIZE));
-                        break;
-                    case '2':
-                        enemies.add(spawn("enemy2", j * TILED_SIZE, i * TILED_SIZE));
-                        break;
+//                    case 'p':
+//                        player = spawn("player", j * TILED_SIZE, i * TILED_SIZE);
+//                        playerComponent = player.getComponent(PlayerComponent.class);
+//                        break;
+//                    case '1':
+//                        enemies.add(spawn("enemy1", j * TILED_SIZE, i * TILED_SIZE));
+//                        break;
+//                    case '2':
+//                        enemies.add(spawn("enemy2", j * TILED_SIZE, i * TILED_SIZE));
+//                        break;
                     case '3':
                         enemies.add(spawn("enemy3", j * TILED_SIZE, i * TILED_SIZE));
                         break;
@@ -267,9 +321,9 @@ public class BombermanGame extends GameApplication {
             }
         }
 
-        Viewport viewport = getGameScene().getViewport();
-        viewport.setBounds(0, 0, MAP_WIDTH * TILED_SIZE, MAP_HEIGHT * TILED_SIZE);
-        viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
+//        Viewport viewport = getGameScene().getViewport();
+//        viewport.setBounds(0, 0, MAP_WIDTH * TILED_SIZE, MAP_HEIGHT * TILED_SIZE);
+//        viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
     }
 
     protected void nextLevel() {
@@ -300,7 +354,80 @@ public class BombermanGame extends GameApplication {
     }
 
     public void onPlayerDied() {
-        playerComponent.die();
-        resetLevel();
+//        playerComponent.die();
+//        resetLevel();
+    }
+
+
+    /**
+     * Server stuff.
+     */
+
+    public void addPlayer(Entity newPlayer) {
+        Platform.runLater(() -> {
+            getGameWorld().addEntity(newPlayer);
+        });
+    }
+
+    public PlayerMP getPlayerMP() {
+        return playerMP;
+    }
+
+    public GameServer getSocketServer() {
+        return socketServer;
+    }
+
+    public void setSocketServer(GameServer socketServer) {
+        this.socketServer = socketServer;
+    }
+
+    public GameClient getSocketClient() {
+        return socketClient;
+    }
+
+    public void setSocketClient(GameClient socketClient) {
+        this.socketClient = socketClient;
+    }
+
+    public void removePlayerMP(String username) {
+        Platform.runLater(() -> {
+            getGameWorld().getEntitiesByType(PLAYER).forEach(p -> {
+                if (p.getComponent(PlayerComponent.class).getUsername().equalsIgnoreCase(username)) {
+                    p.removeFromWorld();
+                }
+            });
+        });
+    }
+
+    public void movePlayer(String username, double velocityX, double velocityY, int state, double x, double y) {
+        Platform.runLater(() -> {
+            getGameWorld().getEntitiesByType(PLAYER).forEach(p -> {
+                if (p.getComponent(PlayerComponent.class).getUsername().equalsIgnoreCase(username)) {
+                    p.getComponent(PlayerComponent.class).setPos(velocityX, velocityY, State.valueOf(state), x, y);
+                }
+            });
+        });
+    }
+
+    public void placeBomb(String username, int state, int bombType) {
+        Platform.runLater(() -> {
+            getGameWorld().getEntitiesByType(PLAYER).forEach(p -> {
+                if (p.getComponent(PlayerComponent.class).getUsername().equalsIgnoreCase(username)) {
+                    p.getComponent(PlayerComponent.class).setPrevState(State.valueOf(state));
+                    p.getComponent(PlayerComponent.class).setBombType(bombType == 0 ? CLASSICBOMB : bombType == 1 ? LAZERBOMB : LIGHTBOMB);
+                    p.getComponent(PlayerComponent.class).placeBomb();
+                }
+            });
+        });
+    }
+
+    @Override
+    protected void onUpdate(double tpf) {
+        super.onUpdate(tpf);
+        // Player's name rendering
+        getGameWorld().getEntitiesByType(PLAYER).forEach(p -> {
+            p.getComponent(PlayerComponent.class).text.setX(p.getX() - viewport.getX());
+            p.getComponent(PlayerComponent.class).text.setY(p.getY() - viewport.getY());
+        });
     }
 }

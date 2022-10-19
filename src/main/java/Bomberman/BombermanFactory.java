@@ -16,6 +16,8 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
+import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.multiplayer.NetworkComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
@@ -92,8 +94,8 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.PLAYER)
             .bbox(new HitBox(new Point2D(2, 2), BoundingShape.circle(22)))
-            .with(new PlayerComponent())
-            .collidable()
+            .with(new PlayerComponent(""))
+            .with(new CollidableComponent(true))
             .build();
     }
 

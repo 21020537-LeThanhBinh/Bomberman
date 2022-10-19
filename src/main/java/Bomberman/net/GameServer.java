@@ -1,20 +1,27 @@
 package Bomberman.net;
 
 import Bomberman.BombermanGame;
+import Bomberman.Components.PlayerMP;
+import Bomberman.net.packets.Packet;
+import Bomberman.net.packets.Packet00Login;
+import Bomberman.net.packets.Packet01Disconnect;
+import Bomberman.net.packets.Packet02Move;
+import Bomberman.net.packets.Packet03PlaceBomb;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameServer extends Thread {
   private DatagramSocket socket;
-  private BombermanGame bombermanGame;
+  private BombermanGame game;
+  private List<PlayerMP> connectedPlayers = new ArrayList<PlayerMP>();
 
-  public GameServer(BombermanGame bombermanGame) {
-    this.bombermanGame = bombermanGame;
+  public GameServer(BombermanGame game) {
+    this.game = game;
     try {
       socket = new DatagramSocket(1331);
     } catch (SocketException e) {
@@ -31,12 +38,72 @@ public class GameServer extends Thread {
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
-      String message = new String(packet.getData());
-      System.out.println("CLIENT > " + message);
-      if (message.trim().equalsIgnoreCase("ping")) {
-        sendData("pong".getBytes(), packet.getAddress(), packet.getPort());
+      this.parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
+    }
+  }
+
+  private void parsePacket(byte[] data, InetAddress address, int port) {
+    String message = new String(data).trim();
+    Packet.PacketTypes type = Packet.lookupPacket(message.substring(0, 2));
+
+    Packet packet = null;
+    switch (type) {
+      default:
+      case INVALID:
+
+        break;
+      case LOGIN:
+        packet = new Packet00Login(data);
+        System.out.println("["+address.getHostAddress()+":"+port+"]"+((Packet00Login)packet).getUsername()+" has connected...");
+
+        PlayerMP player = new PlayerMP(48, 48, ((Packet00Login)packet).getUsername(), address, port);
+        this.addConnection(player, (Packet00Login)packet);
+
+        break;
+      case DISCONNET:
+        packet = new Packet01Disconnect(data);
+        System.out.println("["+address.getHostAddress()+":"+port+"]"+((Packet01Disconnect)packet).getUsername()+" has left...");
+
+        this.removeConnection((Packet01Disconnect)packet);
+
+        break;
+      case MOVE:
+        packet = new Packet02Move(data);
+        this.handleMove(((Packet02Move) packet));
+
+        break;
+      case PLACEBOMB:
+        packet = new Packet03PlaceBomb(data);
+        this.handlePlaceBomb((Packet03PlaceBomb) packet);
+
+        break;
+    }
+  }
+
+  public void addConnection(PlayerMP player, Packet00Login packet) {
+    boolean alreadyConnected = false;
+    for (PlayerMP p : this.connectedPlayers) {
+      if (player.getUsername().equalsIgnoreCase(p.getUsername())) {
+        if (p.getIpAddress() == null) {
+          p.setIpAddress(player.getIpAddress());
+        }
+        if (p.getPort() == -1) {
+          p.setPort(player.getPort());
+        }
+        alreadyConnected = true;
+      } else {
+        sendData(packet.getData(), p.getIpAddress(), p.getPort());
+        sendData(new Packet00Login(p.getUsername(), p.getEntity().getX(), p.getEntity().getY()).getData(), player.getIpAddress(), player.getPort());
       }
     }
+    if (!alreadyConnected) {
+      this.connectedPlayers.add(player);
+    }
+  }
+
+  public void removeConnection(Packet01Disconnect packet) {
+    this.connectedPlayers.removeIf(p -> p.getUsername().equalsIgnoreCase(packet.getUsername()));
+    packet.writeData(this);
   }
 
   public void sendData(byte[] data, InetAddress ipAddress, int port) {
@@ -45,6 +112,38 @@ public class GameServer extends Thread {
       socket.send(packet);
     } catch (IOException e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  public void sendDataToAllClients(byte[] data) {
+    for (PlayerMP p : connectedPlayers) {
+      sendData(data, p.getIpAddress(), p.getPort());
+    }
+  }
+
+  private PlayerMP getPlayerMP(String username) {
+    for (PlayerMP p : this.connectedPlayers) {
+      if (p.getUsername().equalsIgnoreCase(username)) {
+        return p;
+      }
+    }
+    return null;
+  }
+
+  private void handleMove(Packet02Move packet) {
+    PlayerMP thisPlayer = getPlayerMP(packet.getUsername());
+    if (thisPlayer != null) {
+      thisPlayer.setPos(packet.getVelocityX(), packet.getVelocityY(), packet.getState(), packet.getX(), packet.getY());
+      packet.writeData(this);
+    }
+  }
+
+  private void handlePlaceBomb(Packet03PlaceBomb packet) {
+    PlayerMP thisPlayer = getPlayerMP(packet.getUsername());
+    if (thisPlayer != null) {
+//      thisPlayer.placeBomb(packet.getState(), packet.getBombType());
+      game.placeBomb(thisPlayer.getUsername(), packet.getState(), packet.getBombType());
+      packet.writeData(this);
     }
   }
 }
