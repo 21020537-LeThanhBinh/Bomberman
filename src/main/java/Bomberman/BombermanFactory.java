@@ -151,9 +151,10 @@ public class BombermanFactory implements EntityFactory {
 
     @Spawns("lazer_bomb")
     public Entity newLazerBomb(SpawnData data) {
+        // data.getZ() for bomb's direction
         return entityBuilder(data)
             .type(BOMB)
-            .with(new LazerBomb())
+            .with(new LazerBomb((int)data.getZ()))
             .bbox(new HitBox(new Point2D(2, 2), BoundingShape.circle(22)))
             .collidable()
             .build();

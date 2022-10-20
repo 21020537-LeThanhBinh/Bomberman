@@ -7,15 +7,12 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
-import com.almasb.fxgl.physics.PhysicsComponent;
-import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import java.net.InetAddress;
 import javafx.application.Platform;
 import javafx.geometry.Point2D;
 
 public class PlayerMP {
   private Entity player;
-  private PlayerComponent playerComponent;
   private InetAddress ipAddress;
   private int port;
   private String username;
@@ -32,8 +29,6 @@ public class PlayerMP {
         .with(new PlayerComponent(username))
         .with(new CollidableComponent(true))
         .build();
-
-    this.playerComponent = player.getComponent(PlayerComponent.class);
   }
 
   public String getUsername() {
@@ -60,23 +55,24 @@ public class PlayerMP {
     this.port = port;
   }
 
-  public void setPos(double velocityX, double velocityY, int state, double x, double y) {
-    playerComponent.setPos(velocityX, velocityY, State.valueOf(state), x, y);
-  }
+//  public void setPos(double velocityX, double velocityY, int state, double x, double y) {
+//    playerComponent.setState(State.valueOf(state));
+//    playerComponent.setPos(velocityX, velocityY, x, y);
+//  }
 
-  public void placeBomb(int state, int bombType) {
-    Platform.runLater(() -> {
-      playerComponent.setPrevState(State.valueOf(state));
-      if (bombType == 0) {
-        playerComponent.setBombType(BombermanType.CLASSICBOMB);
-      }
-      else if (bombType == 1) {
-        playerComponent.setBombType(BombermanType.LAZERBOMB);
-      }
-      else if (bombType == 2) {
-        playerComponent.setBombType(BombermanType.LIGHTBOMB);
-      }
-      playerComponent.placeBomb();
-    });
-  }
+//  public void placeBomb(int state, int bombType) {
+//    Platform.runLater(() -> {
+//      playerComponent.setPrevState(State.valueOf(state));
+//      if (bombType == 0) {
+//        playerComponent.setBombType(BombermanType.CLASSICBOMB);
+//      }
+//      else if (bombType == 1) {
+//        playerComponent.setBombType(BombermanType.LAZERBOMB);
+//      }
+//      else if (bombType == 2) {
+//        playerComponent.setBombType(BombermanType.LIGHTBOMB);
+//      }
+//      playerComponent.placeBomb();
+//    });
+//  }
 }

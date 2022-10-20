@@ -57,7 +57,7 @@ public class GameClient extends Thread {
         System.out.println("["+address.getHostAddress()+":"+port+"]"+((Packet00Login)packet).getUsername()+" has joined the game...");
 
         PlayerMP player = new PlayerMP(((Packet00Login)packet).getX(), ((Packet00Login)packet).getY(), ((Packet00Login)packet).getUsername(), address, port);
-        game.addPlayer(player.getEntity());
+        game.addPlayerMP(player.getEntity());
 
         break;
       case DISCONNET:
@@ -89,12 +89,11 @@ public class GameClient extends Thread {
   }
 
   private void handleMove(Packet02Move packet) {
-    if (game.getPlayerMP() != null)
-      this.game.movePlayer(packet.getUsername(), packet.getVelocityX(), packet.getVelocityY(), packet.getState(), packet.getX(), packet.getY());
+    game.movePlayerMP(packet.getUsername(), packet.getVelocityX(), packet.getVelocityY(),
+        packet.getState(), packet.getX(), packet.getY());
   }
 
   private void handlePlaceBomb(Packet03PlaceBomb packet) {
-    if (game.getPlayerMP() != null)
-      this.game.placeBomb(packet.getUsername(), packet.getState(), packet.getBombType());
+    game.placeBombMP(packet.getUsername(), packet.getState(), packet.getBombType());
   }
 }

@@ -2,11 +2,7 @@ package Bomberman.Components;
 
 import static Bomberman.BombermanType.*;
 import static Bomberman.Constants.Constant.BONUS_SPEED;
-import static Bomberman.Constants.Constant.TILED_SIZE;
 import static Bomberman.DynamicEntityState.State.*;
-import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
-import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
-import static com.almasb.fxgl.dsl.FXGL.getGameScene;
 import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGL.image;
 import static com.almasb.fxgl.dsl.FXGL.inc;
@@ -22,7 +18,6 @@ import Bomberman.DynamicEntityState.State;
 import Bomberman.Utils.Utils;
 import Bomberman.net.packets.Packet02Move;
 import Bomberman.net.packets.Packet03PlaceBomb;
-import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
@@ -37,17 +32,23 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class PlayerComponent extends Component {
-    // Temporary
-    public String username;
-    public Text text;
 
-    //
     private final int FRAME_SIZE = 45;
-    private boolean bombValid;
+
+    // Username
+    private String username;
+    private Text usernameTexture;
+
+    // Physics
+    private final PhysicsComponent physics;
     private State state;
+
+    // Bomb
+    private boolean bombValid;
     private State prevState;
     private BombermanType bombType;
-    private final PhysicsComponent physics;
+
+    // Texture
     private AnimatedTexture texture;
     private AnimationChannel animIdleDown, animIdleRight, animIdleUp, animIdleLeft;
     private AnimationChannel animWalkDown, animWalkRight, animWalkUp, animWalkLeft;
@@ -55,19 +56,18 @@ public class PlayerComponent extends Component {
 
     public PlayerComponent(String username) {
         this.username = username;
-        text = new Text(username);
-        text.setFont(Font.font("Showcard Gothic", 24));
+        usernameTexture = new Text(username);
+        usernameTexture.setFont(Font.font("Showcard Gothic", 24));
 
+        physics = new PhysicsComponent();
+        physics.setBodyType(BodyType.DYNAMIC);
         state = STOP;
+
         prevState = DOWN;
         bombType = BombermanType.CLASSICBOMB;
         bombValid = true;
 
-        physics = new PhysicsComponent();
-        physics.setBodyType(BodyType.DYNAMIC);
-
         setSkin();
-
         texture = new AnimatedTexture(animIdleDown);
 
         onCollisionBegin(PLAYER, POWERUP_FLAMES, (player, powerup) -> {
@@ -96,7 +96,7 @@ public class PlayerComponent extends Component {
         entity.addComponent(physics);
 
         Platform.runLater(() -> {
-            addUINode(text, 0, 0);
+            addUINode(usernameTexture, 0, 0);
         });
     }
 
@@ -204,6 +204,9 @@ public class PlayerComponent extends Component {
 
     public void die() {
         state = DIE;
+
+        Packet02Move packet = new Packet02Move(this.getUsername(), 0, 0, STOP.getValue(), entity.getX(), entity.getY());
+        packet.writeData(BombermanGame.game.getSocketClient());
     }
 
     public void placeBomb() {
@@ -218,7 +221,8 @@ public class PlayerComponent extends Component {
                 spawn("classic_bomb", new SpawnData(bombLocation));
                 break;
             case LAZERBOMB:
-                spawn("lazer_bomb", new SpawnData(bombLocation));
+                if (prevState == STOP) prevState = state;
+                spawn("lazer_bomb", new SpawnData(bombLocation.getX(), bombLocation.getY(), prevState.getValue()));
                 break;
             case LIGHTBOMB:
                 spawn("light_bomb", new SpawnData(bombLocation));
@@ -229,14 +233,6 @@ public class PlayerComponent extends Component {
         packet.writeData(BombermanGame.game.getSocketClient());
     }
 
-    public void setBombValid(boolean bombValid) {
-        this.bombValid = bombValid;
-    }
-
-    public BombermanType getBombType() {
-        return bombType;
-    }
-
     public void setBombType(BombermanType bombType) {
         this.bombType = bombType;
     }
@@ -245,44 +241,41 @@ public class PlayerComponent extends Component {
         return state;
     }
 
-    public State getPrevState() {
-        return prevState;
-    }
-
     public String getUsername() {
         return username;
+    }
+
+    public void setPos(double velocityX, double velocityY, double x, double y) {
+        try {
+            physics.setVelocityX(velocityX);
+            physics.setVelocityY(velocityY);
+
+            // Lag caused by lost packages on the net
+            if (entity.getPosition().distance(new Point2D(x + 2,y + 2)) > 24) {
+                physics.overwritePosition(new Point2D(x + 2, y + 2));
+            }
+
+        } catch (RuntimeException e) {
+            System.out.println(e);
+        }
+    }
+
+    public void setPrevState(State prevState) {
+        this.prevState = prevState;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public void setUsernameTextLocation(double x, double y) {
+        usernameTexture.setX(x);
+        usernameTexture.setY(y);
     }
 
     @Override
     public void onRemoved() {
         super.onRemoved();
-        text.setText("");
-    }
-
-    public void setPos(double velocityX, double velocityY, State state, double x, double y) {
-//        runOnce(() -> {
-//        Platform.runLater(() -> {
-            try {
-                physics.setVelocityX(velocityX);
-                physics.setVelocityY(velocityY);
-
-                if (entity.getPosition().distance(new Point2D(x + 2,y + 2)) > 24) {
-                    physics.overwritePosition(new Point2D(x + 2, y + 2));
-                }
-
-            } catch (RuntimeException e) {
-                System.out.println(e);
-            }
-            this.state = state;
-//        });
-//        }, Duration.seconds(0));
-    }
-
-    public PhysicsComponent getPhysics() {
-        return physics;
-    }
-
-    public void setPrevState(State prevState) {
-        this.prevState = prevState;
+        usernameTexture.setText("");
     }
 }

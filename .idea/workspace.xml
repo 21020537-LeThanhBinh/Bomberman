@@ -6,23 +6,23 @@
   <component name="ChangeListManager">
     <list default="true" id="7c503e0f-386a-4cce-aced-9eeea4ddb675" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-17-Oct-2022-20.08.19.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-17-Oct-2022-20.08.35.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-17-Oct-2022-20.10.40.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-17-Oct-2022-20.11.17.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-17-Oct-2022-20.12.09.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-17-Oct-2022-20.20.37.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-17-Oct-2022-20.21.25.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-17-Oct-2022-20.23.02.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-17-Oct-2022-20.27.56.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-17-Oct-2022-20.32.05.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-19-Oct-2022-19.01.13.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-19-Oct-2022-19.03.23.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-19-Oct-2022-19.03.24.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-19-Oct-2022-19.40.17.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-19-Oct-2022-19.40.18.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-19-Oct-2022-19.46.50.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-19-Oct-2022-19.46.51.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-19-Oct-2022-19.48.04.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-19-Oct-2022-19.48.05.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-19-Oct-2022-19.51.53.log" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/BombermanGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Bomb/LazerBomb.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/Bomb/LazerBomb.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/PlayerComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/PlayerComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/DynamicEntityState/State.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/DynamicEntityState/State.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/Components/PlayerMP.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/Components/PlayerMP.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/net/GameClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/net/GameClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Bomberman/net/GameServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Bomberman/net/GameServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanFactory.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$3.class" afterDir="false" />
@@ -31,12 +31,8 @@
       <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$6.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$7.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$8.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame$9.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/BombermanGame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/Components/PlayerComponent$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/Components/PlayerComponent$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/Components/PlayerComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/Components/PlayerComponent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/DynamicEntityState/State.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/DynamicEntityState/State.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/net/GameClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/net/GameClient.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Bomberman/net/GameServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Bomberman/net/GameServer.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,25 +58,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/Admin/Desktop/Bomberman/src/main/java/Bomberman/Components",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "SDKs",
-    "project.structure.proportion": "0.17",
-    "project.structure.side.proportion": "0.31919906",
-    "settings.editor.selected.configurable": "inlay.hints"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Admin/Desktop/Bomberman/src/main/java/Bomberman/Components&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.31919906&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;inlay.hints&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Admin\Desktop\Bomberman\src\main\java\Bomberman\Components" />
@@ -255,7 +251,8 @@
       <workItem from="1666137308864" duration="9592000" />
       <workItem from="1666161759272" duration="2499000" />
       <workItem from="1666166732217" duration="3118000" />
-      <workItem from="1666171000232" duration="5894000" />
+      <workItem from="1666171000232" duration="17970000" />
+      <workItem from="1666239532256" duration="10068000" />
     </task>
     <servers />
   </component>

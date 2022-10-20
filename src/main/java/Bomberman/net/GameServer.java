@@ -56,7 +56,7 @@ public class GameServer extends Thread {
         packet = new Packet00Login(data);
         System.out.println("["+address.getHostAddress()+":"+port+"]"+((Packet00Login)packet).getUsername()+" has connected...");
 
-        PlayerMP player = new PlayerMP(48, 48, ((Packet00Login)packet).getUsername(), address, port);
+        PlayerMP player = new PlayerMP(((Packet00Login)packet).getX(), ((Packet00Login)packet).getY(), ((Packet00Login)packet).getUsername(), address, port);
         this.addConnection(player, (Packet00Login)packet);
 
         break;
@@ -93,7 +93,8 @@ public class GameServer extends Thread {
         alreadyConnected = true;
       } else {
         sendData(packet.getData(), p.getIpAddress(), p.getPort());
-        sendData(new Packet00Login(p.getUsername(), p.getEntity().getX(), p.getEntity().getY()).getData(), player.getIpAddress(), player.getPort());
+        sendData(new Packet00Login(p.getUsername(), p.getEntity().getX(), p.getEntity().getY()).getData(),
+            player.getIpAddress(), player.getPort());
       }
     }
     if (!alreadyConnected) {
@@ -122,7 +123,7 @@ public class GameServer extends Thread {
   }
 
   private PlayerMP getPlayerMP(String username) {
-    for (PlayerMP p : this.connectedPlayers) {
+    for (PlayerMP p : connectedPlayers) {
       if (p.getUsername().equalsIgnoreCase(username)) {
         return p;
       }
@@ -133,7 +134,7 @@ public class GameServer extends Thread {
   private void handleMove(Packet02Move packet) {
     PlayerMP thisPlayer = getPlayerMP(packet.getUsername());
     if (thisPlayer != null) {
-      thisPlayer.setPos(packet.getVelocityX(), packet.getVelocityY(), packet.getState(), packet.getX(), packet.getY());
+      game.movePlayerMP(packet.getUsername(), packet.getVelocityX(), packet.getVelocityY(), packet.getState(), packet.getX(), packet.getY());
       packet.writeData(this);
     }
   }
@@ -141,8 +142,7 @@ public class GameServer extends Thread {
   private void handlePlaceBomb(Packet03PlaceBomb packet) {
     PlayerMP thisPlayer = getPlayerMP(packet.getUsername());
     if (thisPlayer != null) {
-//      thisPlayer.placeBomb(packet.getState(), packet.getBombType());
-      game.placeBomb(thisPlayer.getUsername(), packet.getState(), packet.getBombType());
+      game.placeBombMP(thisPlayer.getUsername(), packet.getState(), packet.getBombType());
       packet.writeData(this);
     }
   }
