@@ -46,7 +46,7 @@ public class GameServer extends Thread {
     String message = new String(data).trim();
     Packet.PacketTypes type = Packet.lookupPacket(message.substring(0, 2));
 
-    Packet packet = null;
+    Packet packet;
     switch (type) {
       default:
       case INVALID:
@@ -69,12 +69,16 @@ public class GameServer extends Thread {
         break;
       case MOVE:
         packet = new Packet02Move(data);
-        this.handleMove(((Packet02Move) packet));
+        if (getPlayerMP(((Packet02Move) packet).getUsername()) != null) {
+          packet.writeData(this);
+        }
 
         break;
       case PLACEBOMB:
         packet = new Packet03PlaceBomb(data);
-        this.handlePlaceBomb((Packet03PlaceBomb) packet);
+        if (getPlayerMP(((Packet03PlaceBomb) packet).getUsername()) != null) {
+          packet.writeData(this);
+        }
 
         break;
     }
@@ -129,21 +133,5 @@ public class GameServer extends Thread {
       }
     }
     return null;
-  }
-
-  private void handleMove(Packet02Move packet) {
-    PlayerMP thisPlayer = getPlayerMP(packet.getUsername());
-    if (thisPlayer != null) {
-      game.movePlayerMP(packet.getUsername(), packet.getVelocityX(), packet.getVelocityY(), packet.getState(), packet.getX(), packet.getY());
-      packet.writeData(this);
-    }
-  }
-
-  private void handlePlaceBomb(Packet03PlaceBomb packet) {
-    PlayerMP thisPlayer = getPlayerMP(packet.getUsername());
-    if (thisPlayer != null) {
-      game.placeBombMP(thisPlayer.getUsername(), packet.getState(), packet.getBombType());
-      packet.writeData(this);
-    }
   }
 }

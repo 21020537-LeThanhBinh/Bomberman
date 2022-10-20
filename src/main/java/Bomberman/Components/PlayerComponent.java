@@ -2,6 +2,7 @@ package Bomberman.Components;
 
 import static Bomberman.BombermanType.*;
 import static Bomberman.Constants.Constant.BONUS_SPEED;
+import static Bomberman.Constants.Constant.PLAYER_SPEED;
 import static Bomberman.DynamicEntityState.State.*;
 import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGL.image;
@@ -12,13 +13,15 @@ import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.addUINode;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.geti;
 
-import Bomberman.BombermanGame;
 import Bomberman.BombermanType;
+import Bomberman.Components.Bomb.BombComponent;
+import Bomberman.Components.Bomb.ClassicBomb;
+import Bomberman.Components.Bomb.LazerBomb;
+import Bomberman.Components.Bomb.LightBomb;
 import Bomberman.DynamicEntityState.State;
 import Bomberman.Utils.Utils;
-import Bomberman.net.packets.Packet02Move;
-import Bomberman.net.packets.Packet03PlaceBomb;
 import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.physics.PhysicsComponent;
@@ -42,8 +45,11 @@ public class PlayerComponent extends Component {
     // Physics
     private final PhysicsComponent physics;
     private State state;
+    private int speed;
 
     // Bomb
+    private int bombCounter;
+    private int flamePower;
     private boolean bombValid;
     private State prevState;
     private BombermanType bombType;
@@ -62,7 +68,10 @@ public class PlayerComponent extends Component {
         physics = new PhysicsComponent();
         physics.setBodyType(BodyType.DYNAMIC);
         state = STOP;
+        speed = PLAYER_SPEED;
 
+        bombCounter = 1;
+        flamePower = 1;
         prevState = DOWN;
         bombType = BombermanType.CLASSICBOMB;
         bombValid = true;
@@ -70,22 +79,22 @@ public class PlayerComponent extends Component {
         setSkin();
         texture = new AnimatedTexture(animIdleDown);
 
-        onCollisionBegin(PLAYER, POWERUP_FLAMES, (player, powerup) -> {
+        onCollisionBegin(PLAYER, POWERUP_FLAMES, (p, powerup) -> {
             powerup.removeFromWorld();
             play("powerup.wav");
-            inc("flame", 1);
+            p.getComponent(PlayerComponent.class).incFlamePower();
         });
-        onCollisionBegin(PLAYER, POWERUP_BOMBS, (player, powerup) -> {
+        onCollisionBegin(PLAYER, POWERUP_BOMBS, (p, powerup) -> {
             powerup.removeFromWorld();
             play("powerup.wav");
-            inc("bomb", 1);
+            p.getComponent(PlayerComponent.class).incBombCounter();
         });
-        onCollisionBegin(PLAYER, POWERUP_SPEED, (player, powerup) -> {
+        onCollisionBegin(PLAYER, POWERUP_SPEED, (p, powerup) -> {
             powerup.removeFromWorld();
             play("powerup.wav");
-            inc("speed", BONUS_SPEED);
+            p.getComponent(PlayerComponent.class).speedUp();
             getGameTimer().runOnceAfter(() -> {
-                inc("speed", -BONUS_SPEED);
+                p.getComponent(PlayerComponent.class).speedNormal();
             }, Duration.seconds(6));
         });
     }
@@ -161,29 +170,29 @@ public class PlayerComponent extends Component {
             }
         }
 
-        if (physics.getVelocityX() == 0 && physics.getVelocityY() == 0) {
+        if (physics.getVelocityX() == 0 && physics.getVelocityY() == 0 && state != STOP) {
             stop();
         }
     }
 
     public void moveRight() {
         state = RIGHT;
-        physics.setVelocityX(geti("speed"));
+        physics.setVelocityX(this.speed);
     }
 
     public void moveLeft() {
         state = LEFT;
-        physics.setVelocityX(-geti("speed"));
+        physics.setVelocityX(-this.speed);
     }
 
     public void moveUp() {
         state = UP;
-        physics.setVelocityY(-geti("speed"));
+        physics.setVelocityY(-this.speed);
     }
 
     public void moveDown() {
         state = DOWN;
-        physics.setVelocityY(geti("speed"));
+        physics.setVelocityY(this.speed);
     }
 
     public void stop() {
@@ -196,22 +205,30 @@ public class PlayerComponent extends Component {
     }
 
     public void placeBomb() {
-        if (geti("bomb") <= 0 || !bombValid) {
+        if (bombCounter <= 0 || !bombValid) {
             return;
         }
+        bombCounter--;
 
         Point2D bombLocation = Utils.rearrange(entity.getPosition());
         play("place_bomb.wav");
+        Entity bomb;
         switch (bombType) {
             case CLASSICBOMB:
-                spawn("classic_bomb", new SpawnData(bombLocation));
+                bomb = spawn("classic_bomb", new SpawnData(bombLocation));
+                bomb.getComponent(ClassicBomb.class).setOwner(this.entity);
+                bomb.getComponent(ClassicBomb.class).setFlamePower(flamePower);
                 break;
             case LAZERBOMB:
                 if (state != STOP) prevState = state;
-                spawn("lazer_bomb", new SpawnData(bombLocation.getX(), bombLocation.getY(), prevState.getValue()));
+                bomb = spawn("lazer_bomb", new SpawnData(bombLocation.getX(), bombLocation.getY(), prevState.getValue()));
+                bomb.getComponent(LazerBomb.class).setOwner(this.entity);
+                bomb.getComponent(LazerBomb.class).setFlamePower(flamePower);
                 break;
             case LIGHTBOMB:
-                spawn("light_bomb", new SpawnData(bombLocation));
+                bomb = spawn("light_bomb", new SpawnData(bombLocation));
+                bomb.getComponent(LightBomb.class).setOwner(this.entity);
+                bomb.getComponent(LightBomb.class).setFlamePower(flamePower);
                 break;
         }
     }
@@ -242,7 +259,7 @@ public class PlayerComponent extends Component {
             physics.setVelocityY(velocityY);
 
             // Lag caused by lost packages on the net
-            if (entity.getPosition().distance(new Point2D(x + 2,y + 2)) > 24) {
+            if (entity.getPosition().distance(new Point2D(x + 2,y + 2)) > 1) {
                 physics.overwritePosition(new Point2D(x + 2, y + 2));
             }
 
@@ -266,6 +283,22 @@ public class PlayerComponent extends Component {
 
     public PhysicsComponent getPhysics() {
         return physics;
+    }
+
+    public void incBombCounter() {
+        this.bombCounter++;
+    }
+
+    public void incFlamePower() {
+        this.flamePower++;
+    }
+    
+    public void speedUp() {
+        this.speed += BONUS_SPEED;
+    }
+    
+    public void speedNormal() {
+        this.speed -= BONUS_SPEED;
     }
 
     @Override

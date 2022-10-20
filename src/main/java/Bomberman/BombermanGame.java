@@ -18,6 +18,8 @@ import Bomberman.net.packets.Packet02Move;
 import Bomberman.net.packets.Packet03PlaceBomb;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.app.scene.FXGLMenu;
+import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -258,9 +260,6 @@ public class BombermanGame extends GameApplication  {
         vars.put("map_width", 0);
         vars.put("map_height", 0);
         vars.put("level", STARTING_LEVEL);
-        vars.put("speed", PLAYER_SPEED);
-        vars.put("bomb", 1);
-        vars.put("flame", 1);
         vars.put("score", 0);
     }
 
@@ -356,7 +355,7 @@ public class BombermanGame extends GameApplication  {
         // If single player
         // resetLevel();
 
-        // If multiplayer ...
+        // If multiplayer ... reset map after winning
         PlayerComponent pComponent = p.getComponent(PlayerComponent.class);
 
         // Reset to default position
@@ -369,6 +368,9 @@ public class BombermanGame extends GameApplication  {
             pComponent.setPrevState(DOWN);
             pComponent.setState(STOP);
             pComponent.setPos(0,0, randomX, randomY);
+
+            Packet02Move packet = new Packet02Move(pComponent.getUsername(), 0, 0, STOP.getValue(), randomX, randomY);
+            packet.writeData(socketClient);
         }, Duration.seconds(2));
     }
 

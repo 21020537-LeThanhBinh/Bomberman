@@ -17,6 +17,7 @@ import static com.almasb.fxgl.dsl.FXGL.onCollisionEnd;
 import static com.almasb.fxgl.dsl.FXGL.play;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 
+import Bomberman.Components.PlayerComponent;
 import Bomberman.DynamicEntityState.State;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import javafx.util.Duration;
 
 public abstract class BombComponent extends Component {
+    protected Entity owner;
     protected int flames;
     protected Entity physic_block;
     private AnimatedTexture texture;
@@ -43,8 +45,6 @@ public abstract class BombComponent extends Component {
             if (physicBlock != null) physicBlock.removeFromWorld();
         });
 
-        flames = geti("flame");
-        inc("bomb", -1);
         animation = new AnimationChannel(image("bomb.png"), 3, TILED_SIZE, TILED_SIZE, Duration.seconds(0.4), 0, 2);
         texture = new AnimatedTexture(animation);
         texture.loop();
@@ -58,10 +58,14 @@ public abstract class BombComponent extends Component {
     public void explode() {
         entity.removeFromWorld();
         play("explosion.wav");
-        inc("bomb", 1);
+        owner.getComponent(PlayerComponent.class).incBombCounter();
     }
 
-    public Entity getPhysic_block() {
-        return physic_block;
+    public void setOwner(Entity owner) {
+        this.owner = owner;
+    }
+
+    public void setFlamePower(int flames) {
+        this.flames = flames;
     }
 }
