@@ -148,7 +148,7 @@ public class PlayerComponent extends Component {
         if (physics.getVelocityX() != 0) {
             physics.setVelocityX((int) physics.getVelocityX() * 0.9);
 
-            if (FXGLMath.abs(physics.getVelocityX()) < 1) {
+            if (FXGLMath.abs(physics.getVelocityX()) < 50) {
                 physics.setVelocityX(0);
             }
         }
@@ -156,61 +156,47 @@ public class PlayerComponent extends Component {
         if (physics.getVelocityY() != 0) {
             physics.setVelocityY((int) physics.getVelocityY() * 0.9);
 
-            if (FXGLMath.abs(physics.getVelocityY()) < 1) {
+            if (FXGLMath.abs(physics.getVelocityY()) < 50) {
                 physics.setVelocityY(0);
             }
+        }
+
+        if (physics.getVelocityX() == 0 && physics.getVelocityY() == 0) {
+            stop();
         }
     }
 
     public void moveRight() {
         state = RIGHT;
         physics.setVelocityX(geti("speed"));
-
-        Packet02Move packet = new Packet02Move(this.getUsername(), (physics.getVelocityX()), (physics.getVelocityY()*0.9), state.getValue(), entity.getX(), entity.getY());
-        packet.writeData(BombermanGame.game.getSocketClient());
     }
 
     public void moveLeft() {
         state = LEFT;
         physics.setVelocityX(-geti("speed"));
-
-        Packet02Move packet = new Packet02Move(this.getUsername(), (physics.getVelocityX()), (physics.getVelocityY()*0.9), state.getValue(), entity.getX(), entity.getY());
-        packet.writeData(BombermanGame.game.getSocketClient());
     }
 
     public void moveUp() {
         state = UP;
         physics.setVelocityY(-geti("speed"));
-
-        Packet02Move packet = new Packet02Move(this.getUsername(), (physics.getVelocityX()*0.9), (physics.getVelocityY()), state.getValue(), entity.getX(), entity.getY());
-        packet.writeData(BombermanGame.game.getSocketClient());
     }
 
     public void moveDown() {
         state = DOWN;
         physics.setVelocityY(geti("speed"));
-
-        Packet02Move packet = new Packet02Move(this.getUsername(), (physics.getVelocityX()*0.9), (physics.getVelocityY()), state.getValue(), entity.getX(), entity.getY());
-        packet.writeData(BombermanGame.game.getSocketClient());
     }
 
     public void stop() {
         prevState = state;
         state = STOP;
-
-        Packet02Move packet = new Packet02Move(this.getUsername(), 0, 0, state.getValue(), entity.getX(), entity.getY());
-        packet.writeData(BombermanGame.game.getSocketClient());
     }
 
     public void die() {
         state = DIE;
-
-        Packet02Move packet = new Packet02Move(this.getUsername(), 0, 0, STOP.getValue(), entity.getX(), entity.getY());
-        packet.writeData(BombermanGame.game.getSocketClient());
     }
 
     public void placeBomb() {
-        if (geti("bomb") == 0 || !bombValid) {
+        if (geti("bomb") <= 0 || !bombValid) {
             return;
         }
 
@@ -221,16 +207,13 @@ public class PlayerComponent extends Component {
                 spawn("classic_bomb", new SpawnData(bombLocation));
                 break;
             case LAZERBOMB:
-                if (prevState == STOP) prevState = state;
+                if (state != STOP) prevState = state;
                 spawn("lazer_bomb", new SpawnData(bombLocation.getX(), bombLocation.getY(), prevState.getValue()));
                 break;
             case LIGHTBOMB:
                 spawn("light_bomb", new SpawnData(bombLocation));
                 break;
         }
-
-        Packet03PlaceBomb packet = new Packet03PlaceBomb(this.getUsername(), prevState.getValue(), bombType == CLASSICBOMB ? 0 : bombType == LAZERBOMB ? 1 : 2);
-        packet.writeData(BombermanGame.game.getSocketClient());
     }
 
     public void setBombType(BombermanType bombType) {
@@ -239,6 +222,14 @@ public class PlayerComponent extends Component {
 
     public State getState() {
         return state;
+    }
+
+    public State getPrevState() {
+        return prevState;
+    }
+
+    public BombermanType getBombType() {
+        return bombType;
     }
 
     public String getUsername() {
@@ -271,6 +262,10 @@ public class PlayerComponent extends Component {
     public void setUsernameTextLocation(double x, double y) {
         usernameTexture.setX(x);
         usernameTexture.setY(y);
+    }
+
+    public PhysicsComponent getPhysics() {
+        return physics;
     }
 
     @Override

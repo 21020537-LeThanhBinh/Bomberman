@@ -54,9 +54,11 @@ public class GameClient extends Thread {
         break;
       case LOGIN:
         packet = new Packet00Login(data);
-        System.out.println("["+address.getHostAddress()+":"+port+"]"+((Packet00Login)packet).getUsername()+" has joined the game...");
+        System.out.println("["+address.getHostAddress()+":"+port+"]"+
+            ((Packet00Login)packet).getUsername()+" has joined the game...");
 
-        PlayerMP player = new PlayerMP(((Packet00Login)packet).getX(), ((Packet00Login)packet).getY(), ((Packet00Login)packet).getUsername(), address, port);
+        PlayerMP player = new PlayerMP(((Packet00Login)packet).getX(), ((Packet00Login)packet).getY(),
+            ((Packet00Login)packet).getUsername(), address, port);
         game.addPlayerMP(player.getEntity());
 
         break;

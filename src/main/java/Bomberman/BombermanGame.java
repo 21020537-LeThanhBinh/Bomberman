@@ -14,6 +14,8 @@ import Bomberman.net.GameClient;
 import Bomberman.net.GameServer;
 import Bomberman.net.packets.Packet00Login;
 import Bomberman.net.packets.Packet01Disconnect;
+import Bomberman.net.packets.Packet02Move;
+import Bomberman.net.packets.Packet03PlaceBomb;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
@@ -61,12 +63,12 @@ public class BombermanGame extends GameApplication  {
     protected void initSettings(GameSettings settings) {
         game = this;
 
-        loadFile("Level1_sample.txt");
+        loadFile("Multiplayer_map.txt");
 
         MAP_HEIGHT = sc.nextInt();
         MAP_WIDTH = sc.nextInt();
 
-        settings.setWidth(Math.min(MAX_SCENE_WIDTH, MAP_WIDTH * TILED_SIZE)/2);
+        settings.setWidth(Math.min(MAX_SCENE_WIDTH, MAP_WIDTH * TILED_SIZE));
         settings.setHeight(Math.min(MAX_SCENE_HEIGHT, MAP_HEIGHT * TILED_SIZE));
 
         settings.setTitle(GAME_TITLE);
@@ -101,6 +103,7 @@ public class BombermanGame extends GameApplication  {
         spawn("background");
         loadLevel();
         getGameWorld().addEntity(player);
+        System.out.println("Spawn me!");
 
         viewport = getGameScene().getViewport();
         viewport.setBounds(0, 0, MAP_WIDTH * TILED_SIZE, MAP_HEIGHT * TILED_SIZE);
@@ -119,11 +122,8 @@ public class BombermanGame extends GameApplication  {
             @Override
             protected void onAction() {
                 playerComponent.moveLeft();
-            }
-
-            @Override
-            protected void onActionEnd() {
-                playerComponent.stop();
+                Packet02Move packet = new Packet02Move(playerComponent.getUsername(), playerComponent.getPhysics().getVelocityX(), playerComponent.getPhysics().getVelocityY(), playerComponent.getState().getValue(), player.getX(), player.getY());
+                packet.writeData(socketClient);
             }
         }, KeyCode.A);
 
@@ -131,11 +131,8 @@ public class BombermanGame extends GameApplication  {
             @Override
             protected void onAction() {
                 playerComponent.moveRight();
-            }
-
-            @Override
-            protected void onActionEnd() {
-                playerComponent.stop();
+                Packet02Move packet = new Packet02Move(playerComponent.getUsername(), playerComponent.getPhysics().getVelocityX(), playerComponent.getPhysics().getVelocityY(), playerComponent.getState().getValue(), player.getX(), player.getY());
+                packet.writeData(socketClient);
             }
         }, KeyCode.D);
 
@@ -143,11 +140,8 @@ public class BombermanGame extends GameApplication  {
             @Override
             protected void onAction() {
                 playerComponent.moveUp();
-            }
-
-            @Override
-            protected void onActionEnd() {
-                playerComponent.stop();
+                Packet02Move packet = new Packet02Move(playerComponent.getUsername(), playerComponent.getPhysics().getVelocityX(), playerComponent.getPhysics().getVelocityY(), playerComponent.getState().getValue(), player.getX(), player.getY());
+                packet.writeData(socketClient);
             }
         }, KeyCode.W);
 
@@ -155,11 +149,8 @@ public class BombermanGame extends GameApplication  {
             @Override
             protected void onAction() {
                 playerComponent.moveDown();
-            }
-
-            @Override
-            protected void onActionEnd() {
-                playerComponent.stop();
+                Packet02Move packet = new Packet02Move(playerComponent.getUsername(), playerComponent.getPhysics().getVelocityX(), playerComponent.getPhysics().getVelocityY(), playerComponent.getState().getValue(), player.getX(), player.getY());
+                packet.writeData(socketClient);
             }
         }, KeyCode.S);
 
@@ -167,6 +158,9 @@ public class BombermanGame extends GameApplication  {
             @Override
             protected void onActionBegin() {
                 playerComponent.placeBomb();
+
+                Packet03PlaceBomb packet = new Packet03PlaceBomb(playerComponent.getUsername(), playerComponent.getPrevState().getValue(), playerComponent.getBombType() == CLASSICBOMB ? 0 : playerComponent.getBombType() == LAZERBOMB ? 1 : 2);
+                packet.writeData(socketClient);
             }
         }, KeyCode.SPACE);
 
@@ -202,6 +196,7 @@ public class BombermanGame extends GameApplication  {
             protected void onActionBegin() {
                 Packet01Disconnect packet = new Packet01Disconnect(playerComponent.getUsername());
                 packet.writeData(socketClient);
+
                 Platform.exit();
             }
         }, KeyCode.ESCAPE);
@@ -364,6 +359,7 @@ public class BombermanGame extends GameApplication  {
         // If multiplayer ...
         PlayerComponent pComponent = p.getComponent(PlayerComponent.class);
 
+        // Reset to default position
         pComponent.die();
 
         FXGL.runOnce(() -> {
@@ -392,14 +388,16 @@ public class BombermanGame extends GameApplication  {
      * Where enemies are other players
      */
 
-    public GameClient getSocketClient() {
-        return socketClient;
-    }
-
     public void addPlayerMP(Entity p) {
         Platform.runLater(() -> {
             getGameWorld().addEntity(p);
             enemies.add(p);
+            System.out.println("Spawn enemy!");
+            if (p.getComponent(PlayerComponent.class).getUsername().compareTo(playerComponent.getUsername()) > 0) {
+                p.getComponent(PlayerComponent.class).setPos(0, 0, 11*48, 11*48);
+            } else {
+                playerComponent.setPos(0,0,11*48, 11*48);
+            }
         });
     }
 
