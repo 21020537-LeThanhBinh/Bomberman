@@ -20,6 +20,7 @@ import Bomberman.DynamicEntityState.State;
 import Bomberman.Menu.GameMenu;
 import Bomberman.Menu.MainMenu;
 import Bomberman.UI.EndingScene;
+import Bomberman.UI.StageStartScene;
 import Bomberman.UI.UIComponents;
 import Bomberman.net.GameClient;
 import Bomberman.net.GameServer;
@@ -39,6 +40,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -60,8 +62,8 @@ public class BombermanGame extends GameApplication  {
 
     // File and map
     private Scanner sc;
-    private int MAP_HEIGHT;
-    private int MAP_WIDTH;
+    private static int MAP_HEIGHT;
+    private static int MAP_WIDTH;
     private Viewport viewport;
 
     // Entities related
@@ -75,9 +77,6 @@ public class BombermanGame extends GameApplication  {
         instance = this;
 
         isMultiplayer = false;
-
-//        settings.setWidth(Math.min(MAX_SCENE_WIDTH, MAP_WIDTH * TILED_SIZE));
-//        settings.setHeight(Math.min(MAX_SCENE_HEIGHT, MAP_HEIGHT * TILED_SIZE));
 
         settings.setWidth(MAX_SCENE_WIDTH);
         settings.setHeight(MAX_SCENE_HEIGHT);
@@ -117,27 +116,35 @@ public class BombermanGame extends GameApplication  {
 
     @Override
     protected void initGame() {
+        System.out.println("Init game");
+
+        if (player != null) player.removeFromWorld();
+        stillObject.forEach(Entity::removeFromWorld);
+        enemies.forEach(Entity::removeFromWorld);
+        stillObject.clear();
+        enemies.clear();
+
         if (isMultiplayer) {
             loadFile("Multiplayer_map.txt");
         } else {
             loadFile("Level1_sample.txt");
         }
 
-        // Todo: make map_size static
-        MAP_HEIGHT = sc.nextInt(); set("map_height", MAP_HEIGHT);
-        MAP_WIDTH = sc.nextInt(); set("map_width", MAP_WIDTH);
-
-        getGameWorld().addEntityFactory(new BombermanFactory());
-        loadLevel();
+        MAP_HEIGHT = sc.nextInt();
+        MAP_WIDTH = sc.nextInt();
 
         viewport = getGameScene().getViewport();
         viewport.setBounds(0, -96, MAP_WIDTH * TILED_SIZE, MAP_HEIGHT * TILED_SIZE);
+
+        getGameWorld().addEntityFactory(new BombermanFactory());
+        loadLevel();
 
         if (isMultiplayer) {
             playerMP = new PlayerMP(48, 48, JOptionPane.showInputDialog(this, "Please enter a username"), null,-1);
             player = playerMP.getEntity();
             getGameWorld().addEntity(player);
 
+            // Todo: fix bug when changing from solo to multiplayer, map got unbalanced
             viewport.setX(-(MAX_SCENE_WIDTH-MAP_WIDTH*TILED_SIZE)/2);
             viewport.setY(-(MAX_SCENE_HEIGHT-MAP_HEIGHT*TILED_SIZE));
 
@@ -147,7 +154,7 @@ public class BombermanGame extends GameApplication  {
             }
             loginPacket.writeData(socketClient);
         } else {
-            viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
+
         }
         playerComponent = player.getComponent(PlayerComponent.class);
     }
@@ -246,7 +253,7 @@ public class BombermanGame extends GameApplication  {
             if (getGameWorld().getGroup(ENEMY1, ENEMY2, ENEMY3, ENEMY4, ENEMY5, POWERUP_BOMBS, POWERUP_FLAMES).getSize() == 0) {
                 // Next level music . . .
 
-                player.removeFromWorld();
+//                player.removeFromWorld();
                 playerComponent.setBombValid(false);
                 getGameTimer().runOnceAfter(this::nextLevel, Duration.seconds(1));
             }
@@ -291,16 +298,14 @@ public class BombermanGame extends GameApplication  {
 
     @Override
     protected void initGameVars(Map<String, Object> vars) {
-        vars.put("map_width", 0);
-        vars.put("map_height", 0);
         vars.put("level", STARTING_LEVEL);
         vars.put("score", 0);
 
         vars.put("life", 3);
         vars.put("enemies", 0);
-        vars.put("flame", 2);
+        vars.put("flame", 1);
         vars.put("speed", PLAYER_SPEED);
-        vars.put("bomb", 5);
+        vars.put("bomb", 1);
         vars.put("levelTime", TIME_LEVEL);
     }
 
@@ -327,7 +332,7 @@ public class BombermanGame extends GameApplication  {
     protected void loadLevel() {
         getGameScene().setBackgroundColor(Color.web("#B9B9B9"));
 
-        spawn("background");
+        Entity background = spawn("background");
 
         sc.nextLine();
         for (int i = 0; i < MAP_HEIGHT; i++) {
@@ -339,8 +344,12 @@ public class BombermanGame extends GameApplication  {
                         stillObject.add(spawn("wall", j * TILED_SIZE, i * TILED_SIZE));
                         break;
                     case 'p':
-                        player = spawn("player", j * TILED_SIZE, i * TILED_SIZE);
-                        playerComponent = player.getComponent(PlayerComponent.class);
+                        if (!isMultiplayer) {
+                            player = spawn("player", j * TILED_SIZE, i * TILED_SIZE);
+                            playerComponent = player.getComponent(PlayerComponent.class);
+
+                            viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
+                        }
                         break;
                     case '1':
                         enemies.add(spawn("enemy1", j * TILED_SIZE, i * TILED_SIZE));
@@ -372,6 +381,9 @@ public class BombermanGame extends GameApplication  {
                 }
             }
         }
+
+        set("enemies", getGameWorld().getGroup(ENEMY1, ENEMY2, ENEMY3, ENEMY4, ENEMY5).getSize());
+        set("levelTime", TIME_LEVEL);
     }
 
     protected void nextLevel() {
@@ -381,13 +393,12 @@ public class BombermanGame extends GameApplication  {
         stillObject.forEach(Entity::removeFromWorld);
         enemies.forEach(Entity::removeFromWorld);
 
-        if (geti("level") <= MAX_LEVEL) {
+        if (geti("level") > MAX_LEVEL) {
+            turnOffMusic();
+            getSceneService().pushSubScene(new EndingScene("CONGRATULATIONS !!!\n\n\n\n    GOOD BYE"));
+        } else {
             loadFile("Level" + geti("level") + "_sample.txt");
             loadLevel();
-        }
-        else {
-            System.out.println("You win!");
-            // Load win screen . . .
         }
     }
 
@@ -401,6 +412,7 @@ public class BombermanGame extends GameApplication  {
 
         // Reset powers ...
         set("flame", 1);
+        set("levelTime", TIME_LEVEL);
     }
 
     public void onPlayerDied(Entity p) {
@@ -440,11 +452,27 @@ public class BombermanGame extends GameApplication  {
 
     @Override
     protected void onUpdate(double tpf) {
+        if (!isMultiplayer) {
+            inc("levelTime", -tpf);
+
+            if (getd("levelTime") <= 0.0) {
+                showMessage("Time Up !!!");
+                onPlayerDied(player);
+            }
+        }
+
         getGameWorld().getEntitiesByType(PLAYER).forEach(p ->  {
             p.getComponent(PlayerComponent.class).setUsernameTextLocation(p.getX() - viewport.getX(), p.getY() - viewport.getY());
         });
     }
 
+    public static int getMapHeight() {
+        return MAP_HEIGHT;
+    }
+
+    public static int getMapWidth() {
+        return MAP_WIDTH;
+    }
 
     /**
      * Server stuff.

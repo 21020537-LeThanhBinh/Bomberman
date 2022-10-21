@@ -1,5 +1,6 @@
 package Bomberman.Components.Enemy;
 
+import static Bomberman.BombermanGame.*;
 import static Bomberman.BombermanType.BOMB;
 import static Bomberman.BombermanType.BRICK;
 import static Bomberman.BombermanType.ENEMY3;
@@ -11,10 +12,12 @@ import static Bomberman.Constants.Constant.TILED_SIZE;
 import static Bomberman.DynamicEntityState.State.DIE;
 import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGL.inc;
 import static com.almasb.fxgl.dsl.FXGL.random;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.geti;
 
+import Bomberman.BombermanGame;
 import Bomberman.Components.Bomb.LightBomb;
 import Bomberman.Components.AStarPathFinder.AStarPathFinder;
 import Bomberman.Components.AStarPathFinder.Map;
@@ -44,17 +47,18 @@ public class Enemy3 extends EnemyComponent {
     protected List<Entity> nextStepList = new ArrayList<com.almasb.fxgl.entity.Entity>();
 
     public Enemy3() {
-        super(-ENEMY_SPEED, 0, 2, 3, "enemy3.png");
+        super(-ENEMY_SPEED, 0, 1.5, 3, "enemy3.png");
 
-        FXGL.onCollision(ENEMY3, FLAME, (enemy3, flame) -> {
+        FXGL.onCollisionEnd(ENEMY3, FLAME, (enemy3, flame) -> {
             enemy3.getComponent(Enemy3.class).setStateDie();
             getGameTimer().runOnceAfter(enemy3::removeFromWorld, Duration.seconds(2.4));
+            inc("enemies", -1);
         });
 
-        map = new Map(geti("map_width"), geti("map_height"));
+        map = new Map(getMapWidth(), getMapHeight());
         aStar = new AStarPathFinder(map);
 
-        movingRandom = false;
+        movingRandom = true;
     }
 
     public Enemy3(double dx, double dy, double speedFactor, double reactionForce, String assetName) {
@@ -65,7 +69,7 @@ public class Enemy3 extends EnemyComponent {
             getGameTimer().runOnceAfter(enemy3::removeFromWorld, Duration.seconds(2.4));
         });
 
-        map = new Map(geti("map_width"), geti("map_height"));
+        map = new Map(getMapWidth(), getMapHeight());
         aStar = new AStarPathFinder(map);
 
         movingRandom = false;
@@ -91,6 +95,7 @@ public class Enemy3 extends EnemyComponent {
 
         if (!movingRandom) {
             loadPlayer();
+            speedFactor = 1.5;
         }
         loadMap();
         path = aStar.findPath(myX,myY,playerX,playerY);
@@ -101,6 +106,7 @@ public class Enemy3 extends EnemyComponent {
             playerY = random(myY-2,myY+2);
 
             movingRandom = true;
+            speedFactor = 1;
             return;
         }
 
@@ -143,8 +149,8 @@ public class Enemy3 extends EnemyComponent {
     }
 
     public void loadMap() {
-        for (int x = 0; x < geti("map_width"); x++) {
-            for (int y = 0; y < geti("map_height"); y++) {
+        for (int x = 0; x < getMapWidth(); x++) {
+            for (int y = 0; y < getMapHeight(); y++) {
                 map.setVal(x,y,1);
             }
         }

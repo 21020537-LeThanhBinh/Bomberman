@@ -6,8 +6,10 @@ import static Bomberman.DynamicEntityState.State.DIE;
 import static Bomberman.BombermanType.*;
 import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGL.inc;
 import static com.almasb.fxgl.dsl.FXGL.onCollision;
 import static com.almasb.fxgl.dsl.FXGL.onCollisionBegin;
+import static com.almasb.fxgl.dsl.FXGL.onCollisionEnd;
 import static com.almasb.fxgl.dsl.FXGL.set;
 
 import Bomberman.Components.Bomb.LightBomb;
@@ -35,9 +37,10 @@ public class Enemy2 extends EnemyComponent {
             if (!bomb.hasComponent(LightBomb.class))
                 enemy2.getComponent(Enemy2.class).turn();
         });
-        onCollision(ENEMY2, FLAME, (enemy2, flame) -> {
+        onCollisionEnd(ENEMY2, FLAME, (enemy2, flame) -> {
             enemy2.getComponent(Enemy2.class).setStateDie();
             getGameTimer().runOnceAfter(enemy2::removeFromWorld, Duration.seconds(2.4));
+            inc("enemies", -1);
         });
 
     }

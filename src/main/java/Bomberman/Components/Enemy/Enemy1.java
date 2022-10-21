@@ -20,9 +20,10 @@ public class Enemy1 extends EnemyComponent {
             if (!bomb.hasComponent(LightBomb.class))
                 enemy1.getComponent(Enemy1.class).turn();
         });
-        onCollision(ENEMY1, FLAME, (enemy1, flame) -> {
+        onCollisionEnd(ENEMY1, FLAME, (enemy1, flame) -> {
             enemy1.getComponent(Enemy1.class).setStateDie();
             getGameTimer().runOnceAfter(enemy1::removeFromWorld, Duration.seconds(2.4));
+            inc("enemies", -1);
         });
     }
 }

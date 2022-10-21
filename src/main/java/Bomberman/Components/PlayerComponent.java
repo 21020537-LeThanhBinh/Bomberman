@@ -83,11 +83,13 @@ public class PlayerComponent extends Component {
             powerup.removeFromWorld();
             play("powerup.wav");
             p.getComponent(PlayerComponent.class).incFlamePower();
+            inc("flame", 1);
         });
         onCollisionBegin(PLAYER, POWERUP_BOMBS, (p, powerup) -> {
             powerup.removeFromWorld();
             play("powerup.wav");
             p.getComponent(PlayerComponent.class).incBombCounter();
+            inc("bomb", 1);
         });
         onCollisionBegin(PLAYER, POWERUP_SPEED, (p, powerup) -> {
             powerup.removeFromWorld();

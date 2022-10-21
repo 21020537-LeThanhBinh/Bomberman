@@ -1,5 +1,6 @@
 package Bomberman.Components.Enemy;
 
+import static Bomberman.BombermanGame.*;
 import static Bomberman.BombermanType.BOMB;
 import static Bomberman.BombermanType.BRICK;
 import static Bomberman.BombermanType.ENEMY4;
@@ -10,8 +11,9 @@ import static Bomberman.Constants.Constant.ENEMY_SPEED;
 import static Bomberman.Constants.Constant.TILED_SIZE;
 import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.geti;
+import static com.almasb.fxgl.dsl.FXGL.inc;
 
+import Bomberman.BombermanGame;
 import Bomberman.Components.PlayerComponent;
 import com.almasb.fxgl.dsl.FXGL;
 import javafx.util.Duration;
@@ -20,16 +22,17 @@ public class Enemy4 extends Enemy3 {
     public Enemy4() {
         super(-ENEMY_SPEED, 0, 2, 3, "enemy4.png");
 
-        FXGL.onCollision(ENEMY4, FLAME, (enemy4, flame) -> {
+        FXGL.onCollisionEnd(ENEMY4, FLAME, (enemy4, flame) -> {
             enemy4.getComponent(Enemy4.class).setStateDie();
             getGameTimer().runOnceAfter(enemy4::removeFromWorld, Duration.seconds(2.4));
+            inc("enemies", -1);
         });
     }
 
     @Override
     public void loadMap() {
-        for (int x = 0; x < geti("map_width"); x++) {
-            for (int y = 0; y < geti("map_height"); y++) {
+        for (int x = 0; x < getMapWidth(); x++) {
+            for (int y = 0; y < getMapHeight(); y++) {
                 map.setVal(x,y,1);
             }
         }

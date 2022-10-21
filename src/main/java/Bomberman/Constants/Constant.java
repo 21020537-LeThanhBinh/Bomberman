@@ -9,7 +9,7 @@ public class Constant {
     public static final String GAME_VERSION = "1.0";
     public static final Double UI_FONT_SIZE = 36.0;
 
-    public static final int MAX_LEVEL = 2;
+    public static final int MAX_LEVEL = 1;
     public static final int STARTING_LEVEL = 1;
     public static final double TIME_LEVEL = 280.0;
     public static final int TILED_SIZE = 48;
