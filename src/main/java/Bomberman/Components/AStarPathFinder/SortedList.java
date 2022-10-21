@@ -1,34 +1,31 @@
-package Bomberman.Components.Enemy.AStarPathFinder;
+package Bomberman.Components.AStarPathFinder;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.PriorityQueue;
 
 class SortedList<T extends Comparable> {
-  private ArrayList<T> list = new ArrayList<>();
   private PriorityQueue<T> queue = new PriorityQueue<>();
-  // Todo: use priority queue
 
   public T first() {
-    return list.get(0);
+    return queue.peek();
   }
   public void clear() {
-    list.clear();
+    queue.clear();
   }
   public void add(T o) {
-    list.add(o);
-    Collections.sort(list);
+    queue.add(o);
   }
 
   public void remove(T o) {
-    list.remove(o);
+    queue.poll();
   }
 
   public int size() {
-    return list.size();
+    return queue.size();
   }
 
   public boolean contains(T o) {
-    return list.contains(o);
+    return queue.contains(o);
   }
 }

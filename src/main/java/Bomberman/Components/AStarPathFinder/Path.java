@@ -1,4 +1,4 @@
-package Bomberman.Components.Enemy.AStarPathFinder;
+package Bomberman.Components.AStarPathFinder;
 
 import java.util.ArrayList;
 import javafx.util.Pair;

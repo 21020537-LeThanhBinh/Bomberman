@@ -55,7 +55,11 @@ public class PlayerMP {
     this.port = port;
   }
 
-//  public void setPos(double velocityX, double velocityY, int state, double x, double y) {
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  //  public void setPos(double velocityX, double velocityY, int state, double x, double y) {
 //    playerComponent.setState(State.valueOf(state));
 //    playerComponent.setPos(velocityX, velocityY, x, y);
 //  }

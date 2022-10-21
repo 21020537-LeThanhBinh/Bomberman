@@ -1,4 +1,4 @@
-package Bomberman.Components.Enemy.AStarPathFinder;
+package Bomberman.Components.AStarPathFinder;
 
 public class Map {
   private int[][] binaryMap;

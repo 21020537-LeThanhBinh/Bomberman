@@ -1,7 +1,6 @@
-package Bomberman.Components.Enemy.AStarPathFinder;
+package Bomberman.Components.AStarPathFinder;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class AStarPathFinder {
 	private class Node implements Comparable {

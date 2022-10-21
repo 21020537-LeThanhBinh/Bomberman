@@ -176,26 +176,31 @@ public class PlayerComponent extends Component {
     }
 
     public void moveRight() {
+        if (state == DIE) return;
         state = RIGHT;
         physics.setVelocityX(this.speed);
     }
 
     public void moveLeft() {
+        if (state == DIE) return;
         state = LEFT;
         physics.setVelocityX(-this.speed);
     }
 
     public void moveUp() {
+        if (state == DIE) return;
         state = UP;
         physics.setVelocityY(-this.speed);
     }
 
     public void moveDown() {
+        if (state == DIE) return;
         state = DOWN;
         physics.setVelocityY(this.speed);
     }
 
     public void stop() {
+        if (state == DIE) return;
         prevState = state;
         state = STOP;
     }
@@ -299,6 +304,14 @@ public class PlayerComponent extends Component {
     
     public void speedNormal() {
         this.speed -= BONUS_SPEED;
+    }
+
+    public int getFlamePower() {
+        return flamePower;
+    }
+
+    public void setBombValid(boolean bombValid) {
+        this.bombValid = bombValid;
     }
 
     @Override

@@ -16,9 +16,9 @@ import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.geti;
 
 import Bomberman.Components.Bomb.LightBomb;
-import Bomberman.Components.Enemy.AStarPathFinder.AStarPathFinder;
-import Bomberman.Components.Enemy.AStarPathFinder.Map;
-import Bomberman.Components.Enemy.AStarPathFinder.Path;
+import Bomberman.Components.AStarPathFinder.AStarPathFinder;
+import Bomberman.Components.AStarPathFinder.Map;
+import Bomberman.Components.AStarPathFinder.Path;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import java.util.ArrayList;

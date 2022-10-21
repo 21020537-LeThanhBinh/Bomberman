@@ -31,7 +31,7 @@ public class BombermanFactory implements EntityFactory {
     @Spawns("background")
     public Entity newBackground(SpawnData data) {
         return entityBuilder(data)
-            .view(new Rectangle(GAME_WORLD_WIDTH, GAME_WORLD_HEIGHT, Color.rgb(0, 125, 0)))
+            .view(new Rectangle(geti("map_width") * TILED_SIZE, geti("map_height") * TILED_SIZE, Color.rgb(0, 125, 0)))
             .zIndex(-1)
             .build();
     }

@@ -68,4 +68,8 @@ public abstract class BombComponent extends Component {
     public void setFlamePower(int flames) {
         this.flames = flames;
     }
+
+    public int getFlames() {
+        return flames;
+    }
 }

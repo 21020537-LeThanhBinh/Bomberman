@@ -4,6 +4,7 @@ import static Bomberman.BombermanType.BOMB;
 import static Bomberman.BombermanType.BRICK;
 import static Bomberman.BombermanType.ENEMY4;
 import static Bomberman.BombermanType.FLAME;
+import static Bomberman.BombermanType.PLAYER;
 import static Bomberman.BombermanType.WALL;
 import static Bomberman.Constants.Constant.ENEMY_SPEED;
 import static Bomberman.Constants.Constant.TILED_SIZE;
@@ -11,6 +12,7 @@ import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.geti;
 
+import Bomberman.Components.PlayerComponent;
 import com.almasb.fxgl.dsl.FXGL;
 import javafx.util.Duration;
 
@@ -43,7 +45,7 @@ public class Enemy4 extends Enemy3 {
             int thisY = (int)entity1.getY()/TILED_SIZE;
             map.setVal(thisX,thisY,0);
 
-            int flame = FXGL.geti("flame");
+            int flame = getGameWorld().getSingleton(PLAYER).getComponent(PlayerComponent.class).getFlamePower();
             for (int i = 1; i <= flame; i++) {
                 map.setVal(thisX+i,thisY,0);
                 map.setVal(thisX-i,thisY,0);
