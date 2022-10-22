@@ -100,8 +100,6 @@ public class BombermanGame extends GameApplication  {
         getGameScene().setBackgroundColor(Color.web("#B9B9B9"));
         getGameWorld().addEntityFactory(new BombermanFactory());
 
-
-
         if (isMultiplayer) {
             socketClient = new GameClient(this, "192.168.1.4");
             socketClient.start();
@@ -113,8 +111,7 @@ public class BombermanGame extends GameApplication  {
             loadMap("Multiplayer_map.txt");
             getGameWorld().addEntity(player);
 
-            viewport.setX(-(MAX_SCENE_WIDTH-MAP_WIDTH*TILED_SIZE)/2);
-            viewport.setY(-(MAX_SCENE_HEIGHT-MAP_HEIGHT*TILED_SIZE));
+
 
             Packet00Login loginPacket = new Packet00Login(playerMP.getUsername(), player.getX(), player.getY());
             if (socketServer != null) {
@@ -216,16 +213,19 @@ public class BombermanGame extends GameApplication  {
             }
         }, KeyCode.DIGIT3);
 
-//        getInput().addAction(new UserAction("Exit game") {
-//            @Override
-//            protected void onActionBegin() {
-//                Packet01Disconnect packet = new Packet01Disconnect(playerComponent.getUsername());
-//                packet.writeData(socketClient);
-//
-//                Platform.exit();
-//            }
-//        }, KeyCode.DELETE);
+        getInput().addAction(new UserAction("Exit game") {
+            @Override
+            protected void onActionBegin() {
+                if (isMultiplayer) {
+                    Packet01Disconnect packet = new Packet01Disconnect(playerComponent.getUsername());
+                    packet.writeData(socketClient);
 
+                    Platform.exit();
+                }
+            }
+        }, KeyCode.ESCAPE);
+
+        // For testing
         getInput().addAction(new UserAction("Next level") {
             @Override
             protected void onActionBegin() {
@@ -284,20 +284,17 @@ public class BombermanGame extends GameApplication  {
             }
         });
         onCollisionBegin(PLAYER, ENEMY5, (p, enemy) -> {
-//            if (enemy.getComponent(Enemy5.class).getState() != DIE
-//                && playerComponent.getState() != DIE) {
-//                onPlayerDied(p);
-//            }
+            if (enemy.getComponent(Enemy5.class).getState() != DIE
+                && playerComponent.getState() != DIE) {
+                onPlayerDied(p);
+            }
         });
 
         // Multiplayer
         onCollisionBegin(PLAYER, FLAME, (p, flame) -> {
             if (p.getComponent(PlayerComponent.class).getState() != DIE) {
                 onPlayerDied(p);
-                if (p != this.player) {
-                    inc("score", 100);
-                    // Todo: Sent score to server ...
-                }
+                // Todo: Sent score to server ...
             }
         });
     }
@@ -321,6 +318,13 @@ public class BombermanGame extends GameApplication  {
 
     @Override
     protected void initUI() {
+        if (isMultiplayer) {
+            UIComponents.addILabelUI("flame", "🔥 %d", 40, 25);
+            UIComponents.addILabelUI("speed", "👟  %d", 150, 25);
+            UIComponents.addILabelUI("bomb", "💣 %d", 320, 25);
+            return;
+        }
+
         UIComponents.addILabelUI("level", "🚩 %d", 35, 25);
         UIComponents.addILabelUI("life", "💜 %d", 160, 25);
         UIComponents.addILabelUI("score", "💵  %d", 300, 25);
@@ -345,6 +349,8 @@ public class BombermanGame extends GameApplication  {
 
         viewport = getGameScene().getViewport();
         viewport.setBounds(0, -96, MAP_WIDTH * TILED_SIZE, MAP_HEIGHT * TILED_SIZE);
+        viewport.setX(-(MAX_SCENE_WIDTH-MAP_WIDTH*TILED_SIZE)/2);
+        viewport.setY(-(MAX_SCENE_HEIGHT-MAP_HEIGHT*TILED_SIZE));
 
         stillObject.add(spawn("background"));
 
@@ -375,6 +381,9 @@ public class BombermanGame extends GameApplication  {
                         break;
                     case '4':
                         enemies.add(spawn("enemy4", j * TILED_SIZE, i * TILED_SIZE));
+                        break;
+                    case '5':
+                        enemies.add(spawn("enemy5", j * TILED_SIZE, i * TILED_SIZE));
                         break;
                     case 'x':
                         stillObject.add(spawn("portal", j * TILED_SIZE, i * TILED_SIZE));
@@ -409,7 +418,6 @@ public class BombermanGame extends GameApplication  {
 
     private void clearGame() {
         if (player != null) {
-//            playerComponent.setBombValid(false);
             player.removeFromWorld();
         }
 
@@ -548,10 +556,6 @@ public class BombermanGame extends GameApplication  {
 
     public void setMultiplayer(boolean multiplayer) {
         isMultiplayer = multiplayer;
-    }
-
-    public boolean isMultiplayer() {
-        return isMultiplayer;
     }
 
     public static BombermanGame getInstance() {
