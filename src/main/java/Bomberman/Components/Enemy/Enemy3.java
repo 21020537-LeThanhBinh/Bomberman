@@ -1,8 +1,13 @@
 package Bomberman.Components.Enemy;
 
+import static Bomberman.BombermanGame.*;
 import static Bomberman.BombermanType.BOMB;
 import static Bomberman.BombermanType.BRICK;
+import static Bomberman.BombermanType.ENEMY1;
+import static Bomberman.BombermanType.ENEMY2;
 import static Bomberman.BombermanType.ENEMY3;
+import static Bomberman.BombermanType.ENEMY4;
+import static Bomberman.BombermanType.ENEMY5;
 import static Bomberman.BombermanType.FLAME;
 import static Bomberman.BombermanType.PLAYER;
 import static Bomberman.BombermanType.WALL;
@@ -11,14 +16,21 @@ import static Bomberman.Constants.Constant.TILED_SIZE;
 import static Bomberman.DynamicEntityState.State.DIE;
 import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGL.inc;
 import static com.almasb.fxgl.dsl.FXGL.random;
+import static com.almasb.fxgl.dsl.FXGL.set;
+import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.geti;
 
+import Bomberman.BombermanGame;
 import Bomberman.Components.Bomb.LightBomb;
-import Bomberman.Components.Enemy.AStarPathFinder.AStarPathFinder;
-import Bomberman.Components.Enemy.AStarPathFinder.Map;
-import Bomberman.Components.Enemy.AStarPathFinder.Path;
+import Bomberman.Components.AStarPathFinder.AStarPathFinder;
+import Bomberman.Components.AStarPathFinder.Map;
+import Bomberman.Components.AStarPathFinder.Path;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
@@ -36,15 +48,18 @@ public class Enemy3 extends EnemyComponent {
     protected int playerY;
     // Random movement
     protected boolean movingRandom;
-    public Enemy3() {
-        super(-ENEMY_SPEED, 0, 2, 3, "enemy3.png");
+    // Marker
+    protected List<Entity> nextStepList = new ArrayList<com.almasb.fxgl.entity.Entity>();
 
-        FXGL.onCollision(ENEMY3, FLAME, (enemy3, flame) -> {
+    public Enemy3() {
+        super(-ENEMY_SPEED, 0, 1.5, 3, "enemy3.png");
+
+        FXGL.onCollisionEnd(ENEMY3, FLAME, (enemy3, flame) -> {
             enemy3.getComponent(Enemy3.class).setStateDie();
             getGameTimer().runOnceAfter(enemy3::removeFromWorld, Duration.seconds(2.4));
         });
 
-        map = new Map(geti("map_width"), geti("map_height"));
+        map = new Map(getMapWidth(), getMapHeight());
         aStar = new AStarPathFinder(map);
 
         movingRandom = false;
@@ -58,7 +73,7 @@ public class Enemy3 extends EnemyComponent {
             getGameTimer().runOnceAfter(enemy3::removeFromWorld, Duration.seconds(2.4));
         });
 
-        map = new Map(geti("map_width"), geti("map_height"));
+        map = new Map(getMapWidth(), getMapHeight());
         aStar = new AStarPathFinder(map);
 
         movingRandom = false;
@@ -84,21 +99,29 @@ public class Enemy3 extends EnemyComponent {
 
         if (!movingRandom) {
             loadPlayer();
+            speedFactor = 2;
         }
         loadMap();
         path = aStar.findPath(myX,myY,playerX,playerY);
 
-        // No path to player
+        // No path to player -> move to random
         if (path == null) {
             playerX = random(myX-2,myX+2);
             playerY = random(myY-2,myY+2);
 
             movingRandom = true;
+            speedFactor = 1.5;
             return;
         }
 
         // Ideal nextStep
         nextStep = new Point2D(path.getX(0) * TILED_SIZE, path.getY(0) * TILED_SIZE);
+
+        // Marking (for testing)
+        removeMarker();
+        if (geti("developermode") == 1) {
+            markPath();
+        }
 
         // When at nextStep (accuracy < 3)
         if (entity.getPosition().distance(nextStep) < 3) {
@@ -132,8 +155,8 @@ public class Enemy3 extends EnemyComponent {
     }
 
     public void loadMap() {
-        for (int x = 0; x < geti("map_width"); x++) {
-            for (int y = 0; y < geti("map_height"); y++) {
+        for (int x = 0; x < getMapWidth(); x++) {
+            for (int y = 0; y < getMapHeight(); y++) {
                 map.setVal(x,y,1);
             }
         }
@@ -157,5 +180,22 @@ public class Enemy3 extends EnemyComponent {
         Point2D playerPos = getGameWorld().getSingleton(PLAYER).getPosition();
         playerX = (int)Math.round(playerPos.getX() / TILED_SIZE);
         playerY = (int)Math.round(playerPos.getY() / TILED_SIZE);
+    }
+
+    public void markPath() {
+        for (int i = 0; i < path.getLength(); i++) {
+            nextStepList.add(spawn("yellow_mark", path.getX(i) * TILED_SIZE, path.getY(i) * TILED_SIZE));
+        }
+    }
+
+    public void removeMarker() {
+        nextStepList.forEach(Entity::removeFromWorld);
+        nextStepList.clear();
+    }
+
+    @Override
+    public void onRemoved() {
+        removeMarker();
+        super.onRemoved();
     }
 }

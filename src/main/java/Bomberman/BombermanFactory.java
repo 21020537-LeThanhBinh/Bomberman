@@ -16,6 +16,8 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
+import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.multiplayer.NetworkComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
@@ -29,7 +31,15 @@ public class BombermanFactory implements EntityFactory {
     @Spawns("background")
     public Entity newBackground(SpawnData data) {
         return entityBuilder(data)
-            .view(new Rectangle(GAME_WORLD_WIDTH, GAME_WORLD_HEIGHT, Color.rgb(0, 125, 0)))
+            .view(new Rectangle(BombermanGame.getMapWidth() * TILED_SIZE, BombermanGame.getMapHeight() * TILED_SIZE, Color.rgb(0, 125, 0)))
+            .zIndex(-1)
+            .build();
+    }
+
+    @Spawns("yellow_mark")
+    public Entity newYellowMark(SpawnData data) {
+        return entityBuilder(data)
+            .view(new Rectangle(48, 48, Color.rgb(125, 255, 0)))
             .zIndex(-1)
             .build();
     }
@@ -84,8 +94,8 @@ public class BombermanFactory implements EntityFactory {
         return entityBuilder(data)
             .type(BombermanType.PLAYER)
             .bbox(new HitBox(new Point2D(2, 2), BoundingShape.circle(22)))
-            .with(new PlayerComponent())
-            .collidable()
+            .with(new PlayerComponent(""))
+            .with(new CollidableComponent(true))
             .build();
     }
 
@@ -141,9 +151,10 @@ public class BombermanFactory implements EntityFactory {
 
     @Spawns("lazer_bomb")
     public Entity newLazerBomb(SpawnData data) {
+        // data.getZ() for bomb's direction
         return entityBuilder(data)
             .type(BOMB)
-            .with(new LazerBomb())
+            .with(new LazerBomb((int)data.getZ()))
             .bbox(new HitBox(new Point2D(2, 2), BoundingShape.circle(22)))
             .collidable()
             .build();

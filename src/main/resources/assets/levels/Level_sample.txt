@@ -12,7 +12,7 @@
 # #*# # # # # # #*# # # # # # #
 #           *   *  *          #
 ###############################
-
+1 1
 
 Mô tả cấu trúc tệp cấu hình màn chơi:
 1/ Dòng đầu tiên bao gồm 3 số nguyên L, R, C:
@@ -25,6 +25,10 @@ Tiles:
 # - Wall
 * - Brick
 x - Portal
+
+3/ Dòng tiếp theo gồm 2 số nguyên b, f:
+b - số bomb bắt đầu
+f - số flame bắt đầu
 
 Character:
 p - Bomber

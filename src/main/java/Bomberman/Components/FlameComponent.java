@@ -15,10 +15,10 @@ import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.util.Duration;
 
 public class FlameComponent extends Component {
-    private String name;
-    private boolean isLazer;
-    private AnimatedTexture texture;
-    private AnimationChannel animation;
+    private final String name;
+    private final boolean isLazer;
+    private final AnimatedTexture texture;
+    private final AnimationChannel animation;
 
     public FlameComponent(String assetName, boolean isLazer) {
         this.name = assetName.split("\\.")[0];
