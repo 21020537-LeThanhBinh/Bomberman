@@ -4,15 +4,11 @@ import static Bomberman.BombermanType.BOMB;
 import static Bomberman.BombermanType.FLAME;
 import static Bomberman.BombermanType.PLAYER;
 import static Bomberman.Constants.Constant.TILED_SIZE;
-import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
-import static com.almasb.fxgl.dsl.FXGL.inc;
 import static com.almasb.fxgl.dsl.FXGL.onCollision;
 import static com.almasb.fxgl.dsl.FXGL.onCollisionEnd;
-import static com.almasb.fxgl.dsl.FXGL.play;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 
 import com.almasb.fxgl.entity.SpawnData;
-import javafx.util.Duration;
 
 public class ClassicBomb extends BombComponent{
   public ClassicBomb() {

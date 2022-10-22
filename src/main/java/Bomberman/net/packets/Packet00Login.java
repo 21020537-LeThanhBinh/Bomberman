@@ -4,9 +4,9 @@ import Bomberman.net.GameClient;
 import Bomberman.net.GameServer;
 
 public class Packet00Login extends Packet {
-  private String username;
-  private double x;
-  private double y;
+  private final String username;
+  private final double x;
+  private final double y;
 
   public Packet00Login(byte[] data) {
     super(00);

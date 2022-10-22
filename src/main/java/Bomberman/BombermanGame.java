@@ -2,32 +2,18 @@ package Bomberman;
 
 import static Bomberman.BombermanType.*;
 import static Bomberman.Constants.Constant.*;
-import static Bomberman.DynamicEntityState.State.DIE;
-import static Bomberman.DynamicEntityState.State.DOWN;
-import static Bomberman.DynamicEntityState.State.STOP;
-import static Bomberman.Sounds.SoundEffect.turnOffMusic;
-import static Bomberman.Sounds.SoundEffect.turnOnMusic;
-import static Bomberman.Sounds.SoundEffect.unmute;
+import static Bomberman.DynamicEntityState.State.*;
+import static Bomberman.Sounds.SoundEffect.*;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-import Bomberman.Components.Enemy.Enemy1;
-import Bomberman.Components.Enemy.Enemy2;
-import Bomberman.Components.Enemy.Enemy3;
-import Bomberman.Components.Enemy.Enemy4;
-import Bomberman.Components.PlayerComponent;
-import Bomberman.Components.PlayerMP;
+import Bomberman.Components.*;
+import Bomberman.Components.Enemy.*;
 import Bomberman.DynamicEntityState.State;
-import Bomberman.Menu.GameMenu;
-import Bomberman.Menu.MainMenu;
-import Bomberman.UI.EndingScene;
-import Bomberman.UI.StageStartScene;
-import Bomberman.UI.UIComponents;
-import Bomberman.net.GameClient;
-import Bomberman.net.GameServer;
-import Bomberman.net.packets.Packet00Login;
-import Bomberman.net.packets.Packet01Disconnect;
-import Bomberman.net.packets.Packet02Move;
-import Bomberman.net.packets.Packet03PlaceBomb;
+import Bomberman.Menu.*;
+import Bomberman.UI.*;
+import Bomberman.net.*;
+import Bomberman.net.packets.*;
+
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
@@ -40,7 +26,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -69,13 +54,12 @@ public class BombermanGame extends GameApplication  {
     // Entities related
     private Entity player;
     private PlayerComponent playerComponent;
-    private List<Entity> stillObject = new ArrayList<>();
-    private List<Entity> enemies = new ArrayList<>();
+    private final List<Entity> stillObject = new ArrayList<>();
+    private final List<Entity> enemies = new ArrayList<>();
 
     @Override
     protected void initSettings(GameSettings settings) {
         instance = this;
-
         isMultiplayer = false;
 
         settings.setWidth(MAX_SCENE_WIDTH);
@@ -109,42 +93,28 @@ public class BombermanGame extends GameApplication  {
     protected void onPreInit() {
         unmute();
         loopBGM("stage_theme.mp3");
-
-        socketClient = new GameClient(this, "192.168.1.4");
-        socketClient.start();
     }
 
     @Override
     protected void initGame() {
-        System.out.println("Init game");
-
-        if (player != null) player.removeFromWorld();
-        stillObject.forEach(Entity::removeFromWorld);
-        enemies.forEach(Entity::removeFromWorld);
-        stillObject.clear();
-        enemies.clear();
+        getGameScene().setBackgroundColor(Color.web("#B9B9B9"));
+        getGameWorld().addEntityFactory(new BombermanFactory());
 
         if (isMultiplayer) {
-            loadFile("Multiplayer_map.txt");
+            socketClient = new GameClient(this, "192.168.1.4");
+            socketClient.start();
+
+            loadMap("Multiplayer_map.txt");
         } else {
-            loadFile("Level1_sample.txt");
+            loadMap("Level1_sample.txt");
         }
 
-        MAP_HEIGHT = sc.nextInt();
-        MAP_WIDTH = sc.nextInt();
-
-        viewport = getGameScene().getViewport();
-        viewport.setBounds(0, -96, MAP_WIDTH * TILED_SIZE, MAP_HEIGHT * TILED_SIZE);
-
-        getGameWorld().addEntityFactory(new BombermanFactory());
-        loadLevel();
-
         if (isMultiplayer) {
-            playerMP = new PlayerMP(48, 48, JOptionPane.showInputDialog(this, "Please enter a username"), null,-1);
+            playerMP = new PlayerMP(48*8, 48, JOptionPane.showInputDialog(this, "Please enter a username"), null,-1);
             player = playerMP.getEntity();
+            playerComponent = player.getComponent(PlayerComponent.class);
             getGameWorld().addEntity(player);
 
-            // Todo: fix bug when changing from solo to multiplayer, map got unbalanced
             viewport.setX(-(MAX_SCENE_WIDTH-MAP_WIDTH*TILED_SIZE)/2);
             viewport.setY(-(MAX_SCENE_HEIGHT-MAP_HEIGHT*TILED_SIZE));
 
@@ -153,10 +123,8 @@ public class BombermanGame extends GameApplication  {
                 socketServer.addConnection(playerMP, loginPacket);
             }
             loginPacket.writeData(socketClient);
-        } else {
-
         }
-        playerComponent = player.getComponent(PlayerComponent.class);
+
     }
 
     @Override
@@ -165,8 +133,10 @@ public class BombermanGame extends GameApplication  {
             @Override
             protected void onAction() {
                 playerComponent.moveLeft();
-                Packet02Move packet = new Packet02Move(playerComponent.getUsername(), playerComponent.getPhysics().getVelocityX(), playerComponent.getPhysics().getVelocityY(), playerComponent.getState().getValue(), player.getX(), player.getY());
-                packet.writeData(socketClient);
+                if (isMultiplayer) {
+                    Packet02Move packet = new Packet02Move(playerComponent.getUsername(), playerComponent.getPhysics().getVelocityX(), playerComponent.getPhysics().getVelocityY(), playerComponent.getState().getValue(), player.getX(), player.getY());
+                    packet.writeData(socketClient);
+                }
             }
         }, KeyCode.A);
 
@@ -174,8 +144,10 @@ public class BombermanGame extends GameApplication  {
             @Override
             protected void onAction() {
                 playerComponent.moveRight();
-                Packet02Move packet = new Packet02Move(playerComponent.getUsername(), playerComponent.getPhysics().getVelocityX(), playerComponent.getPhysics().getVelocityY(), playerComponent.getState().getValue(), player.getX(), player.getY());
-                packet.writeData(socketClient);
+                if (isMultiplayer) {
+                    Packet02Move packet = new Packet02Move(playerComponent.getUsername(), playerComponent.getPhysics().getVelocityX(), playerComponent.getPhysics().getVelocityY(), playerComponent.getState().getValue(), player.getX(), player.getY());
+                    packet.writeData(socketClient);
+                }
             }
         }, KeyCode.D);
 
@@ -183,8 +155,10 @@ public class BombermanGame extends GameApplication  {
             @Override
             protected void onAction() {
                 playerComponent.moveUp();
-                Packet02Move packet = new Packet02Move(playerComponent.getUsername(), playerComponent.getPhysics().getVelocityX(), playerComponent.getPhysics().getVelocityY(), playerComponent.getState().getValue(), player.getX(), player.getY());
-                packet.writeData(socketClient);
+                if (isMultiplayer) {
+                    Packet02Move packet = new Packet02Move(playerComponent.getUsername(), playerComponent.getPhysics().getVelocityX(), playerComponent.getPhysics().getVelocityY(), playerComponent.getState().getValue(), player.getX(), player.getY());
+                    packet.writeData(socketClient);
+                }
             }
         }, KeyCode.W);
 
@@ -192,8 +166,10 @@ public class BombermanGame extends GameApplication  {
             @Override
             protected void onAction() {
                 playerComponent.moveDown();
-                Packet02Move packet = new Packet02Move(playerComponent.getUsername(), playerComponent.getPhysics().getVelocityX(), playerComponent.getPhysics().getVelocityY(), playerComponent.getState().getValue(), player.getX(), player.getY());
-                packet.writeData(socketClient);
+                if (isMultiplayer) {
+                    Packet02Move packet = new Packet02Move(playerComponent.getUsername(), playerComponent.getPhysics().getVelocityX(), playerComponent.getPhysics().getVelocityY(), playerComponent.getState().getValue(), player.getX(), player.getY());
+                    packet.writeData(socketClient);
+                }
             }
         }, KeyCode.S);
 
@@ -201,61 +177,68 @@ public class BombermanGame extends GameApplication  {
             @Override
             protected void onActionBegin() {
                 playerComponent.placeBomb();
-
-                Packet03PlaceBomb packet = new Packet03PlaceBomb(playerComponent.getUsername(), playerComponent.getPrevState().getValue(), playerComponent.getBombType() == CLASSICBOMB ? 0 : playerComponent.getBombType() == LAZERBOMB ? 1 : 2);
-                packet.writeData(socketClient);
+                if (isMultiplayer) {
+                    Packet03PlaceBomb packet = new Packet03PlaceBomb(playerComponent.getUsername(), playerComponent.getPrevState().getValue(), playerComponent.getBombType() == CLASSICBOMB ? 0 : playerComponent.getBombType() == LAZERBOMB ? 1 : 2);
+                    packet.writeData(socketClient);
+                }
             }
         }, KeyCode.SPACE);
 
         getInput().addAction(new UserAction("Switch to classic bomb") {
             @Override
             protected void onActionBegin() {
-                playerComponent.setBombType(CLASSICBOMB);
-                System.out.println("Switched to classic bomb");
-                // Music ...
+                if (isMultiplayer) {
+                    playerComponent.setBombType(CLASSICBOMB);
+                    System.out.println("Switched to classic bomb");
+                    play("powerup.wav");
+                }
             }
         }, KeyCode.DIGIT1);
 
         getInput().addAction(new UserAction("Switch to lazer bomb") {
             @Override
             protected void onActionBegin() {
-                playerComponent.setBombType(LAZERBOMB);
-                System.out.println("Switched to lazer bomb");
-                // Music ...
+                if (isMultiplayer) {
+                    playerComponent.setBombType(LAZERBOMB);
+                    System.out.println("Switched to lazer bomb");
+                    play("powerup.wav");
+                }
             }
         }, KeyCode.DIGIT2);
 
         getInput().addAction(new UserAction("Switch to light bomb") {
             @Override
             protected void onActionBegin() {
-                playerComponent.setBombType(LIGHTBOMB);
-                System.out.println("Switched to light bomb");
-                // Music ...
+                if (isMultiplayer) {
+                    playerComponent.setBombType(LIGHTBOMB);
+                    System.out.println("Switched to light bomb");
+                    play("powerup.wav");
+                }
             }
         }, KeyCode.DIGIT3);
 
-        getInput().addAction(new UserAction("Exit game") {
-            @Override
-            protected void onActionBegin() {
-                Packet01Disconnect packet = new Packet01Disconnect(playerComponent.getUsername());
-                packet.writeData(socketClient);
-
-                Platform.exit();
-            }
-        }, KeyCode.DELETE);
+//        getInput().addAction(new UserAction("Exit game") {
+//            @Override
+//            protected void onActionBegin() {
+//                Packet01Disconnect packet = new Packet01Disconnect(playerComponent.getUsername());
+//                packet.writeData(socketClient);
+//
+//                Platform.exit();
+//            }
+//        }, KeyCode.DELETE);
     }
 
     @Override
     protected void initPhysics() {
         getPhysicsWorld().setGravity(0,0);
 
-        onCollision(PLAYER, PORTAL, (player, portal) -> {
+        onCollisionBegin(PLAYER, PORTAL, (player, portal) -> {
             if (getGameWorld().getGroup(ENEMY1, ENEMY2, ENEMY3, ENEMY4, ENEMY5, POWERUP_BOMBS, POWERUP_FLAMES).getSize() == 0) {
-                // Next level music . . .
+                turnOffMusic();
+                play("next_level.wav");
 
-//                player.removeFromWorld();
                 playerComponent.setBombValid(false);
-                getGameTimer().runOnceAfter(this::nextLevel, Duration.seconds(1));
+                getGameTimer().runOnceAfter(this::nextLevel, Duration.seconds(4));
             }
         });
         onCollisionBegin(PLAYER, ENEMY1, (p, enemy) -> {
@@ -282,15 +265,20 @@ public class BombermanGame extends GameApplication  {
                 onPlayerDied(p);
             }
         });
+        onCollisionBegin(PLAYER, ENEMY5, (p, enemy) -> {
+//            if (enemy.getComponent(Enemy5.class).getState() != DIE
+//                && playerComponent.getState() != DIE) {
+//                onPlayerDied(p);
+//            }
+        });
+
         // Multiplayer
         onCollisionBegin(PLAYER, FLAME, (p, flame) -> {
             if (p.getComponent(PlayerComponent.class).getState() != DIE) {
                 onPlayerDied(p);
                 if (p != this.player) {
-                    inc("score", 1);
-                    // Sent score to server ...
-
-                    System.out.println(playerMP.getUsername() + "'s score: " + geti("score"));
+                    inc("score", 100);
+                    // Todo: Sent score to server ...
                 }
             }
         });
@@ -300,7 +288,6 @@ public class BombermanGame extends GameApplication  {
     protected void initGameVars(Map<String, Object> vars) {
         vars.put("level", STARTING_LEVEL);
         vars.put("score", 0);
-
         vars.put("life", 3);
         vars.put("enemies", 0);
         vars.put("flame", 1);
@@ -321,18 +308,22 @@ public class BombermanGame extends GameApplication  {
         UIComponents.addDLabelUI("levelTime", "⏰ %.0f", 1140, 25);
     }
 
-    protected void loadFile(String file) {
+    protected void loadMap(String file) {
+        clearGame();
+
         try {
             sc = new Scanner(new File("src/main/resources/assets/levels/" + file));
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
 
-    protected void loadLevel() {
-        getGameScene().setBackgroundColor(Color.web("#B9B9B9"));
+        MAP_HEIGHT = sc.nextInt();
+        MAP_WIDTH = sc.nextInt();
 
-        Entity background = spawn("background");
+        viewport = getGameScene().getViewport();
+        viewport.setBounds(0, -96, MAP_WIDTH * TILED_SIZE, MAP_HEIGHT * TILED_SIZE);
+
+        stillObject.add(spawn("background"));
 
         sc.nextLine();
         for (int i = 0; i < MAP_HEIGHT; i++) {
@@ -347,7 +338,6 @@ public class BombermanGame extends GameApplication  {
                         if (!isMultiplayer) {
                             player = spawn("player", j * TILED_SIZE, i * TILED_SIZE);
                             playerComponent = player.getComponent(PlayerComponent.class);
-
                             viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
                         }
                         break;
@@ -382,44 +372,47 @@ public class BombermanGame extends GameApplication  {
             }
         }
 
+        int bomb = sc.nextInt();
+        set("bomb", bomb);
+        playerComponent.setBombCounter(bomb);
+
+        int flame = sc.nextInt();
+        set("flame", flame);
+        playerComponent.setFlamePower(flame);
+
         set("enemies", getGameWorld().getGroup(ENEMY1, ENEMY2, ENEMY3, ENEMY4, ENEMY5).getSize());
         set("levelTime", TIME_LEVEL);
+    }
+
+    private void clearGame() {
+        if (player != null) {
+            playerComponent.setBombValid(false);
+            player.removeFromWorld();
+        }
+
+        stillObject.forEach(Entity::removeFromWorld);
+        enemies.forEach(Entity::removeFromWorld);
+
+        stillObject.clear();
+        enemies.clear();
     }
 
     protected void nextLevel() {
         inc("level", 1);
 
-        // Remove old level
-        stillObject.forEach(Entity::removeFromWorld);
-        enemies.forEach(Entity::removeFromWorld);
-
         if (geti("level") > MAX_LEVEL) {
             turnOffMusic();
             getSceneService().pushSubScene(new EndingScene("CONGRATULATIONS !!!\n\n\n\n    GOOD BYE"));
         } else {
-            loadFile("Level" + geti("level") + "_sample.txt");
-            loadLevel();
+            loadMap("Level" + geti("level") + "_sample.txt");
         }
-    }
-
-    protected void resetLevel() {
-        player.removeFromWorld();
-        stillObject.forEach(Entity::removeFromWorld);
-        enemies.forEach(Entity::removeFromWorld);
-
-        loadFile("Level" + geti("level") + "_sample.txt");
-        loadLevel();
-
-        // Reset powers ...
-        set("flame", 1);
-        set("levelTime", TIME_LEVEL);
     }
 
     public void onPlayerDied(Entity p) {
         PlayerComponent pComponent = p.getComponent(PlayerComponent.class);
         pComponent.die();
 
-        // If single player
+        // Todo: when multiplayer die
         if (!isMultiplayer) {
             turnOffMusic();
             play("player_die.wav");
@@ -428,7 +421,7 @@ public class BombermanGame extends GameApplication  {
                     turnOnMusic();
                     inc("life", -1);
                     if (geti("life") > 0) {
-                        resetLevel();
+                        loadMap("Level" + geti("level") + "_sample.txt");
                     } else {
                         turnOffMusic();
                         getSceneService().pushSubScene(new EndingScene("   GAME OVER !!!\n\n\n\n   DO YOUR BEST"));
@@ -437,9 +430,10 @@ public class BombermanGame extends GameApplication  {
             }, Duration.seconds(2));
         } else {
             FXGL.runOnce(() -> {
+                // Todo: improved respawn method ...
                 int randomX = random(1, MAP_WIDTH-1) * TILED_SIZE;
                 int randomY = random(1, MAP_HEIGHT-1) * TILED_SIZE;
-                // Todo: improved respawn method ...
+
                 pComponent.setPrevState(DOWN);
                 pComponent.setState(STOP);
                 pComponent.setPos(0,0, randomX, randomY);
@@ -485,9 +479,9 @@ public class BombermanGame extends GameApplication  {
             enemies.add(p);
             System.out.println("Spawn enemy!");
             if (p.getComponent(PlayerComponent.class).getUsername().compareTo(playerComponent.getUsername()) > 0) {
-                p.getComponent(PlayerComponent.class).setPos(0, 0, 11*48, 11*48);
+                p.getComponent(PlayerComponent.class).setPos(0, 0, 18*48, 11*48);
             } else {
-                playerComponent.setPos(0,0,11*48, 11*48);
+                playerComponent.setPos(0,0,18*48, 11*48);
             }
         });
     }
@@ -531,16 +525,8 @@ public class BombermanGame extends GameApplication  {
         socketServer.start();
     }
 
-    public PlayerMP getPlayerMP() {
-        return playerMP;
-    }
-
     public void setMultiplayer(boolean multiplayer) {
         isMultiplayer = multiplayer;
-    }
-
-    public void setPlayerMP(PlayerMP playerMP) {
-        this.playerMP = playerMP;
     }
 
     public static BombermanGame getInstance() {

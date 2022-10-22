@@ -3,7 +3,11 @@ package Bomberman.Components.Enemy;
 import static Bomberman.BombermanGame.*;
 import static Bomberman.BombermanType.BOMB;
 import static Bomberman.BombermanType.BRICK;
+import static Bomberman.BombermanType.ENEMY1;
+import static Bomberman.BombermanType.ENEMY2;
 import static Bomberman.BombermanType.ENEMY3;
+import static Bomberman.BombermanType.ENEMY4;
+import static Bomberman.BombermanType.ENEMY5;
 import static Bomberman.BombermanType.FLAME;
 import static Bomberman.BombermanType.PLAYER;
 import static Bomberman.BombermanType.WALL;
@@ -14,6 +18,7 @@ import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.inc;
 import static com.almasb.fxgl.dsl.FXGL.random;
+import static com.almasb.fxgl.dsl.FXGL.set;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.geti;
 
@@ -52,7 +57,6 @@ public class Enemy3 extends EnemyComponent {
         FXGL.onCollisionEnd(ENEMY3, FLAME, (enemy3, flame) -> {
             enemy3.getComponent(Enemy3.class).setStateDie();
             getGameTimer().runOnceAfter(enemy3::removeFromWorld, Duration.seconds(2.4));
-            inc("enemies", -1);
         });
 
         map = new Map(getMapWidth(), getMapHeight());
@@ -114,8 +118,8 @@ public class Enemy3 extends EnemyComponent {
         nextStep = new Point2D(path.getX(0) * TILED_SIZE, path.getY(0) * TILED_SIZE);
 
         // Marking (for testing)
-        removeMarker();
-        markPath();
+//        removeMarker();
+//        markPath();
 
         // When at nextStep (accuracy < 3)
         if (entity.getPosition().distance(nextStep) < 3) {

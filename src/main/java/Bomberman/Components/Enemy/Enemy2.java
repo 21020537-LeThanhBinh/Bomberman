@@ -1,19 +1,21 @@
 package Bomberman.Components.Enemy;
 
+import static Bomberman.BombermanType.BOMB;
+import static Bomberman.BombermanType.BRICK;
+import static Bomberman.BombermanType.ENEMY2;
+import static Bomberman.BombermanType.FLAME;
+import static Bomberman.BombermanType.PLAYER;
+import static Bomberman.BombermanType.PORTAL;
+import static Bomberman.BombermanType.WALL;
 import static Bomberman.Constants.Constant.ENEMY_SPEED;
 import static Bomberman.Constants.Constant.TILED_SIZE;
 import static Bomberman.DynamicEntityState.State.DIE;
-import static Bomberman.BombermanType.*;
 import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
-import static com.almasb.fxgl.dsl.FXGL.inc;
-import static com.almasb.fxgl.dsl.FXGL.onCollision;
 import static com.almasb.fxgl.dsl.FXGL.onCollisionBegin;
 import static com.almasb.fxgl.dsl.FXGL.onCollisionEnd;
-import static com.almasb.fxgl.dsl.FXGL.set;
 
 import Bomberman.Components.Bomb.LightBomb;
-import Bomberman.Components.FlameComponent;
 import Bomberman.Components.PlayerComponent;
 import com.almasb.fxgl.entity.Entity;
 import javafx.util.Duration;
@@ -40,7 +42,6 @@ public class Enemy2 extends EnemyComponent {
         onCollisionEnd(ENEMY2, FLAME, (enemy2, flame) -> {
             enemy2.getComponent(Enemy2.class).setStateDie();
             getGameTimer().runOnceAfter(enemy2::removeFromWorld, Duration.seconds(2.4));
-            inc("enemies", -1);
         });
 
     }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import javafx.util.Pair;
 
 public class Path {
-	private ArrayList<Pair<Integer, Integer>> steps = new ArrayList<>();
+	private final ArrayList<Pair<Integer, Integer>> steps = new ArrayList<>();
 
 	public Path() {
 		

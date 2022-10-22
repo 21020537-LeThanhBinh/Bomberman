@@ -4,12 +4,12 @@ import Bomberman.net.GameClient;
 import Bomberman.net.GameServer;
 
 public abstract class Packet {
-  public static enum PacketTypes {
+  public enum PacketTypes {
     INVALID(-1), LOGIN(00), DISCONNET(01), MOVE(02), PLACEBOMB(03);
 
-    private int packetId;
+    private final int packetId;
 
-    private PacketTypes(int packetId) {
+    PacketTypes(int packetId) {
       this.packetId = packetId;
     }
 

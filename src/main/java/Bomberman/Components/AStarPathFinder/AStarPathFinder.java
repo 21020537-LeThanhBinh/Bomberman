@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class AStarPathFinder {
 	private class Node implements Comparable {
-		private int x;
-		private int y;
+		private final int x;
+		private final int y;
 		private float cost;
 		private Node parent;
 		private float heuristic;
@@ -29,10 +29,10 @@ public class AStarPathFinder {
 			return Float.compare(f, of);
 		}
 	}
-	private ArrayList<Node> closed = new ArrayList<>();
-	private SortedList<Node> open = new SortedList<>();
-	private Map map;
-	private Node[][] nodes;
+	private final ArrayList<Node> closed = new ArrayList<>();
+	private final SortedList<Node> open = new SortedList<>();
+	private final Map map;
+	private final Node[][] nodes;
 
 	public AStarPathFinder(Map map) {
 		this.map = map;

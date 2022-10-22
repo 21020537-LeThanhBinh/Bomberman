@@ -4,18 +4,15 @@ import static Bomberman.BombermanType.BOMB;
 import static Bomberman.BombermanType.FLAME;
 import static Bomberman.BombermanType.PLAYER;
 import static Bomberman.Constants.Constant.TILED_SIZE;
-import static Bomberman.DynamicEntityState.State.STOP;
-import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.onCollision;
 import static com.almasb.fxgl.dsl.FXGL.onCollisionEnd;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 
-import Bomberman.Components.PlayerComponent;
 import Bomberman.DynamicEntityState.State;
 import com.almasb.fxgl.entity.SpawnData;
 
 public class LazerBomb extends BombComponent{
-  private State direction;
+  private final State direction;
   public LazerBomb(int direction) {
     onCollision(BOMB, FLAME, (bomb, flame) -> {
       if (bomb != null) bomb.getComponent(LazerBomb.class).explode();

@@ -1,7 +1,6 @@
 package Bomberman.net;
 
 import Bomberman.BombermanGame;
-import Bomberman.Components.PlayerMP;
 import Bomberman.net.packets.Packet;
 import Bomberman.net.packets.Packet00Login;
 import Bomberman.net.packets.Packet01Disconnect;
@@ -16,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameServer extends Thread {
-  private DatagramSocket socket;
-  private BombermanGame game;
-  private List<PlayerMP> connectedPlayers = new ArrayList<PlayerMP>();
+  private final DatagramSocket socket;
+  private final BombermanGame game;
+  private final List<PlayerMP> connectedPlayers = new ArrayList<PlayerMP>();
 
   public GameServer(BombermanGame game) {
     this.game = game;

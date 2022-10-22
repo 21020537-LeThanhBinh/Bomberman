@@ -4,7 +4,7 @@ import Bomberman.net.GameClient;
 import Bomberman.net.GameServer;
 
 public class Packet01Disconnect extends Packet {
-  private String username;
+  private final String username;
 
   public Packet01Disconnect(byte[] data) {
     super(01);

@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.PriorityQueue;
 
 class SortedList<T extends Comparable> {
-  private PriorityQueue<T> queue = new PriorityQueue<>();
+  private final PriorityQueue<T> queue = new PriorityQueue<>();
 
   public T first() {
     return queue.peek();

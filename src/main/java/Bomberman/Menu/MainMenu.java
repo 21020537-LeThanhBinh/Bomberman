@@ -15,9 +15,7 @@ import static javafx.scene.input.KeyCode.SPACE;
 import static javafx.scene.input.KeyCode.W;
 
 import Bomberman.BombermanGame;
-import Bomberman.Components.PlayerMP;
 import Bomberman.UI.StageStartScene;
-import Bomberman.net.GameServer;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.input.view.KeyView;

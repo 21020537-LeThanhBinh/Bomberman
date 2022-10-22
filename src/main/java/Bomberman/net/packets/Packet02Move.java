@@ -4,12 +4,12 @@ import Bomberman.net.GameClient;
 import Bomberman.net.GameServer;
 
 public class Packet02Move extends Packet {
-  private String username;
-  private double velocityX;
-  private double velocityY;
-  private int state;
-  private double x;
-  private double y;
+  private final String username;
+  private final double velocityX;
+  private final double velocityY;
+  private final int state;
+  private final double x;
+  private final double y;
 
   public Packet02Move(byte[] data) {
     super(02);

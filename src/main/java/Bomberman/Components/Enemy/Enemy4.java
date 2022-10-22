@@ -3,7 +3,11 @@ package Bomberman.Components.Enemy;
 import static Bomberman.BombermanGame.*;
 import static Bomberman.BombermanType.BOMB;
 import static Bomberman.BombermanType.BRICK;
+import static Bomberman.BombermanType.ENEMY1;
+import static Bomberman.BombermanType.ENEMY2;
+import static Bomberman.BombermanType.ENEMY3;
 import static Bomberman.BombermanType.ENEMY4;
+import static Bomberman.BombermanType.ENEMY5;
 import static Bomberman.BombermanType.FLAME;
 import static Bomberman.BombermanType.PLAYER;
 import static Bomberman.BombermanType.WALL;
@@ -12,6 +16,7 @@ import static Bomberman.Constants.Constant.TILED_SIZE;
 import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.inc;
+import static com.almasb.fxgl.dsl.FXGL.set;
 
 import Bomberman.BombermanGame;
 import Bomberman.Components.PlayerComponent;
@@ -25,7 +30,6 @@ public class Enemy4 extends Enemy3 {
         FXGL.onCollisionEnd(ENEMY4, FLAME, (enemy4, flame) -> {
             enemy4.getComponent(Enemy4.class).setStateDie();
             getGameTimer().runOnceAfter(enemy4::removeFromWorld, Duration.seconds(2.4));
-            inc("enemies", -1);
         });
     }
 

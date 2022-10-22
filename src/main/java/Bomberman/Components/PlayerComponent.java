@@ -39,8 +39,8 @@ public class PlayerComponent extends Component {
     private final int FRAME_SIZE = 45;
 
     // Username
-    private String username;
-    private Text usernameTexture;
+    private final String username;
+    private final Text usernameTexture;
 
     // Physics
     private final PhysicsComponent physics;
@@ -55,7 +55,7 @@ public class PlayerComponent extends Component {
     private BombermanType bombType;
 
     // Texture
-    private AnimatedTexture texture;
+    private final AnimatedTexture texture;
     private AnimationChannel animIdleDown, animIdleRight, animIdleUp, animIdleLeft;
     private AnimationChannel animWalkDown, animWalkRight, animWalkUp, animWalkLeft;
     private AnimationChannel animDie;
@@ -95,6 +95,7 @@ public class PlayerComponent extends Component {
             powerup.removeFromWorld();
             play("powerup.wav");
             p.getComponent(PlayerComponent.class).speedUp();
+            inc("speed", 100);
             getGameTimer().runOnceAfter(() -> {
                 p.getComponent(PlayerComponent.class).speedNormal();
             }, Duration.seconds(6));
@@ -320,5 +321,13 @@ public class PlayerComponent extends Component {
     public void onRemoved() {
         super.onRemoved();
         usernameTexture.setText("");
+    }
+
+    public void setBombCounter(int bombCounter) {
+        this.bombCounter = bombCounter;
+    }
+
+    public void setFlamePower(int flamePower) {
+        this.flamePower = flamePower;
     }
 }

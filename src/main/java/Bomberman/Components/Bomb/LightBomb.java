@@ -1,19 +1,15 @@
 package Bomberman.Components.Bomb;
 
 import static Bomberman.BombermanType.BOMB;
-import static Bomberman.BombermanType.ENEMY1;
 import static Bomberman.BombermanType.FLAME;
-import static Bomberman.BombermanType.PHYSIC_BLOCK;
 import static Bomberman.BombermanType.PLAYER;
 import static Bomberman.Constants.Constant.TILED_SIZE;
 import static com.almasb.fxgl.dsl.FXGL.onCollision;
-import static com.almasb.fxgl.dsl.FXGL.onCollisionBegin;
 import static com.almasb.fxgl.dsl.FXGL.onCollisionEnd;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 
 import Bomberman.Utils.Utils;
 import com.almasb.fxgl.entity.SpawnData;
-import com.almasb.fxgl.physics.PhysicsComponent;
 
 public class LightBomb extends BombComponent {
   public LightBomb() {

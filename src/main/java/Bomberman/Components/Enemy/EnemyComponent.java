@@ -15,7 +15,7 @@ public abstract class EnemyComponent extends Component {
     protected double dx;
     protected double dy;
     protected double speedFactor;
-    private double reactionForce;
+    private final double reactionForce;
     protected State state;
     protected AnimatedTexture texture;
     protected AnimationChannel animDie;
@@ -46,8 +46,8 @@ public abstract class EnemyComponent extends Component {
 
     @Override
     public void onUpdate(double tpf) {
-        entity.translateX((dx * speedFactor) * tpf);
-        entity.translateY((dy * speedFactor) * tpf);
+        entity.translateX((dx * speedFactor) * 1/60d);
+        entity.translateY((dy * speedFactor) * 1/60d);
 
         switch (state) {
             case UP:

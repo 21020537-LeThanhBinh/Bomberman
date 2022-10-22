@@ -4,9 +4,9 @@ import Bomberman.net.GameClient;
 import Bomberman.net.GameServer;
 
 public class Packet03PlaceBomb extends Packet {
-  private String username;
-  private int state;
-  private int bombType;
+  private final String username;
+  private final int state;
+  private final int bombType;
 
   public Packet03PlaceBomb(byte[] data) {
     super(03);

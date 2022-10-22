@@ -1,9 +1,9 @@
 package Bomberman.Components.AStarPathFinder;
 
 public class Map {
-  private int[][] binaryMap;
-  private int width;
-  private int height;
+  private final int[][] binaryMap;
+  private final int width;
+  private final int height;
 
   public Map(int width, int height) {
     this.binaryMap = new int[height][width];

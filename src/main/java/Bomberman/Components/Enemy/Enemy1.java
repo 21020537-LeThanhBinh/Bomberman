@@ -1,11 +1,17 @@
 package Bomberman.Components.Enemy;
 
+import static Bomberman.BombermanType.BOMB;
+import static Bomberman.BombermanType.BRICK;
+import static Bomberman.BombermanType.ENEMY1;
+import static Bomberman.BombermanType.FLAME;
+import static Bomberman.BombermanType.WALL;
+import static Bomberman.Constants.Constant.ENEMY_SPEED;
+import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
+import static com.almasb.fxgl.dsl.FXGL.onCollisionBegin;
+import static com.almasb.fxgl.dsl.FXGL.onCollisionEnd;
+
 import Bomberman.Components.Bomb.LightBomb;
 import javafx.util.Duration;
-
-import static Bomberman.Constants.Constant.ENEMY_SPEED;
-import static Bomberman.BombermanType.*;
-import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class Enemy1 extends EnemyComponent {
     public Enemy1() {
@@ -23,7 +29,6 @@ public class Enemy1 extends EnemyComponent {
         onCollisionEnd(ENEMY1, FLAME, (enemy1, flame) -> {
             enemy1.getComponent(Enemy1.class).setStateDie();
             getGameTimer().runOnceAfter(enemy1::removeFromWorld, Duration.seconds(2.4));
-            inc("enemies", -1);
         });
     }
 }
