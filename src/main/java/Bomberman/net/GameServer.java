@@ -133,4 +133,8 @@ public class GameServer extends Thread {
     }
     return null;
   }
+
+  public DatagramSocket getSocket() {
+    return socket;
+  }
 }

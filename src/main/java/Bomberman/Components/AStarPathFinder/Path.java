@@ -6,10 +6,6 @@ import javafx.util.Pair;
 public class Path {
 	private final ArrayList<Pair<Integer, Integer>> steps = new ArrayList<>();
 
-	public Path() {
-		
-	}
-
 	public int getLength() {
 		return steps.size();
 	}

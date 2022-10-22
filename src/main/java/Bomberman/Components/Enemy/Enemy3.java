@@ -62,7 +62,7 @@ public class Enemy3 extends EnemyComponent {
         map = new Map(getMapWidth(), getMapHeight());
         aStar = new AStarPathFinder(map);
 
-        movingRandom = true;
+        movingRandom = false;
     }
 
     public Enemy3(double dx, double dy, double speedFactor, double reactionForce, String assetName) {
@@ -99,18 +99,18 @@ public class Enemy3 extends EnemyComponent {
 
         if (!movingRandom) {
             loadPlayer();
-            speedFactor = 1.5;
+            speedFactor = 2;
         }
         loadMap();
         path = aStar.findPath(myX,myY,playerX,playerY);
 
-        // No path to player
+        // No path to player -> move to random
         if (path == null) {
             playerX = random(myX-2,myX+2);
             playerY = random(myY-2,myY+2);
 
             movingRandom = true;
-            speedFactor = 1;
+            speedFactor = 1.5;
             return;
         }
 
@@ -118,8 +118,10 @@ public class Enemy3 extends EnemyComponent {
         nextStep = new Point2D(path.getX(0) * TILED_SIZE, path.getY(0) * TILED_SIZE);
 
         // Marking (for testing)
-//        removeMarker();
-//        markPath();
+        removeMarker();
+        if (geti("developermode") == 1) {
+            markPath();
+        }
 
         // When at nextStep (accuracy < 3)
         if (entity.getPosition().distance(nextStep) < 3) {

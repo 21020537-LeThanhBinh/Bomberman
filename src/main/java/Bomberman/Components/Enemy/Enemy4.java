@@ -25,7 +25,7 @@ import javafx.util.Duration;
 
 public class Enemy4 extends Enemy3 {
     public Enemy4() {
-        super(-ENEMY_SPEED, 0, 2, 3, "enemy4.png");
+        super(-ENEMY_SPEED, 0, 1.5, 3, "enemy4.png");
 
         FXGL.onCollisionEnd(ENEMY4, FLAME, (enemy4, flame) -> {
             enemy4.getComponent(Enemy4.class).setStateDie();

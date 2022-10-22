@@ -1,6 +1,7 @@
 package Bomberman.Components.AStarPathFinder;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 public class AStarPathFinder {
 	private class Node implements Comparable {
@@ -9,7 +10,6 @@ public class AStarPathFinder {
 		private float cost;
 		private Node parent;
 		private float heuristic;
-		private int depth;
 
 		public Node(int x, int y) {
 			this.x = x;
@@ -30,7 +30,7 @@ public class AStarPathFinder {
 		}
 	}
 	private final ArrayList<Node> closed = new ArrayList<>();
-	private final SortedList<Node> open = new SortedList<>();
+	private final PriorityQueue<Node> open = new PriorityQueue<>();
 	private final Map map;
 	private final Node[][] nodes;
 
@@ -46,31 +46,26 @@ public class AStarPathFinder {
 	}
 	
 	/**
-	 * Shortest path from s to t.
+	 * Shortest path from start (s) to target (t).
 	 */
 	public Path findPath(int sx, int sy, int tx, int ty) {
-		// The target is blocked (== 0)
-		if (!isValidLocation(sx, sy, tx, ty) || map.getVal(tx, ty) != 1) {
+		if (!isValidLocation(tx, ty)) {
 			return null;
 		}
 		
 		nodes[sx][sy].cost = 0;
-		nodes[sx][sy].depth = 0;
 		closed.clear();
 		open.clear();
 		open.add(nodes[sx][sy]);
 		
 		nodes[tx][ty].parent = null;
 		
-		while (open.size() != 0) {
-			Node current = open.first();
-//			System.out.println("Current at " + current.x + "-" + current.y);
+		while (open.size() > 0) {
+			Node current = open.poll();
 			if (current == nodes[tx][ty]) {
-//				System.out.println("Found the path");
 				break;
 			}
 
-			open.remove(current);
 			closed.add(current);
 
 			int[] arrX = {0, 0, 1, -1};
@@ -79,28 +74,36 @@ public class AStarPathFinder {
 				int xp = arrX[i] + current.x;
 				int yp = arrY[i] + current.y;
 
-				if (isValidLocation(sx,sy,xp,yp)) {
-					float nextStepCost = current.cost + 1;
-					Node neighbour = nodes[xp][yp];
+				if (!isValidLocation(xp,yp)) {
+					continue;
+				}
 
-					if (nextStepCost < neighbour.cost) {
-						if (open.contains(neighbour)) {
-							open.remove(neighbour);
-						}
+				Node neighbour = nodes[xp][yp];
+				float nextStepCost = current.cost + 1;
+
+				if (open.contains(neighbour)) {
+					if (nextStepCost > neighbour.cost) {
+						continue;
 					}
+				}
+				if (closed.contains(neighbour)) {
+					if (nextStepCost < neighbour.cost) {
+						closed.remove(neighbour);
 
-					if (!open.contains(neighbour) && !(closed.contains(neighbour))) {
 						neighbour.cost = nextStepCost;
-						neighbour.heuristic = getHeuristicCost(xp, yp, tx, ty);
 						neighbour.setParent(current);
 						open.add(neighbour);
 					}
+				} else {
+					neighbour.cost = nextStepCost;
+					neighbour.heuristic = getHeuristicCost(xp, yp, tx, ty);
+					neighbour.setParent(current);
+					open.add(neighbour);
 				}
 			}
 		}
 
 		if (nodes[tx][ty].parent == null) {
-//			System.out.println("Path not exist!");
 			return null;
 		}
 		
@@ -110,18 +113,12 @@ public class AStarPathFinder {
 			path.prependStep(target.x, target.y);
 			target = target.parent;
 		}
-//		path.prependStep(sx,sy);
-		
+
 		return path;
 	}
 
-	protected boolean isValidLocation(int sx, int sy, int x, int y) {
-		boolean invalid = (x < 0) || (y < 0) || (x >= map.getWidth()) || (y >= map.getHeight());
-		
-		if ((!invalid) && ((sx != x) || (sy != y))) {
-			invalid = (map.getVal(x, y) != 1);
-		}
-		
+	protected boolean isValidLocation(int x, int y) {
+		boolean invalid = (x < 0) || (y < 0) || (x >= map.getWidth()) || (y >= map.getHeight()) || (map.getVal(x, y) == 0);
 		return !invalid;
 	}
 	

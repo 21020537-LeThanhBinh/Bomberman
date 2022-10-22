@@ -100,19 +100,17 @@ public class BombermanGame extends GameApplication  {
         getGameScene().setBackgroundColor(Color.web("#B9B9B9"));
         getGameWorld().addEntityFactory(new BombermanFactory());
 
+
+
         if (isMultiplayer) {
             socketClient = new GameClient(this, "192.168.1.4");
             socketClient.start();
 
-            loadMap("Multiplayer_map.txt");
-        } else {
-            loadMap("Level1_sample.txt");
-        }
-
-        if (isMultiplayer) {
-            playerMP = new PlayerMP(48*8, 48, JOptionPane.showInputDialog(this, "Please enter a username"), null,-1);
+            playerMP = new PlayerMP(8*48, 48, JOptionPane.showInputDialog(this, "Please enter a username"), null,-1);
             player = playerMP.getEntity();
             playerComponent = player.getComponent(PlayerComponent.class);
+
+            loadMap("Multiplayer_map.txt");
             getGameWorld().addEntity(player);
 
             viewport.setX(-(MAX_SCENE_WIDTH-MAP_WIDTH*TILED_SIZE)/2);
@@ -123,8 +121,9 @@ public class BombermanGame extends GameApplication  {
                 socketServer.addConnection(playerMP, loginPacket);
             }
             loginPacket.writeData(socketClient);
+        } else {
+            loadMap("Level1_sample.txt");
         }
-
     }
 
     @Override
@@ -226,6 +225,25 @@ public class BombermanGame extends GameApplication  {
 //                Platform.exit();
 //            }
 //        }, KeyCode.DELETE);
+
+        getInput().addAction(new UserAction("Next level") {
+            @Override
+            protected void onActionBegin() {
+                if (!isMultiplayer) {
+                    nextLevel();
+                }
+            }
+        }, KeyCode.P);
+
+        getInput().addAction(new UserAction("Developer Mode") {
+            @Override
+            protected void onActionBegin() {
+                if (geti("developermode") == 0)
+                    set("developermode", 1);
+                else
+                    set("developermode", 0);
+            }
+        }, KeyCode.O);
     }
 
     @Override
@@ -286,6 +304,8 @@ public class BombermanGame extends GameApplication  {
 
     @Override
     protected void initGameVars(Map<String, Object> vars) {
+        vars.put("developermode", 0);
+
         vars.put("level", STARTING_LEVEL);
         vars.put("score", 0);
         vars.put("life", 3);
@@ -294,6 +314,9 @@ public class BombermanGame extends GameApplication  {
         vars.put("speed", PLAYER_SPEED);
         vars.put("bomb", 1);
         vars.put("levelTime", TIME_LEVEL);
+
+        vars.put("defaultX", 8*48);
+        vars.put("defaultY", 48);
     }
 
     @Override
@@ -386,7 +409,7 @@ public class BombermanGame extends GameApplication  {
 
     private void clearGame() {
         if (player != null) {
-            playerComponent.setBombValid(false);
+//            playerComponent.setBombValid(false);
             player.removeFromWorld();
         }
 
@@ -404,6 +427,8 @@ public class BombermanGame extends GameApplication  {
             turnOffMusic();
             getSceneService().pushSubScene(new EndingScene("CONGRATULATIONS !!!\n\n\n\n    GOOD BYE"));
         } else {
+            turnOffMusic();
+            getSceneService().pushSubScene(new StageStartScene());
             loadMap("Level" + geti("level") + "_sample.txt");
         }
     }
@@ -430,15 +455,11 @@ public class BombermanGame extends GameApplication  {
             }, Duration.seconds(2));
         } else {
             FXGL.runOnce(() -> {
-                // Todo: improved respawn method ...
-                int randomX = random(1, MAP_WIDTH-1) * TILED_SIZE;
-                int randomY = random(1, MAP_HEIGHT-1) * TILED_SIZE;
-
                 pComponent.setPrevState(DOWN);
                 pComponent.setState(STOP);
-                pComponent.setPos(0,0, randomX, randomY);
+                pComponent.setPos(0,0, geti("defaultX"), geti("defaultY"));
 
-                Packet02Move packet = new Packet02Move(pComponent.getUsername(), 0, 0, STOP.getValue(), randomX, randomY);
+                Packet02Move packet = new Packet02Move(pComponent.getUsername(), 0, 0, STOP.getValue(), geti("defaultX"), geti("defaultY"));
                 packet.writeData(socketClient);
             }, Duration.seconds(2));
         }
@@ -446,13 +467,11 @@ public class BombermanGame extends GameApplication  {
 
     @Override
     protected void onUpdate(double tpf) {
-        if (!isMultiplayer) {
-            inc("levelTime", -tpf);
+        inc("levelTime", -tpf);
 
-            if (getd("levelTime") <= 0.0) {
-                showMessage("Time Up !!!");
-                onPlayerDied(player);
-            }
+        if (getd("levelTime") <= 0.0) {
+            showMessage("Time Up !!!");
+            onPlayerDied(player);
         }
 
         getGameWorld().getEntitiesByType(PLAYER).forEach(p ->  {
@@ -482,6 +501,8 @@ public class BombermanGame extends GameApplication  {
                 p.getComponent(PlayerComponent.class).setPos(0, 0, 18*48, 11*48);
             } else {
                 playerComponent.setPos(0,0,18*48, 11*48);
+                set("defaultX", 18*48);
+                set("defaultY", 11*48);
             }
         });
     }
@@ -527,6 +548,10 @@ public class BombermanGame extends GameApplication  {
 
     public void setMultiplayer(boolean multiplayer) {
         isMultiplayer = multiplayer;
+    }
+
+    public boolean isMultiplayer() {
+        return isMultiplayer;
     }
 
     public static BombermanGame getInstance() {
