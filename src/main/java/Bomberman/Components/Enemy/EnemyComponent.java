@@ -6,9 +6,16 @@ import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.util.Duration;
 
+import static Bomberman.BombermanType.ENEMY1;
+import static Bomberman.BombermanType.ENEMY2;
+import static Bomberman.BombermanType.ENEMY3;
+import static Bomberman.BombermanType.ENEMY4;
+import static Bomberman.BombermanType.ENEMY5;
 import static Bomberman.Constants.Constant.ENEMY_SPEED;
 import static Bomberman.DynamicEntityState.State.*;
+import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.image;
+import static com.almasb.fxgl.dsl.FXGL.set;
 
 public abstract class EnemyComponent extends Component {
     private final int FRAME_SIZE = 48;
@@ -131,6 +138,8 @@ public abstract class EnemyComponent extends Component {
         dx = 0;
         dy = 0;
         state = DIE;
+        set("enemies", getGameWorld().getGroup(ENEMY1,
+            ENEMY2, ENEMY3, ENEMY4, ENEMY5).getSize());
     }
 
     public State getState() {

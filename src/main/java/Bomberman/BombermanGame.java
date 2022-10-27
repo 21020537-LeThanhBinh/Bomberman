@@ -111,8 +111,6 @@ public class BombermanGame extends GameApplication  {
             loadMap("Multiplayer_map.txt");
             getGameWorld().addEntity(player);
 
-
-
             Packet00Login loginPacket = new Packet00Login(playerMP.getUsername(), player.getX(), player.getY());
             if (socketServer != null) {
                 socketServer.addConnection(playerMP, loginPacket);
@@ -252,11 +250,14 @@ public class BombermanGame extends GameApplication  {
 
         onCollisionBegin(PLAYER, PORTAL, (player, portal) -> {
             if (getGameWorld().getGroup(ENEMY1, ENEMY2, ENEMY3, ENEMY4, ENEMY5, POWERUP_BOMBS, POWERUP_FLAMES).getSize() == 0) {
+                playerComponent.setBombValid(false);
+                player.removeFromWorld();
                 turnOffMusic();
                 play("next_level.wav");
-
-                playerComponent.setBombValid(false);
-                getGameTimer().runOnceAfter(this::nextLevel, Duration.seconds(4));
+                getGameTimer().runOnceAfter(() -> {
+                    turnOnMusic();
+                    nextLevel();
+                }, Duration.seconds(4));
             }
         });
         onCollisionBegin(PLAYER, ENEMY1, (p, enemy) -> {

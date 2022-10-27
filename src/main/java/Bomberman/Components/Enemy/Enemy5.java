@@ -40,8 +40,6 @@ public class Enemy5 extends EnemyComponent {
             enemy5.getComponent(Enemy5.class).setStateDie();
             getGameTimer().runOnceAfter(() -> {
                 enemy5.removeFromWorld();
-                set("enemies", getGameWorld().getGroup(ENEMY1,
-                        ENEMY2, ENEMY3, ENEMY4, ENEMY5).getSize());
             }, Duration.seconds(2.4));
         });
 
