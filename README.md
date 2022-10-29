@@ -33,17 +33,27 @@ Người thực hiện:
 
 - ![](readme/oneal.png) *Oneal* biết đuổi Bomber khi lại gần, có tốc độ di chuyển tăng trong khi đuổi Bomber.
 
-- ![](readme/pass.png) *Pass* biết đuổi Bomber với phạm vi toàn bản đồ.
+- ![](readme/pass.png) *Pass* biết đuổi Bomber với phạm vi toàn bản đồ, sử dụng thuật toán A*.
 
 - ![](readme/dahl.png) *Dahl* di chuyển ngẫu nhiên và biết né bomb.
 
 - ![](readme/doria.png) *Doria* biết đuổi Bomber khi lại gần, có tốc độ di chuyển tăng và có thể di chuyển xuyên Brick.
 
-## Mô tả game play, xử lý va chạm và xử lý bom nổ
-- Trong một màn chơi, Bomber sẽ được người chơi di chuyển, đặt và kích hoạt Bomb với mục tiêu chính là tiêu diệt tất cả Enemy và tìm ra vị trí Portal để có thể qua màn mới
+## Singleplayer
+- Trong một màn chơi, Bomber sẽ được người chơi di chuyển, đặt và kích hoạt Bomb với mục tiêu chính là tiêu diệt tất cả Enemy và tìm ra vị trí Portal để có thể qua màn mới.
 - Bomber sẽ bị giết khi va chạm với Enemy hoặc thuộc phạm vi Bomb nổ. Lúc đấy trò chơi kết thúc.
-- Enemy bị tiêu diệt khi thuộc phạm vi Bomb nổ
-- Một đối tượng thuộc phạm vi Bomb nổ có nghĩa là đối tượng đó va chạm với một trong các tia lửa được tạo ra tại thời điểm một đối tượng Bomb nổ.
+- Enemy bị tiêu diệt khi thuộc phạm vi Bomb nổ.
+- Khi Bomb nổ, một Flame trung tâm tại vị trí Bomb nổ và các Flame tại bốn vị trí ô đơn vị xung quanh vị trí của Bomb xuất hiện theo bốn hướng trên/dưới/trái/phải. 
+- Khi các Flame xuất hiện, nếu có một đối tượng thuộc loại Brick/Wall nằm trên vị trí một trong các Flame thì Flame sẽ bị chặn lại đến vị trí đó.
 
-- Khi Bomb nổ, một Flame trung tâm![](readme/bomb_exploded.png) tại vị trí Bomb nổ và bốn Flame tại bốn vị trí ô đơn vị xung quanh vị trí của Bomb xuất hiện theo bốn hướng trên![](res/sprites/explosion_vertical.png)/dưới![](res/sprites/explosion_vertical.png)/trái![](res/sprites/explosion_horizontal.png)/phải![](res/sprites/explosion_horizontal.png). Độ dài bốn Flame xung quanh mặc định là 1 đơn vị, được tăng lên khi Bomber sử dụng các FlameItem.
-- Khi các Flame xuất hiện, nếu có một đối tượng thuộc loại Brick/Wall nằm trên vị trí một trong các Flame thì độ dài Flame đó sẽ được giảm đi để sao cho Flame chỉ xuất hiện đến vị trí đối tượng Brick/Wall theo hướng xuất hiện. Lúc đó chỉ có đối tượng Brick/Wall bị ảnh hưởng bởi Flame, các đối tượng tiếp theo không bị ảnh hưởng. Còn nếu vật cản Flame là một đối tượng Bomb khác thì đối tượng Bomb đó cũng sẽ nổ ngay lập tức.
+## Multiplayer
+- Solo 1 vs 1.
+- Kết nối qua mạng LAN (cùng 1 wifi).
+- Không giới hạn thời gian, số lần thắng thua.
+- Có thêm 2 loại bomb mới:
+  - Lazerbomb (bắn thẳng, xuyên qua tường)
+  - Lightbomb (có thể được di chuyển sau khi đặt)
+- Sau khi chết, người chơi quay lại điểm xuất phát.
+
+## BombOverloading
+- Khi 2 quả bomb nổ gần nhau, chúng sẽ tăng cường phạm vi nổ
