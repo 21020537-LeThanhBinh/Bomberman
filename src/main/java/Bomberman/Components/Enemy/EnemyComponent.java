@@ -53,8 +53,8 @@ public abstract class EnemyComponent extends Component {
 
     @Override
     public void onUpdate(double tpf) {
-        entity.translateX((dx * speedFactor) * 1/60d);
-        entity.translateY((dy * speedFactor) * 1/60d);
+        entity.translateX((dx * speedFactor) * tpf);
+        entity.translateY((dy * speedFactor) * tpf);
 
         switch (state) {
             case UP:

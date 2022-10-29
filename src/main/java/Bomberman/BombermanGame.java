@@ -101,7 +101,7 @@ public class BombermanGame extends GameApplication  {
         getGameWorld().addEntityFactory(new BombermanFactory());
 
         if (isMultiplayer) {
-            socketClient = new GameClient(this, "192.168.1.4");
+            socketClient = new GameClient(this, "192.168.43.19");
             socketClient.start();
 
             playerMP = new PlayerMP(8*48, 48, JOptionPane.showInputDialog(this, "Please enter a username"), null,-1);
@@ -255,8 +255,7 @@ public class BombermanGame extends GameApplication  {
                 turnOffMusic();
                 play("next_level.wav");
                 getGameTimer().runOnceAfter(() -> {
-                    turnOnMusic();
-                    nextLevel();
+                    turnOnMusic();                    nextLevel();
                 }, Duration.seconds(4));
             }
         });
